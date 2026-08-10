@@ -7,6 +7,8 @@ import { Triage } from "@/components/desk/Triage";
 import { Reveal } from "@/components/desk/Reveal";
 import { StatusLedger, SuiteCounters } from "@/components/desk/StatusLedger";
 import { useParallax } from "@/hooks/use-parallax";
+import { useReveal } from "@/hooks/use-reveal";
+
 import { BOUNDARIES, DESK_LOG, PHILOSOPHY, RESTAURANT_INTELLIGENCE, TOOLS } from "@/lib/desk-data";
 import heroPass from "@/assets/hero-pass.jpg";
 import diningRoom from "@/assets/dining-room.jpg";
