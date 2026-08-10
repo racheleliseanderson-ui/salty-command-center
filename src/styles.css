@@ -74,36 +74,36 @@
 :root {
   --radius: 0.25rem;
 
-  /* Dark: ink-green, lifted a step out of near-black so panels read as material. */
-  --ink-deep: oklch(0.172 0.015 158);
-  --ink: oklch(0.216 0.017 158);
-  --surface: oklch(0.257 0.019 158);
-  --surface-raised: oklch(0.302 0.021 158);
-  --pine: oklch(0.375 0.048 158);
-  --brass: oklch(0.8 0.115 84);
-  --brass-deep: oklch(0.62 0.1 74);
-  --oxblood: oklch(0.48 0.15 26);
-  --bone: oklch(0.95 0.014 84);
-  --live: oklch(0.79 0.13 155);
+  /* Navy · Pearl · Gold — dark navy ground, gold signal, pearl reading text. */
+  --ink-deep: oklch(0.168 0.044 258);
+  --ink: oklch(0.213 0.05 258);
+  --surface: oklch(0.256 0.053 258);
+  --surface-raised: oklch(0.302 0.056 258);
+  --pine: oklch(0.4 0.072 255);
+  --brass: oklch(0.83 0.13 88);
+  --brass-deep: oklch(0.66 0.115 85);
+  --oxblood: oklch(0.53 0.16 22);
+  --bone: oklch(0.965 0.008 260);
+  --live: oklch(0.8 0.1 195);
 
   --background: var(--ink);
-  --foreground: oklch(0.94 0.012 84);
+  --foreground: oklch(0.935 0.011 260);
   --card: var(--surface);
-  --card-foreground: oklch(0.94 0.012 84);
+  --card-foreground: oklch(0.935 0.011 260);
   --popover: var(--surface-raised);
-  --popover-foreground: oklch(0.94 0.012 84);
+  --popover-foreground: oklch(0.935 0.011 260);
   --primary: var(--brass);
-  --primary-foreground: oklch(0.17 0.02 84);
+  --primary-foreground: oklch(0.17 0.045 258);
   --secondary: var(--surface-raised);
-  --secondary-foreground: oklch(0.94 0.012 84);
+  --secondary-foreground: oklch(0.935 0.011 260);
   --muted: var(--surface);
-  --muted-foreground: oklch(0.755 0.014 120);
+  --muted-foreground: oklch(0.775 0.022 262);
   --accent: var(--pine);
-  --accent-foreground: oklch(0.96 0.012 84);
+  --accent-foreground: oklch(0.96 0.01 260);
   --destructive: var(--oxblood);
-  --destructive-foreground: oklch(0.96 0.01 84);
-  --border: oklch(0.375 0.019 158);
-  --input: oklch(0.375 0.019 158);
+  --destructive-foreground: oklch(0.96 0.01 260);
+  --border: oklch(0.38 0.05 258);
+  --input: oklch(0.38 0.05 258);
   --ring: var(--brass-deep);
 
   --chart-1: var(--brass);
@@ -112,73 +112,175 @@
   --chart-4: var(--pine);
   --chart-5: var(--bone);
   --sidebar: var(--surface);
-  --sidebar-foreground: oklch(0.94 0.012 84);
+  --sidebar-foreground: oklch(0.935 0.011 260);
   --sidebar-primary: var(--brass);
-  --sidebar-primary-foreground: oklch(0.17 0.02 84);
+  --sidebar-primary-foreground: oklch(0.17 0.045 258);
   --sidebar-accent: var(--surface-raised);
-  --sidebar-accent-foreground: oklch(0.94 0.012 84);
-  --sidebar-border: oklch(0.375 0.019 158);
+  --sidebar-accent-foreground: oklch(0.935 0.011 260);
+  --sidebar-border: oklch(0.38 0.05 258);
   --sidebar-ring: var(--brass-deep);
 
-  --media-opacity: 0.7;
-  --media-opacity-soft: 0.25;
+  --media-opacity: 0.62;
+  --media-opacity-soft: 0.24;
   --grain-strength: 0.5;
   --grid-strength: 5%;
 }
 
 /*
- * Light: printed operations sheet. Same token names, inverted material.
+ * Pearl: printed operations sheet. Same token names, inverted material.
  * --bone stays the high-contrast reading colour, so markup never changes.
  */
 .light {
   color-scheme: light;
 
-  --ink-deep: oklch(0.955 0.009 84);
-  --ink: oklch(0.982 0.006 84);
-  --surface: oklch(0.945 0.011 84);
-  --surface-raised: oklch(0.915 0.013 84);
-  --pine: oklch(0.86 0.032 158);
-  --brass: oklch(0.53 0.108 72);
-  --brass-deep: oklch(0.43 0.09 68);
-  --oxblood: oklch(0.45 0.15 26);
-  --bone: oklch(0.235 0.022 158);
-  --live: oklch(0.5 0.115 155);
+  --ink-deep: oklch(0.955 0.007 265);
+  --ink: oklch(0.986 0.004 265);
+  --surface: oklch(0.941 0.009 265);
+  --surface-raised: oklch(0.908 0.012 265);
+  --pine: oklch(0.865 0.03 258);
+  --brass: oklch(0.545 0.11 80);
+  --brass-deep: oklch(0.44 0.095 78);
+  --oxblood: oklch(0.47 0.16 22);
+  --bone: oklch(0.225 0.048 258);
+  --live: oklch(0.5 0.09 208);
 
   --background: var(--ink);
-  --foreground: oklch(0.245 0.02 158);
+  --foreground: oklch(0.245 0.042 258);
   --card: var(--surface);
-  --card-foreground: oklch(0.245 0.02 158);
-  --popover: oklch(0.99 0.005 84);
-  --popover-foreground: oklch(0.245 0.02 158);
+  --card-foreground: oklch(0.245 0.042 258);
+  --popover: oklch(0.992 0.003 265);
+  --popover-foreground: oklch(0.245 0.042 258);
   --primary: var(--brass);
-  --primary-foreground: oklch(0.985 0.006 84);
+  --primary-foreground: oklch(0.988 0.004 265);
   --secondary: var(--surface-raised);
-  --secondary-foreground: oklch(0.245 0.02 158);
+  --secondary-foreground: oklch(0.245 0.042 258);
   --muted: var(--surface);
-  --muted-foreground: oklch(0.455 0.016 158);
+  --muted-foreground: oklch(0.435 0.03 262);
   --accent: var(--pine);
-  --accent-foreground: oklch(0.245 0.02 158);
+  --accent-foreground: oklch(0.245 0.042 258);
   --destructive: var(--oxblood);
-  --destructive-foreground: oklch(0.985 0.008 84);
-  --border: oklch(0.855 0.012 84);
-  --input: oklch(0.855 0.012 84);
+  --destructive-foreground: oklch(0.988 0.004 265);
+  --border: oklch(0.855 0.014 265);
+  --input: oklch(0.855 0.014 265);
   --ring: var(--brass-deep);
 
-  --chart-5: oklch(0.3 0.02 158);
+  --chart-5: oklch(0.3 0.045 258);
   --sidebar: var(--surface);
-  --sidebar-foreground: oklch(0.245 0.02 158);
+  --sidebar-foreground: oklch(0.245 0.042 258);
   --sidebar-primary: var(--brass);
-  --sidebar-primary-foreground: oklch(0.985 0.006 84);
+  --sidebar-primary-foreground: oklch(0.988 0.004 265);
   --sidebar-accent: var(--surface-raised);
-  --sidebar-accent-foreground: oklch(0.245 0.02 158);
-  --sidebar-border: oklch(0.855 0.012 84);
+  --sidebar-accent-foreground: oklch(0.245 0.042 258);
+  --sidebar-border: oklch(0.855 0.014 265);
   --sidebar-ring: var(--brass-deep);
 
-  --media-opacity: 0.42;
-  --media-opacity-soft: 0.18;
+  --media-opacity: 0.4;
+  --media-opacity-soft: 0.16;
 
   --grain-strength: 0.35;
   --grid-strength: 10%;
+}
+
+/*
+ * High contrast — black ground, white type, gold kept only as signal.
+ * Chroma is stripped from grounds so text contrast is maximal.
+ */
+.hc {
+  color-scheme: dark;
+
+  --ink-deep: oklch(0 0 0);
+  --ink: oklch(0.04 0 0);
+  --surface: oklch(0.09 0 0);
+  --surface-raised: oklch(0.13 0 0);
+  --pine: oklch(0.3 0 0);
+  --brass: oklch(0.9 0.15 92);
+  --brass-deep: oklch(0.78 0.14 90);
+  --oxblood: oklch(0.68 0.19 25);
+  --bone: oklch(1 0 0);
+  --live: oklch(0.9 0.1 200);
+
+  --background: var(--ink);
+  --foreground: oklch(1 0 0);
+  --card: var(--surface);
+  --card-foreground: oklch(1 0 0);
+  --popover: var(--surface-raised);
+  --popover-foreground: oklch(1 0 0);
+  --primary: var(--brass);
+  --primary-foreground: oklch(0 0 0);
+  --secondary: var(--surface-raised);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: var(--surface);
+  --muted-foreground: oklch(0.93 0 0);
+  --accent: var(--pine);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: var(--oxblood);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.75 0 0);
+  --input: oklch(0.75 0 0);
+  --ring: oklch(1 0 0);
+
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.75 0 0);
+
+  --media-opacity: 0.3;
+  --media-opacity-soft: 0.12;
+  --grain-strength: 0;
+  --grid-strength: 0%;
+}
+
+/* High contrast, white ground. */
+.hc.light {
+  color-scheme: light;
+
+  --ink-deep: oklch(1 0 0);
+  --ink: oklch(1 0 0);
+  --surface: oklch(0.985 0 0);
+  --surface-raised: oklch(0.96 0 0);
+  --pine: oklch(0.9 0 0);
+  --brass: oklch(0.42 0.13 78);
+  --brass-deep: oklch(0.34 0.11 76);
+  --oxblood: oklch(0.42 0.2 25);
+  --bone: oklch(0 0 0);
+  --live: oklch(0.38 0.1 215);
+
+  --foreground: oklch(0 0 0);
+  --card-foreground: oklch(0 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary-foreground: oklch(0 0 0);
+  --muted-foreground: oklch(0.22 0 0);
+  --accent-foreground: oklch(0 0 0);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.3 0 0);
+  --input: oklch(0.3 0 0);
+  --ring: oklch(0 0 0);
+
+  --sidebar-foreground: oklch(0 0 0);
+  --sidebar-border: oklch(0.3 0 0);
+
+  --media-opacity: 0.22;
+  --media-opacity-soft: 0.1;
+}
+
+/* High contrast strips decorative material so edges stay legible. */
+.hc .panel,
+.hc .panel-brass {
+  background: var(--surface);
+  box-shadow: none;
+  border: 1px solid var(--border);
+}
+
+.hc .grain::after {
+  display: none;
+}
+
+.hc .ink-veil {
+  background: linear-gradient(
+    to top,
+    var(--ink) 20%,
+    color-mix(in oklab, var(--ink) 88%, transparent) 100%
+  );
 }
 
 
@@ -448,30 +550,122 @@
 }
 
 /*
- * Colour-vision-safe variant. Signal moves off the brass/oxblood/pine axis
- * onto a blue/amber pair that stays separable for deutan and protan vision.
+ * Colour-vision-safe variant. On the navy ground the signal pair becomes
+ * gold vs cyan, which stays separable for deutan, protan and tritan vision.
  * Icons and text labels carry the meaning; colour only reinforces it.
  */
 .cvd {
-  --brass: oklch(0.82 0.15 85);
-  --brass-deep: oklch(0.66 0.13 82);
-  --oxblood: oklch(0.55 0.17 255);
-  --pine: oklch(0.45 0.09 250);
-  --live: oklch(0.72 0.13 235);
+  --brass: oklch(0.86 0.15 92);
+  --brass-deep: oklch(0.7 0.13 88);
+  --oxblood: oklch(0.72 0.14 215);
+  --pine: oklch(0.42 0.07 230);
+  --live: oklch(0.82 0.11 200);
   --accent: var(--pine);
   --destructive: var(--oxblood);
-  --destructive-foreground: oklch(0.97 0.01 250);
+  --destructive-foreground: oklch(0.14 0.04 240);
   --chart-2: var(--live);
   --chart-3: var(--oxblood);
   --chart-4: var(--pine);
 }
 
 .cvd.light {
-  --brass: oklch(0.52 0.12 75);
-  --brass-deep: oklch(0.42 0.1 72);
-  --oxblood: oklch(0.44 0.17 258);
-  --pine: oklch(0.86 0.05 250);
-  --live: oklch(0.46 0.14 240);
-  --destructive-foreground: oklch(0.985 0.008 250);
+  --brass: oklch(0.5 0.11 78);
+  --brass-deep: oklch(0.4 0.095 76);
+  --oxblood: oklch(0.42 0.13 225);
+  --pine: oklch(0.87 0.04 230);
+  --live: oklch(0.44 0.1 210);
+  --destructive-foreground: oklch(0.99 0.004 230);
 }
 
+
+/* --- interaction & touch ----------------------------------------------- */
+
+/* Palette changes cross-fade instead of snapping. */
+html.mode-shift,
+html.mode-shift body,
+html.mode-shift * {
+  transition:
+    background-color 260ms ease,
+    border-color 260ms ease,
+    color 260ms ease !important;
+}
+
+/* Minimum comfortable tap target — used on every mobile control. */
+@utility tap {
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: color-mix(in oklab, var(--brass) 22%, transparent);
+}
+
+/* Horizontal snap rail for touch: swipe through cards on narrow screens. */
+@utility snap-rail {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  & > * {
+    scroll-snap-align: start;
+    flex: 0 0 86%;
+  }
+}
+
+@utility press {
+  transition:
+    transform 140ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease;
+  &:active {
+    transform: scale(0.975);
+  }
+}
+
+@utility sheet-in {
+  animation: sheet-up 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility gold-underline {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: var(--brass);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-in,
+  .press,
+  html.mode-shift * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

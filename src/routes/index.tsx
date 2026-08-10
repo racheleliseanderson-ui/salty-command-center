@@ -75,7 +75,7 @@ function Desk() {
           <div className="rise mt-10 flex flex-wrap gap-3">
             <Link
               to="/host-path"
-              className="inline-flex items-center gap-2 bg-brass px-5 py-3 text-sm font-medium tracking-wide text-primary-foreground transition-colors hover:bg-bone"
+              className="press tap inline-flex items-center gap-2 bg-brass px-5 py-3 text-sm font-medium tracking-wide text-primary-foreground transition-colors hover:bg-bone"
             >
               I'm hosting at home
               <ArrowRight className="h-4 w-4" />
@@ -84,14 +84,14 @@ function Desk() {
               href={RESTAURANT_INTELLIGENCE.href}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 border border-bone/30 px-5 py-3 text-sm font-medium tracking-wide text-bone transition-colors hover:border-brass hover:text-brass"
+              className="press tap inline-flex items-center gap-2 border border-bone/30 px-5 py-3 text-sm font-medium tracking-wide text-bone transition-colors hover:border-brass hover:text-brass"
             >
               I'm dining out
               <ArrowUpRight className="h-4 w-4" />
             </a>
             <Link
               to="/handoffs"
-              className="inline-flex items-center gap-2 px-2 py-3 text-sm tracking-wide text-muted-foreground transition-colors hover:text-brass"
+              className="press tap inline-flex items-center gap-2 px-2 py-3 text-sm tracking-wide text-muted-foreground transition-colors hover:text-brass"
             >
               What moves between tools?
             </Link>

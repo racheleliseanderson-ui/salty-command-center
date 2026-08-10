@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
 import { HandoffMap } from "@/components/desk/HandoffMap";
+import { SearchField } from "@/components/desk/SearchField";
 
 export const Route = createFileRoute("/handoffs")({
   head: () => ({
@@ -24,6 +26,8 @@ export const Route = createFileRoute("/handoffs")({
 });
 
 function Handoffs() {
+  const [q, setQ] = useState("");
+
   return (
     <div className="min-h-dvh bg-ink">
       <DeskHeader />
@@ -48,7 +52,21 @@ function Handoffs() {
       </section>
 
       <section className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
-        <HandoffMap />
+        <div className="max-w-[720px]">
+          <SearchField
+            value={q}
+            onChange={setQ}
+            label="Filter packet fields"
+            placeholder="Filter by field, reason or contract…"
+          />
+          <p className="label-mono mt-3">
+            Filters the three contracts below · ⌘K searches the whole desk.
+          </p>
+        </div>
+
+        <div className="mt-10">
+          <HandoffMap query={q} />
+        </div>
 
         <div className="panel mt-10 rounded-lg p-5 sm:p-9">
           <p className="label-mono text-brass">Rules of transfer</p>

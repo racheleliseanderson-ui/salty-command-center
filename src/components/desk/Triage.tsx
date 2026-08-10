@@ -44,7 +44,7 @@ export function Triage() {
             type="button"
             onClick={reset}
             disabled={answered === 0}
-            className="label-mono inline-flex min-h-11 items-center gap-2 border border-border px-3 text-[0.6rem] transition-colors hover:border-brass/50 hover:text-brass disabled:opacity-40"
+            className="press label-mono inline-flex min-h-11 items-center gap-2 border border-border px-3 text-[0.6rem] transition-colors hover:border-brass/50 hover:text-brass disabled:opacity-40"
           >
             <RotateCcw className="h-3 w-3" /> Reset
           </button>
@@ -76,8 +76,8 @@ export function Triage() {
                     onClick={() => setAnswer(q.key, active ? undefined : (o.value as never))}
                     className={
                       active
-                        ? "flex min-h-11 items-start gap-2 border border-brass bg-brass/15 px-3 py-2 text-left text-[0.8rem] text-brass transition-colors"
-                        : "flex min-h-11 items-start gap-2 border border-border px-3 py-2 text-left text-[0.8rem] text-foreground/80 transition-colors hover:border-brass/50 hover:text-brass"
+                        ? "press flex min-h-11 w-full items-start gap-2 border border-brass bg-brass/15 px-3 py-2.5 text-left text-[0.8rem] text-brass sm:w-auto"
+                        : "press flex min-h-11 w-full items-start gap-2 border border-border px-3 py-2.5 text-left text-[0.8rem] text-foreground/80 hover:border-brass/50 hover:text-brass sm:w-auto"
                     }
                   >
                     {active ? <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" /> : null}

@@ -86,7 +86,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "Salty & Clever" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "theme-color", content: "#161b18" },
+      { name: "theme-color", content: "#101a2e" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -106,7 +106,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
-const THEME_BOOTSTRAP = `(function(){try{var t=localStorage.getItem("salty-desk-theme");if(t==="light"){document.documentElement.classList.add("light");}var c=localStorage.getItem("salty-desk-cvd");if(c==="on"){document.documentElement.classList.add("cvd");}}catch(e){}})();`;
+const THEME_BOOTSTRAP = `(function(){try{var r=document.documentElement;var m=localStorage.getItem("salty-desk-mode");if(m==="pearl"){r.classList.add("light");}else if(m==="hc-dark"){r.classList.add("hc");}else if(m==="hc-light"){r.classList.add("hc","light");}var c=localStorage.getItem("salty-desk-cvd");if(c==="on"){r.classList.add("cvd");}var l=localStorage.getItem("salty-desk-locale");if(l==="es"||l==="fr"){r.setAttribute("lang",l);}}catch(e){}})();`;
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
