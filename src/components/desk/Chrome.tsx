@@ -19,8 +19,8 @@ export function DeskHeader() {
     <header className="sticky top-0 z-40 border-b border-border/70 bg-ink-deep/90 backdrop-blur-xl">
       <div className="mx-auto grid max-w-[1240px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 py-2.5 sm:px-8">
         <Link to="/" className="group flex min-w-0 items-baseline gap-3">
-          <span className="truncate font-display text-xl leading-none text-bone">Salty Desk</span>
-          <span className="label-mono hidden sm:inline">Salty &amp; Clever</span>
+          <span className="whitespace-nowrap font-display text-xl leading-none text-bone">Salty Desk</span>
+          <span className="label-mono hidden whitespace-nowrap 2xl:inline">Salty &amp; Clever</span>
         </Link>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
