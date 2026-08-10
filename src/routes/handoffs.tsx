@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
 import { HandoffMap } from "@/components/desk/HandoffMap";
+import { SearchField } from "@/components/desk/SearchField";
 
 export const Route = createFileRoute("/handoffs")({
   head: () => ({
