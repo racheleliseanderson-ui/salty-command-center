@@ -41,7 +41,7 @@ function Desk() {
   const dineRef = useParallax<HTMLImageElement>(0.1);
 
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-dvh bg-ink">
       <DeskHeader />
 
       {/* ── Hero ─────────────────────────────────────────────── */}

@@ -25,7 +25,7 @@ export const Route = createFileRoute("/handoffs")({
 
 function Handoffs() {
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-dvh bg-ink">
       <DeskHeader />
 
       <section className="border-b border-border bg-ink-deep">

@@ -26,7 +26,7 @@ export const Route = createFileRoute("/reference")({
 
 function ReferencePage() {
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-dvh bg-ink">
       <DeskHeader />
 
       <section className="border-b border-border bg-ink-deep">
