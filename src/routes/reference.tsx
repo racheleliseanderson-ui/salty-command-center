@@ -27,6 +27,24 @@ export const Route = createFileRoute("/reference")({
 });
 
 function ReferencePage() {
+  const [q, setQ] = useState("");
+  const needle = q.trim().toLowerCase();
+
+  const terms = useMemo(
+    () =>
+      needle
+        ? GLOSSARY.filter((g) => `${g.term} ${g.def}`.toLowerCase().includes(needle))
+        : GLOSSARY,
+    [needle],
+  );
+  const log = useMemo(
+    () =>
+      needle
+        ? DESK_LOG.filter((l) => `${l.id} ${l.date} ${l.entry}`.toLowerCase().includes(needle))
+        : DESK_LOG,
+    [needle],
+  );
+
   return (
     <div className="min-h-dvh bg-ink">
       <DeskHeader />
@@ -41,18 +59,40 @@ function ReferencePage() {
             The suite uses a small, precise vocabulary. If a term reads like jargon, it is doing
             specific work — this page says what.
           </p>
+
+          <div className="mt-9 max-w-[720px]">
+            <SearchField
+              value={q}
+              onChange={setQ}
+              label="Filter reference terms and desk log"
+              placeholder="Filter terms and log entries…"
+              count={terms.length + log.length}
+              countLabel="entries shown"
+            />
+            <p className="label-mono mt-3">
+              Press ⌘K for suite-wide search across tools, handoffs and limits.
+            </p>
+          </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8">
-        <dl className="grid gap-px overflow-hidden border border-border bg-border md:grid-cols-2">
-          {GLOSSARY.map((g, i) => (
-            <Reveal key={g.term} delay={(i % 2) * 80} className="bg-ink-deep p-6 sm:p-7">
-              <dt className="font-display text-2xl leading-tight text-bone">{g.term}</dt>
-              <dd className="mt-3 text-[0.87rem] leading-relaxed text-muted-foreground">{g.def}</dd>
-            </Reveal>
-          ))}
-        </dl>
+        {terms.length === 0 ? (
+          <p className="label-mono border border-dashed border-border p-6 leading-relaxed">
+            No term matches “{q}”. Clear the filter, or search the whole desk with ⌘K.
+          </p>
+        ) : (
+          <dl className="grid gap-px overflow-hidden border border-border bg-border md:grid-cols-2">
+            {terms.map((g, i) => (
+              <Reveal key={g.term} delay={(i % 2) * 80} className="bg-ink-deep p-6 sm:p-7">
+                <dt className="font-display text-2xl leading-tight text-bone">{g.term}</dt>
+                <dd className="mt-3 text-[0.87rem] leading-relaxed text-muted-foreground">
+                  {g.def}
+                </dd>
+              </Reveal>
+            ))}
+          </dl>
+        )}
       </section>
 
       <section className="border-t border-border bg-ink-deep">
