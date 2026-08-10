@@ -1,7 +1,9 @@
+import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
 import { Reveal } from "@/components/desk/Reveal";
+import { SearchField } from "@/components/desk/SearchField";
 import { DESK_LOG, GLOSSARY, LEDGER } from "@/lib/desk-data";
 
 export const Route = createFileRoute("/reference")({
