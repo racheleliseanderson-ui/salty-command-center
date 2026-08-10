@@ -13,7 +13,7 @@ import {
   Square,
   TriangleAlert,
 } from "lucide-react";
-import { STAGES, blockingGates, stageCleared, statusCopy } from "@/lib/desk-pipeline";
+import { STAGES, blockingGates, statusCopy } from "@/lib/desk-pipeline";
 import { usePipelineRun } from "@/hooks/use-pipeline-run";
 import { TOOLS } from "@/lib/desk-data";
 
@@ -28,7 +28,7 @@ export function PipelineConsole() {
 
   const active = STAGES[run.stage]!;
   const blocking = useMemo(() => blockingGates(active, run.gates), [active, run.gates]);
-  const signed = STAGES.filter((s) => stageCleared(s, run.gates)).length;
+  const signed = run.status === "complete" ? STAGES.length : run.stage;
   const idle = run.status === "idle";
   const stopped = run.status === "aborted" || run.status === "complete";
   const status = statusCopy(run.status);
@@ -126,7 +126,7 @@ export function PipelineConsole() {
       {/* ── Stage rail ────────────────────────────────────────── */}
       <ol className="snap-rail flex gap-px overflow-x-auto border-y border-border bg-border sm:grid sm:grid-cols-6 sm:overflow-visible">
         {STAGES.map((s, i) => {
-          const cleared = stageCleared(s, run.gates);
+          const cleared = run.status === "complete" || i < run.stage;
           const current = i === run.stage && !idle;
           return (
             <li key={s.id} className="min-w-[9.5rem] shrink-0 sm:min-w-0">
