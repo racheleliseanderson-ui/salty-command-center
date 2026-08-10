@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShieldAlert, TriangleAlert } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
-import { BOUNDARIES, PHILOSOPHY } from "@/lib/desk-data";
+import { BOUNDARIES, PHILOSOPHY, type BoundaryGroup } from "@/lib/desk-data";
+import { useTriageState } from "@/hooks/use-triage-state";
+import { bindingBoundaries, describeCase } from "@/lib/desk-examples";
 
 export const Route = createFileRoute("/boundary")({
   head: () => ({
@@ -23,59 +25,129 @@ export const Route = createFileRoute("/boundary")({
   component: Boundary,
 });
 
+const GROUPS: BoundaryGroup[] = ["Safety", "Data movement", "Evidence", "Scope"];
+
 function Boundary() {
+  const { answers } = useTriageState();
+  const declared = describeCase(answers);
+  const binding = bindingBoundaries(answers);
+
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-dvh bg-ink">
       <DeskHeader />
 
       <section className="border-b border-border bg-ink-deep">
-        <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8">
+        <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
           <p className="label-mono text-brass">Shared boundary</p>
           <h1 className="display-xl mt-6 max-w-[18ch] text-bone">
             What the desk
             <span className="block text-brass">will not do.</span>
           </h1>
-          <p className="mt-8 max-w-[56ch] text-lg leading-relaxed text-foreground/85">
-            Every tool in the suite holds the same limits. They are design decisions, not gaps
-            waiting to be filled.
+          <p className="mt-8 max-w-[56ch] text-base leading-relaxed text-foreground/85 sm:text-lg">
+            Every tool in the suite holds the same limits. Each one below states the limit, why it
+            exists, and what happens instead. They are design decisions, not gaps waiting to be
+            filled.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-[1240px] gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[1.1fr_1fr]">
-        <div className="panel rounded-lg p-7 sm:p-9">
-          <p className="label-mono text-brass">Hard limits</p>
-          <ul className="mt-6 space-y-5">
-            {BOUNDARIES.map((b) => (
-              <li key={b} className="flex gap-4 text-[0.92rem] leading-relaxed text-foreground/85">
-                <span className="mt-3 h-px w-5 shrink-0 bg-destructive" />
-                {b}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <p className="label-mono text-brass">Standing rules</p>
-          <dl className="mt-6 divide-y divide-border">
-            {PHILOSOPHY.map((p) => (
-              <div key={p.k} className="py-4">
-                <dt className="font-display text-xl text-bone">{p.k}</dt>
-                <dd className="mt-1 text-[0.86rem] leading-relaxed text-muted-foreground">{p.v}</dd>
-              </div>
-            ))}
-          </dl>
-          <p className="mt-8 max-w-[52ch] text-[0.86rem] leading-relaxed text-muted-foreground">
-            Educational planning only — not professional kitchen, medical, or legal advice. Sold and
-            supported by Northern Lantern House LLC when purchases are enabled.
+      {/* Tailored to the reader's declared case */}
+      <section className="mx-auto max-w-[1240px] px-5 pt-14 sm:px-8">
+        <div className="panel-brass rounded-lg p-5 sm:p-8">
+          <p className="label-mono flex items-center gap-2 text-brass">
+            <ShieldAlert className="h-3.5 w-3.5" /> Binding on your selection
           </p>
+          {binding.length ? (
+            <>
+              <p className="mt-3 text-[0.82rem] leading-relaxed text-muted-foreground">
+                {declared.join(" · ")}
+              </p>
+              <ul className="mt-6 space-y-5">
+                {binding.map((b) => (
+                  <li key={b.boundary.id} className="border-l border-brass/60 pl-4">
+                    <p className="font-display text-xl leading-snug text-bone">{b.boundary.limit}</p>
+                    <p className="mt-1 text-[0.85rem] leading-relaxed text-foreground/85">
+                      {b.because}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <p className="mt-3 max-w-[60ch] text-[0.9rem] leading-relaxed text-foreground/85">
+              Answer the triage console on the desk and this panel names only the limits that
+              actually bind your night — with the reason each one applies to you.
+            </p>
+          )}
           <Link
             to="/"
-            className="mt-8 inline-flex items-center gap-2 text-sm text-brass transition-colors hover:text-bone"
+            className="mt-7 inline-flex min-h-11 items-center gap-2 text-sm text-brass transition-colors hover:text-bone"
           >
-            Back to the desk
+            Open the triage console
             <ArrowRight className="h-4 w-4" />
           </Link>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
+        <p className="label-mono text-brass">Hard limits, grouped</p>
+        <div className="mt-8 space-y-12">
+          {GROUPS.map((g) => {
+            const rows = BOUNDARIES.filter((b) => b.group === g);
+            if (!rows.length) return null;
+            return (
+              <div key={g}>
+                <h2 className="font-display text-3xl leading-tight text-bone">{g}</h2>
+                <div className="mt-6 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-2">
+                  {rows.map((b) => (
+                    <article key={b.id} className="bg-ink-deep p-5 sm:p-6">
+                      <p className="flex gap-3 font-display text-xl leading-snug text-bone">
+                        <TriangleAlert className="mt-1.5 h-4 w-4 shrink-0 text-destructive-foreground" />
+                        {b.limit}
+                      </p>
+                      <p className="mt-4 text-[0.85rem] leading-relaxed text-foreground/85">
+                        <span className="label-mono block text-[0.58rem]">Why</span>
+                        {b.why}
+                      </p>
+                      <p className="mt-4 text-[0.85rem] leading-relaxed text-muted-foreground">
+                        <span className="label-mono block text-[0.58rem] text-brass">Instead</span>
+                        {b.instead}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-16 grid gap-10 lg:grid-cols-[1fr_1fr]">
+          <div>
+            <p className="label-mono text-brass">Standing rules</p>
+            <dl className="mt-6 divide-y divide-border">
+              {PHILOSOPHY.map((p) => (
+                <div key={p.k} className="py-4">
+                  <dt className="font-display text-xl text-bone">{p.k}</dt>
+                  <dd className="mt-1 text-[0.86rem] leading-relaxed text-muted-foreground">
+                    {p.v}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+          <div>
+            <p className="max-w-[52ch] text-[0.86rem] leading-relaxed text-muted-foreground">
+              Educational planning only — not professional kitchen, medical, or legal advice. Sold and
+              supported by Northern Lantern House LLC when purchases are enabled.
+            </p>
+            <Link
+              to="/handoffs"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 text-sm text-brass transition-colors hover:text-bone"
+            >
+              See what moves between tools
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -83,3 +155,4 @@ function Boundary() {
     </div>
   );
 }
+

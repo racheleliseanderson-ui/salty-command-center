@@ -304,12 +304,16 @@ function Desk() {
             <h3 className="mt-3 font-display text-3xl text-bone">Local-first, first-party, no forced account</h3>
             <ul className="mt-7 space-y-4">
               {BOUNDARIES.map((b) => (
-                <li key={b} className="flex gap-3 text-[0.86rem] leading-relaxed text-foreground/85">
+                <li key={b.id} className="flex gap-3 text-[0.86rem] leading-relaxed text-foreground/85">
                   <span className="mt-2.5 h-px w-4 shrink-0 bg-destructive" />
-                  {b}
+                  <span>
+                    <span className="label-mono block text-[0.58rem]">{b.group}</span>
+                    {b.limit}
+                  </span>
                 </li>
               ))}
             </ul>
+
             <Link
               to="/boundary"
               className="mt-8 inline-flex items-center gap-2 text-sm text-brass transition-colors hover:text-bone"
