@@ -59,7 +59,7 @@ function HostPath() {
   const ri = RESTAURANT_INTELLIGENCE;
 
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-dvh bg-ink">
       <DeskHeader />
 
       <section className="relative isolate overflow-hidden border-b border-border">

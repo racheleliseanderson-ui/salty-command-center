@@ -25,43 +25,51 @@ export const Route = createFileRoute("/handoffs")({
 
 function Handoffs() {
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-dvh bg-ink">
       <DeskHeader />
 
       <section className="border-b border-border bg-ink-deep">
-        <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8">
+        <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
           <p className="label-mono text-brass">Explicit handoffs only</p>
           <h1 className="display-xl mt-6 max-w-[18ch] text-bone">
             Nothing moves
             <span className="block text-brass">until you move it.</span>
           </h1>
-          <p className="mt-8 max-w-[58ch] text-lg leading-relaxed text-foreground/85">
-            Each tool owns its own state. A handoff is a packet you choose to send — read the two
-            columns before you send one.
+          <p className="mt-8 max-w-[58ch] text-base leading-relaxed text-foreground/85 sm:text-lg">
+            Each tool owns its own state. A handoff is a packet you choose to send. Every row below
+            states the field, the reason it travels or is withheld, and what the receiving tool can
+            and cannot conclude from it.
+          </p>
+          <p className="mt-6 max-w-[58ch] text-[0.86rem] leading-relaxed text-muted-foreground">
+            If you have answered the triage console, each packet is also written out against your own
+            constraints.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8">
+      <section className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
         <HandoffMap />
 
-        <div className="panel mt-10 rounded-lg p-7 sm:p-9">
+        <div className="panel mt-10 rounded-lg p-5 sm:p-9">
           <p className="label-mono text-brass">Rules of transfer</p>
           <ul className="mt-5 grid gap-4 text-[0.88rem] leading-relaxed text-foreground/85 md:grid-cols-2">
             <li>Handoffs are reader-initiated. There is no background sync.</li>
             <li>Packets are public-safe: no private notes, no guest identities.</li>
             <li>Dietary categories travel as planning filters, never as allergy guarantees.</li>
             <li>A refused hard stop does not travel as an approval.</li>
+            <li>A field with no job downstream does not travel, even when it is harmless.</li>
+            <li>Reasoning stays with the tool that did it; only conclusions move.</li>
           </ul>
           <Link
             to="/boundary"
-            className="mt-7 inline-flex items-center gap-2 text-sm text-brass transition-colors hover:text-bone"
+            className="mt-7 inline-flex min-h-11 items-center gap-2 text-sm text-brass transition-colors hover:text-bone"
           >
             Read the shared boundary
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
+
 
       <DeskFooter />
     </div>

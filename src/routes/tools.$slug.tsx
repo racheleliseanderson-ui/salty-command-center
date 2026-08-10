@@ -46,7 +46,7 @@ export const Route = createFileRoute("/tools/$slug")({
 
 function ToolNotFound() {
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-dvh bg-ink">
       <DeskHeader />
       <div className="mx-auto max-w-[1240px] px-5 py-32 sm:px-8">
         <p className="label-mono text-brass">Unknown record</p>
@@ -66,7 +66,7 @@ function ToolPage() {
   const detail = TOOL_DETAILS[tool.slug];
 
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-dvh bg-ink">
       <DeskHeader />
 
       <section className="relative isolate overflow-hidden border-b border-border">

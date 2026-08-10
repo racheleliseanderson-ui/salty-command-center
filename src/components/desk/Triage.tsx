@@ -1,45 +1,71 @@
-import { useMemo, useState } from "react";
-import { ArrowRight, ArrowUpRight, RotateCcw, TriangleAlert } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowRight, ArrowUpRight, Check, RotateCcw, TriangleAlert, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { TOOLS } from "@/lib/desk-data";
-import { QUESTIONS, evaluate, type Answers } from "@/lib/desk-triage";
+import { QUESTIONS, evaluate } from "@/lib/desk-triage";
+import { useTriageState } from "@/hooks/use-triage-state";
 
 export function Triage() {
-  const [answers, setAnswers] = useState<Answers>({});
+  const { answers, setAnswer, reset } = useTriageState();
   const verdict = useMemo(() => evaluate(answers), [answers]);
   const answered = Object.values(answers).filter(Boolean).length;
 
+  const prevTop = useRef<string | null>(null);
+  const [changed, setChanged] = useState<string | null>(null);
+
+  useEffect(() => {
+    const top = verdict.entry;
+    if (top && prevTop.current && prevTop.current !== top) {
+      const tool = TOOLS.find((t) => t.slug === top);
+      setChanged(`Entry point moved to ${tool?.name} — the last constraint you declared changed the binding one.`);
+    } else if (!top) {
+      setChanged(null);
+    }
+    prevTop.current = top;
+  }, [verdict.entry]);
+
   return (
-    <div className="panel grain rounded-lg p-6 sm:p-9">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
+    <div className="panel grain rounded-lg p-5 sm:p-9">
+      <div className="grid gap-4 sm:flex sm:flex-wrap sm:items-start sm:justify-between">
+        <div className="min-w-0">
           <p className="label-mono text-brass">Triage console</p>
-          <h3 className="mt-3 font-display text-3xl leading-tight text-bone sm:text-4xl">
+          <h3 className="mt-3 font-display text-2xl leading-tight text-bone sm:text-4xl">
             Which tool do you actually need?
           </h3>
           <p className="mt-3 max-w-[54ch] text-sm leading-relaxed text-muted-foreground">
             Four declared constraints. Deterministic and local — nothing is uploaded, nothing is
-            inferred, no account. The desk will also say which tools are wrong for you.
+            inferred, no account. Your answers stay on this device and tailor the handoff map and the
+            boundary page.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setAnswers({})}
-          disabled={answered === 0}
-          className="label-mono inline-flex items-center gap-2 border border-border px-3 py-2 text-[0.6rem] transition-colors hover:border-brass/50 hover:text-brass disabled:opacity-40"
-        >
-          <RotateCcw className="h-3 w-3" /> Reset
-        </button>
+        <div className="flex shrink-0 items-center gap-3">
+          <span className="label-mono">{answered} of 4 declared</span>
+          <button
+            type="button"
+            onClick={reset}
+            disabled={answered === 0}
+            className="label-mono inline-flex min-h-11 items-center gap-2 border border-border px-3 text-[0.6rem] transition-colors hover:border-brass/50 hover:text-brass disabled:opacity-40"
+          >
+            <RotateCcw className="h-3 w-3" /> Reset
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-4 h-px w-full bg-border">
+        <div
+          className="h-px bg-brass transition-[width] duration-500"
+          style={{ width: `${(answered / 4) * 100}%` }}
+        />
       </div>
 
       <div className="mt-8 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-2">
         {QUESTIONS.map((q, qi) => (
-          <fieldset key={q.key} className="bg-ink-deep p-5 sm:p-6">
+          <fieldset key={q.key} className="bg-ink-deep p-4 sm:p-6">
             <legend className="label-mono text-brass">
               {String(qi + 1).padStart(2, "0")} · {q.key}
             </legend>
-            <p className="mt-2 font-display text-xl leading-snug text-bone">{q.label}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <p className="mt-2 font-display text-lg leading-snug text-bone sm:text-xl">{q.label}</p>
+            <div className="mt-4 grid gap-2 sm:flex sm:flex-wrap">
               {q.options.map((o) => {
                 const active = answers[q.key] === (o.value as never);
                 return (
@@ -47,20 +73,18 @@ export function Triage() {
                     key={o.value}
                     type="button"
                     aria-pressed={active}
-                    onClick={() =>
-                      setAnswers((prev) => ({
-                        ...prev,
-                        [q.key]: active ? undefined : (o.value as never),
-                      }))
-                    }
+                    onClick={() => setAnswer(q.key, active ? undefined : (o.value as never))}
                     className={
                       active
-                        ? "border border-brass bg-brass/15 px-3 py-2 text-left text-[0.8rem] text-brass transition-colors"
-                        : "border border-border px-3 py-2 text-left text-[0.8rem] text-foreground/80 transition-colors hover:border-brass/50 hover:text-brass"
+                        ? "flex min-h-11 items-start gap-2 border border-brass bg-brass/15 px-3 py-2 text-left text-[0.8rem] text-brass transition-colors"
+                        : "flex min-h-11 items-start gap-2 border border-border px-3 py-2 text-left text-[0.8rem] text-foreground/80 transition-colors hover:border-brass/50 hover:text-brass"
                     }
                   >
-                    <span className="block font-medium">{o.label}</span>
-                    <span className="label-mono mt-1 block text-[0.55rem]">{o.note}</span>
+                    {active ? <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" /> : null}
+                    <span>
+                      <span className="block font-medium">{o.label}</span>
+                      <span className="label-mono mt-1 block text-[0.55rem]">{o.note}</span>
+                    </span>
                   </button>
                 );
               })}
@@ -72,31 +96,43 @@ export function Triage() {
       {/* Verdict */}
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_1.05fr]">
         <div
+          aria-live="polite"
           className={
             verdict.hardStop
-              ? "border border-destructive/50 bg-destructive/10 p-6"
-              : "panel-brass rounded-lg p-6"
+              ? "border border-destructive/50 bg-destructive/10 p-5 sm:p-6"
+              : "panel-brass rounded-lg p-5 sm:p-6"
           }
         >
           <p className="label-mono text-brass">Verdict</p>
-          <h4 className="mt-3 font-display text-3xl leading-tight text-bone">{verdict.headline}</h4>
+          <h4 className="mt-3 font-display text-2xl leading-tight text-bone sm:text-3xl">
+            {verdict.headline}
+          </h4>
           <p className="mt-3 text-[0.9rem] leading-relaxed text-foreground/85">{verdict.detail}</p>
 
           {verdict.hardStop ? (
             <p className="mt-5 flex gap-3 border-t border-destructive/40 pt-4 text-[0.85rem] leading-relaxed text-foreground/85">
               <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-destructive-foreground" />
-              {verdict.hardStop}
+              <span>
+                <span className="label-mono block text-[0.58rem]">Hard stop</span>
+                {verdict.hardStop}
+              </span>
+            </p>
+          ) : null}
+
+          {changed ? (
+            <p className="label-mono mt-5 border-l border-brass/60 pl-3 leading-relaxed text-brass">
+              {changed}
             </p>
           ) : null}
 
           <p className="label-mono mt-6 leading-relaxed">{verdict.handoff}</p>
 
           {verdict.entry ? (
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 grid gap-3 sm:flex sm:flex-wrap">
               <Link
                 to="/tools/$slug"
                 params={{ slug: verdict.entry }}
-                className="inline-flex items-center gap-2 border border-brass/50 bg-brass/10 px-4 py-2.5 text-[0.8rem] tracking-wide text-brass transition-colors hover:bg-brass hover:text-primary-foreground"
+                className="inline-flex min-h-11 items-center justify-center gap-2 border border-brass/50 bg-brass/10 px-4 text-[0.8rem] tracking-wide text-brass transition-colors hover:bg-brass hover:text-primary-foreground"
               >
                 Read the entry point
                 <ArrowRight className="h-4 w-4" />
@@ -105,11 +141,17 @@ export function Triage() {
                 href={TOOLS.find((t) => t.slug === verdict.entry)!.href}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-2 py-2.5 text-[0.8rem] tracking-wide text-muted-foreground transition-colors hover:text-brass"
+                className="inline-flex min-h-11 items-center justify-center gap-2 px-2 text-[0.8rem] tracking-wide text-muted-foreground transition-colors hover:text-brass"
               >
                 Launch it now
                 <ArrowUpRight className="h-4 w-4" />
               </a>
+              <Link
+                to="/handoffs"
+                className="inline-flex min-h-11 items-center justify-center gap-2 px-2 text-[0.8rem] tracking-wide text-muted-foreground transition-colors hover:text-brass"
+              >
+                See the packet for this case
+              </Link>
             </div>
           ) : null}
         </div>
@@ -123,17 +165,26 @@ export function Triage() {
                 key={r.slug}
                 className={
                   lead
-                    ? "border border-brass/40 bg-brass/5 p-5 transition-opacity"
-                    : "border border-border p-5 opacity-55 transition-opacity"
+                    ? "border border-brass/40 bg-brass/5 p-4 transition-opacity sm:p-5"
+                    : "border border-dashed border-border p-4 opacity-70 transition-opacity sm:p-5"
                 }
               >
-                <div className="flex items-baseline justify-between gap-4">
-                  <p className="font-display text-xl leading-tight text-bone">{tool.name}</p>
-                  <span className="label-mono text-brass">{r.fit}% fit</span>
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <p className="min-w-0 font-display text-lg leading-tight text-bone sm:text-xl">
+                    {tool.name}
+                  </p>
+                  <span className="label-mono flex shrink-0 items-center gap-1.5 text-brass">
+                    {lead ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                    {lead ? "Entry point" : "Not this one"} · {r.fit}% fit
+                  </span>
                 </div>
-                <div className="mt-3 h-px w-full bg-border">
+                <div className="mt-3 h-1 w-full bg-border">
                   <div
-                    className="h-px bg-brass transition-[width] duration-700"
+                    className={
+                      lead
+                        ? "h-1 bg-brass transition-[width] duration-700"
+                        : "h-1 fit-hatch transition-[width] duration-700"
+                    }
                     style={{ width: `${r.fit}%` }}
                   />
                 </div>
