@@ -344,3 +344,78 @@ function Control({
     </button>
   );
 }
+
+/**
+ * Compact run strip for pages that are not the console: shows the open stage,
+ * gate pressure, and the two controls that matter without leaving the page.
+ */
+export function PipelineStrip() {
+  const { run, start, advance, hold } = usePipelineRun();
+  const active = STAGES[run.stage]!;
+  const blocking = blockingGates(active, run.gates);
+  const idle = run.status === "idle";
+  const stopped = run.status === "aborted" || run.status === "complete";
+  const status = statusCopy(run.status);
+
+  return (
+    <div className="panel grid gap-5 rounded-lg p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+      <div className="min-w-0">
+        <p className="label-mono flex items-center gap-2 text-brass">
+          {run.status === "running" ? (
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inset-0 animate-ping rounded-full bg-live/60" />
+              <span className="relative h-1.5 w-1.5 rounded-full bg-live" />
+            </span>
+          ) : null}
+          Run status · {status.label}
+        </p>
+        <p className="mt-3 font-display text-2xl leading-tight text-bone sm:text-3xl">
+          {idle
+            ? "No run open. Six stages waiting."
+            : stopped
+              ? status.note
+              : `${active.code} · ${active.name} — ${active.decision}`}
+        </p>
+        <p className="mt-2 text-[0.84rem] leading-relaxed text-muted-foreground">
+          {idle || stopped
+            ? "The pipeline runs from declared constraints to the service window, gate by gate."
+            : blocking.length > 0
+              ? `${blocking.length} hard gate${blocking.length > 1 ? "s" : ""} unsigned. The run will refuse to advance.`
+              : "All hard gates signed. This stage can be closed."}
+        </p>
+      </div>
+
+      <div className="flex shrink-0 flex-wrap items-center gap-2">
+        {idle || stopped ? (
+          <Control onClick={start} tone="primary" icon={<Play className="h-4 w-4" />}>
+            Open run
+          </Control>
+        ) : (
+          <>
+            <Control
+              onClick={advance}
+              tone={blocking.length ? "blocked" : "primary"}
+              icon={<SkipForward className="h-4 w-4" />}
+              disabled={run.status === "held"}
+            >
+              Advance
+            </Control>
+            <Control
+              onClick={hold}
+              icon={run.status === "held" ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+            >
+              {run.status === "held" ? "Release" : "Hold"}
+            </Control>
+          </>
+        )}
+        <Link
+          to="/pipeline"
+          className="press tap inline-flex items-center justify-center gap-2 px-2 text-[0.8rem] tracking-wide text-muted-foreground transition-colors hover:text-brass"
+        >
+          Open the console
+          <ArrowUpRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </div>
+  );
+}
