@@ -4,6 +4,7 @@ import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
 import { ToolCard } from "@/components/desk/ToolCard";
 import { HandoffMap } from "@/components/desk/HandoffMap";
 import { Triage } from "@/components/desk/Triage";
+import { PipelineStrip } from "@/components/desk/PipelineConsole";
 import { Reveal } from "@/components/desk/Reveal";
 import { StatusLedger, SuiteCounters } from "@/components/desk/StatusLedger";
 import { useParallax } from "@/hooks/use-parallax";
@@ -119,6 +120,10 @@ function Desk() {
         />
         <Reveal className="mt-12">
           <Triage />
+        </Reveal>
+
+        <Reveal className="mt-10">
+          <PipelineStrip />
         </Reveal>
       </section>
 

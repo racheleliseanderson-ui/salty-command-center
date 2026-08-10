@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BoundaryRouteImport } from './routes/boundary'
 import { Route as HandoffsRouteImport } from './routes/handoffs'
 import { Route as HostPathRouteImport } from './routes/host-path'
+import { Route as PipelineRouteImport } from './routes/pipeline'
 import { Route as ReferenceRouteImport } from './routes/reference'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 
@@ -36,6 +37,11 @@ const HostPathRoute = HostPathRouteImport.update({
   path: '/host-path',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PipelineRoute = PipelineRouteImport.update({
+  id: '/pipeline',
+  path: '/pipeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReferenceRoute = ReferenceRouteImport.update({
   id: '/reference',
   path: '/reference',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/boundary': typeof BoundaryRoute
   '/handoffs': typeof HandoffsRoute
   '/host-path': typeof HostPathRoute
+  '/pipeline': typeof PipelineRoute
   '/reference': typeof ReferenceRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/boundary': typeof BoundaryRoute
   '/handoffs': typeof HandoffsRoute
   '/host-path': typeof HostPathRoute
+  '/pipeline': typeof PipelineRoute
   '/reference': typeof ReferenceRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/boundary': typeof BoundaryRoute
   '/handoffs': typeof HandoffsRoute
   '/host-path': typeof HostPathRoute
+  '/pipeline': typeof PipelineRoute
   '/reference': typeof ReferenceRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/boundary'
     | '/handoffs'
     | '/host-path'
+    | '/pipeline'
     | '/reference'
     | '/tools/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/boundary'
     | '/handoffs'
     | '/host-path'
+    | '/pipeline'
     | '/reference'
     | '/tools/$slug'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/boundary'
     | '/handoffs'
     | '/host-path'
+    | '/pipeline'
     | '/reference'
     | '/tools/$slug'
   fileRoutesById: FileRoutesById
@@ -104,6 +116,7 @@ export interface RootRouteChildren {
   BoundaryRoute: typeof BoundaryRoute
   HandoffsRoute: typeof HandoffsRoute
   HostPathRoute: typeof HostPathRoute
+  PipelineRoute: typeof PipelineRoute
   ReferenceRoute: typeof ReferenceRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
 }
@@ -138,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HostPathRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pipeline': {
+      id: '/pipeline'
+      path: '/pipeline'
+      fullPath: '/pipeline'
+      preLoaderRoute: typeof PipelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reference': {
       id: '/reference'
       path: '/reference'
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   BoundaryRoute: BoundaryRoute,
   HandoffsRoute: HandoffsRoute,
   HostPathRoute: HostPathRoute,
+  PipelineRoute: PipelineRoute,
   ReferenceRoute: ReferenceRoute,
   ToolsSlugRoute: ToolsSlugRoute,
 }
