@@ -59,14 +59,14 @@ function PipelinePage() {
             decision, its owner, and the gates that must be signed before anything advances.
           </p>
 
-          <dl className="rise mt-12 grid max-w-3xl grid-cols-2 gap-px overflow-hidden border border-border bg-border sm:grid-cols-3">
+          <dl className="rise mt-12 grid max-w-3xl grid-cols-3 gap-px overflow-hidden border border-border bg-border">
             {[
               { k: "Stages", v: String(STAGES.length) },
               { k: "Hard gates", v: String(STAGES.flatMap((s) => s.gates).filter((g) => g.hard).length) },
               { k: "Uploads", v: "0" },
             ].map((s) => (
-              <div key={s.k} className="bg-ink-deep px-5 py-6">
-                <dt className="font-display text-4xl leading-none text-brass">{s.v}</dt>
+              <div key={s.k} className="bg-ink-deep px-4 py-6 sm:px-5">
+                <dt className="font-display text-3xl leading-none text-brass sm:text-4xl">{s.v}</dt>
                 <dd className="label-mono mt-3">{s.k}</dd>
               </div>
             ))}
