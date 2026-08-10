@@ -319,6 +319,36 @@ function Desk() {
         </div>
       </section>
 
+      {/* ── Desk log ─────────────────────────────────────────── */}
+      <section className="mx-auto max-w-[1240px] px-5 pb-24 sm:px-8">
+        <SectionHead
+          kicker="Desk log"
+          title="Recent to the desk"
+          lede="Dated, dry, and first-party. What changed in the suite, and which record it changed."
+        />
+        <ul className="mt-10 divide-y divide-border border-t border-border">
+          {DESK_LOG.map((l, i) => (
+            <Reveal
+              key={l.date + l.id}
+              as="li"
+              delay={i * 70}
+              className="grid gap-2 py-5 sm:grid-cols-[9rem_7rem_1fr]"
+            >
+              <span className="label-mono">{l.date}</span>
+              <span className="label-mono text-brass">{l.id}</span>
+              <span className="text-[0.88rem] leading-relaxed text-foreground/85">{l.entry}</span>
+            </Reveal>
+          ))}
+        </ul>
+        <Link
+          to="/reference"
+          className="mt-10 inline-flex items-center gap-2 text-sm text-brass transition-colors hover:text-bone"
+        >
+          Suite vocabulary &amp; build ledger
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </section>
+
       <DeskFooter />
     </div>
   );
@@ -333,10 +363,11 @@ function SectionHead({
   title: string;
   lede?: string;
 }) {
+  const { ref, shown } = useReveal<HTMLDivElement>(0.3);
   return (
-    <div className="max-w-[62ch]">
+    <div ref={ref} className="max-w-[62ch]">
       <p className="label-mono text-brass">{kicker}</p>
-      <div className="rule-brass mt-3 w-24" />
+      <div data-shown={shown} className="rule-brass draw-rule mt-3 w-24" />
       <h2 className="mt-5 font-display text-4xl leading-[1.05] text-bone sm:text-5xl">{title}</h2>
       {lede ? (
         <p className="mt-5 text-base leading-relaxed text-muted-foreground">{lede}</p>
@@ -344,6 +375,7 @@ function SectionHead({
     </div>
   );
 }
+
 
 function Commit({ n, q, a }: { n: string; q: string; a: string }) {
   return (
