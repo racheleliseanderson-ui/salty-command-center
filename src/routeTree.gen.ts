@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BoundaryRouteImport } from './routes/boundary'
+import { Route as HandoffsRouteImport } from './routes/handoffs'
+import { Route as HostPathRouteImport } from './routes/host-path'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BoundaryRoute = BoundaryRouteImport.update({
+  id: '/boundary',
+  path: '/boundary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HandoffsRoute = HandoffsRouteImport.update({
+  id: '/handoffs',
+  path: '/handoffs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HostPathRoute = HostPathRouteImport.update({
+  id: '/host-path',
+  path: '/host-path',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/boundary': typeof BoundaryRoute
+  '/handoffs': typeof HandoffsRoute
+  '/host-path': typeof HostPathRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/boundary': typeof BoundaryRoute
+  '/handoffs': typeof HandoffsRoute
+  '/host-path': typeof HostPathRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/boundary': typeof BoundaryRoute
+  '/handoffs': typeof HandoffsRoute
+  '/host-path': typeof HostPathRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/boundary' | '/handoffs' | '/host-path'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/boundary' | '/handoffs' | '/host-path'
+  id: '__root__' | '/' | '/boundary' | '/handoffs' | '/host-path'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BoundaryRoute: typeof BoundaryRoute
+  HandoffsRoute: typeof HandoffsRoute
+  HostPathRoute: typeof HostPathRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/boundary': {
+      id: '/boundary'
+      path: '/boundary'
+      fullPath: '/boundary'
+      preLoaderRoute: typeof BoundaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/handoffs': {
+      id: '/handoffs'
+      path: '/handoffs'
+      fullPath: '/handoffs'
+      preLoaderRoute: typeof HandoffsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/host-path': {
+      id: '/host-path'
+      path: '/host-path'
+      fullPath: '/host-path'
+      preLoaderRoute: typeof HostPathRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BoundaryRoute: BoundaryRoute,
+  HandoffsRoute: HandoffsRoute,
+  HostPathRoute: HostPathRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

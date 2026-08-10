@@ -3,7 +3,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
 import { ToolCard } from "@/components/desk/ToolCard";
 import { HandoffMap } from "@/components/desk/HandoffMap";
-import { BOUNDARIES, PHILOSOPHY, TOOLS } from "@/lib/desk-data";
+import { BOUNDARIES, PHILOSOPHY, RESTAURANT_INTELLIGENCE, TOOLS } from "@/lib/desk-data";
 import heroPass from "@/assets/hero-pass.jpg";
 import diningRoom from "@/assets/dining-room.jpg";
 
@@ -70,7 +70,7 @@ function Desk() {
               <ArrowRight className="h-4 w-4" />
             </Link>
             <a
-              href={dineTools[0].href}
+              href={RESTAURANT_INTELLIGENCE.href}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 border border-bone/30 px-5 py-3 text-sm font-medium tracking-wide text-bone transition-colors hover:border-brass hover:text-brass"

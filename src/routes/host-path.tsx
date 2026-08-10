@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
-import { TOOLS } from "@/lib/desk-data";
+import { MENU_BUILDER, OCCASION_OS, RESTAURANT_INTELLIGENCE } from "@/lib/desk-data";
 import prepMise from "@/assets/prep-mise.jpg";
 
 export const Route = createFileRoute("/host-path")({
@@ -37,7 +37,7 @@ const STEPS = [
       "Apply bounded simplification where stress is highest",
     ],
     exit: "A stress summary with hard stops resolved — or an honest refusal.",
-    tool: TOOLS[0],
+    tool: MENU_BUILDER,
   },
   {
     n: "02",
@@ -51,12 +51,12 @@ const STEPS = [
       "Keep dietary categories as planning filters only",
     ],
     exit: "One host plan you can work from, with the food-safety boundary in view.",
-    tool: TOOLS[1],
+    tool: OCCASION_OS,
   },
 ] as const;
 
 function HostPath() {
-  const ri = TOOLS[2];
+  const ri = RESTAURANT_INTELLIGENCE;
 
   return (
     <div className="min-h-screen bg-ink">

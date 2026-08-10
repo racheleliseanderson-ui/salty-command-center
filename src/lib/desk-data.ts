@@ -192,3 +192,7 @@ export const PHILOSOPHY = [
   { k: "No allergen guarantees", v: "Dietary categories are filters. Safety stays with the kitchen." },
   { k: "Fail closed", v: "Hard constraints stop the plan instead of quietly degrading it." },
 ];
+
+export const MENU_BUILDER = TOOLS[0]!;
+export const OCCASION_OS = TOOLS[1]!;
+export const RESTAURANT_INTELLIGENCE = TOOLS[2]!;
