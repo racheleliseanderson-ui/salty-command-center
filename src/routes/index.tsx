@@ -3,9 +3,14 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
 import { ToolCard } from "@/components/desk/ToolCard";
 import { HandoffMap } from "@/components/desk/HandoffMap";
-import { BOUNDARIES, PHILOSOPHY, RESTAURANT_INTELLIGENCE, TOOLS } from "@/lib/desk-data";
+import { Triage } from "@/components/desk/Triage";
+import { Reveal } from "@/components/desk/Reveal";
+import { StatusLedger, SuiteCounters } from "@/components/desk/StatusLedger";
+import { useParallax } from "@/hooks/use-parallax";
+import { BOUNDARIES, DESK_LOG, PHILOSOPHY, RESTAURANT_INTELLIGENCE, TOOLS } from "@/lib/desk-data";
 import heroPass from "@/assets/hero-pass.jpg";
 import diningRoom from "@/assets/dining-room.jpg";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -30,6 +35,8 @@ export const Route = createFileRoute("/")({
 function Desk() {
   const hostTools = TOOLS.filter((t) => t.track === "host");
   const dineTools = TOOLS.filter((t) => t.track === "dine");
+  const heroRef = useParallax<HTMLImageElement>(0.14);
+  const dineRef = useParallax<HTMLImageElement>(0.1);
 
   return (
     <div className="min-h-screen bg-ink">
@@ -38,12 +45,14 @@ function Desk() {
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section className="relative isolate overflow-hidden">
         <img
+          ref={heroRef}
           src={heroPass}
           alt="Hands finishing a plate on a dark kitchen pass under brass service light"
           width={1600}
           height={1104}
-          className="absolute inset-0 h-full w-full object-cover object-center opacity-70"
+          className="media-tone absolute inset-0 h-full w-full object-cover object-center will-change-transform"
         />
+
         <div className="ink-veil absolute inset-0" />
         <div className="hairline-grid absolute inset-0 opacity-40" />
 
@@ -92,34 +101,50 @@ function Desk() {
         </div>
       </section>
 
-      {/* ── Live status strip ─────────────────────────────────── */}
+      {/* ── Suite counters ────────────────────────────────────── */}
       <section className="border-y border-border bg-ink-deep">
-        <div className="mx-auto grid max-w-[1240px] gap-px bg-border px-0 sm:grid-cols-3">
-          {TOOLS.map((t) => (
-            <div key={t.id} className="bg-ink-deep px-5 py-6 sm:px-8">
-              <div className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-live" />
-                <span className="label-mono text-live">Live</span>
-                <span className="label-mono">· {t.id}</span>
-              </div>
-              <p className="mt-3 font-display text-xl text-bone">{t.name}</p>
-              <p className="mt-1 text-[0.8rem] text-muted-foreground">{t.statusNote}</p>
-            </div>
-          ))}
+        <div className="mx-auto max-w-[1240px] px-5 py-14 sm:px-8">
+          <SuiteCounters />
+        </div>
+      </section>
+
+      {/* ── Triage console ───────────────────────────────────── */}
+      <section className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8">
+        <SectionHead
+          kicker="Routing intelligence"
+          title="Answer four constraints. Get one entry point."
+          lede="The desk does not sell you all three tools. It names the one that answers your question — and the ones that do not."
+        />
+        <Reveal className="mt-12">
+          <Triage />
+        </Reveal>
+      </section>
+
+      {/* ── Status ledger ────────────────────────────────────── */}
+      <section className="border-t border-border bg-ink-deep">
+        <div className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8">
+          <SectionHead
+            kicker="Suite status"
+            title="What each tool accepts right now"
+            lede="Build, contract version, and last change — with what the tool will and will not take today."
+          />
+          <div className="mt-12">
+            <StatusLedger />
+          </div>
         </div>
       </section>
 
       {/* ── Choose your surface ──────────────────────────────── */}
       <section className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8">
         <SectionHead
-          kicker="Triage"
+          kicker="Triage grid"
           title="Three tools. One question each."
           lede="If two tools seem to overlap, you're holding the wrong question. Read the decision line, not the feature list."
         />
 
         <div className="mt-12 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-3">
-          {TOOLS.map((t) => (
-            <div key={t.id} className="bg-surface p-7">
+          {TOOLS.map((t, i) => (
+            <Reveal key={t.id} delay={i * 90} className="bg-surface p-7">
               <p className="label-mono text-brass">{t.id}</p>
               <h3 className="mt-3 font-display text-2xl leading-tight text-bone">{t.name}</h3>
               <p className="mt-4 font-display text-lg leading-snug text-brass/90">{t.decision}</p>
@@ -133,10 +158,19 @@ function Desk() {
                   {t.notFor}
                 </p>
               </div>
-            </div>
+              <Link
+                to="/tools/$slug"
+                params={{ slug: t.slug }}
+                className="mt-6 inline-flex items-center gap-2 text-[0.8rem] text-brass transition-colors hover:text-bone"
+              >
+                Full record
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </Reveal>
           ))}
         </div>
       </section>
+
 
       {/* ── Host suite ───────────────────────────────────────── */}
       <section className="relative border-t border-border bg-ink-deep">
@@ -167,13 +201,15 @@ function Desk() {
       {/* ── Dine suite ───────────────────────────────────────── */}
       <section className="relative isolate overflow-hidden border-t border-border">
         <img
+          ref={dineRef}
           src={diningRoom}
           alt="Empty candlelit restaurant banquette in a dark green dining room"
           width={1408}
           height={1008}
           loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover opacity-25"
+          className="media-tone-soft absolute inset-0 h-full w-full object-cover will-change-transform"
         />
+
         <div className="ink-veil absolute inset-0" />
         <div className="relative mx-auto max-w-[1240px] px-5 py-24 sm:px-8">
           <SectionHead
