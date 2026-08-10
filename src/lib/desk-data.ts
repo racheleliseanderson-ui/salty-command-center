@@ -127,7 +127,24 @@ export const TOOLS: Tool[] = [
   },
 ];
 
-export const HANDOFFS = [
+export type PacketRow = { field: string; reason: string };
+
+export type Handoff = {
+  from: string;
+  fromId: string;
+  to: string;
+  toId: string;
+  contract: string;
+  tag: string;
+  purpose: string;
+  breaksIf: string;
+  moves: PacketRow[];
+  stays: PacketRow[];
+  canConclude: string[];
+  cannotConclude: string[];
+};
+
+export const HANDOFFS: Handoff[] = [
   {
     from: "Menu Builder",
     fromId: "SC-MB-001",
@@ -135,15 +152,45 @@ export const HANDOFFS = [
     toId: "SC-OOS-001",
     contract: "Contract 1.1.0",
     tag: "Primary",
+    purpose:
+      "So the night can be sequenced against a menu that has already been stress-tested — not against a wish list.",
+    breaksIf:
+      "If drafts and simplification history travelled too, Occasion OS would route a menu you already rejected.",
     moves: [
-      "Menu architecture (roles, dishes, pairing mode)",
-      "Stress summary across five axes",
-      "Locked anchor and its re-scoring effect",
+      {
+        field: "Menu architecture (roles, dishes, pairing mode)",
+        reason: "The prep route is built per dish role; without roles there is no sequence to build.",
+      },
+      {
+        field: "Stress summary across five axes",
+        reason: "Occasion OS needs the pressure profile to know which step to protect first.",
+      },
+      {
+        field: "Locked anchor and its re-scoring effect",
+        reason: "An anchor fixes one dish's timing; the route has to respect it, not re-litigate it.",
+      },
     ],
     stays: [
-      "Draft menus you discarded",
-      "Simplification history and budget pressure inputs",
-      "Anything you did not explicitly send",
+      {
+        field: "Draft menus you discarded",
+        reason: "A rejected draft is not a decision. Sending it would let it be re-proposed.",
+      },
+      {
+        field: "Simplification history and budget pressure inputs",
+        reason: "These are reasoning, not output. Occasion OS has no job that needs them.",
+      },
+      {
+        field: "Anything you did not explicitly send",
+        reason: "There is no background sync. Silence is withholding, not consent.",
+      },
+    ],
+    canConclude: [
+      "Which dishes need heat, hands, or the pass at the same moment",
+      "Where the plan is already at capacity before guests arrive",
+    ],
+    cannotConclude: [
+      "Why you chose this menu over another",
+      "That any dietary category is an allergy-safe claim",
     ],
   },
   {
@@ -153,14 +200,41 @@ export const HANDOFFS = [
     toId: "SC-RI-001",
     contract: "Reader-initiated",
     tag: "Optional",
+    purpose:
+      "So a room can be ranked against the same occasion you were planning — when hosting is no longer the right outcome.",
+    breaksIf:
+      "If the host plan travelled, a restaurant surface would hold your kitchen state for a night that is not happening.",
     moves: [
-      "Occasion type, party size, and date window",
-      "Planning-filter dietary categories (never allergy claims)",
+      {
+        field: "Occasion type, party size, and date window",
+        reason: "Capacity and booking fit cannot be ranked without these three.",
+      },
+      {
+        field: "Planning-filter dietary categories (never allergy claims)",
+        reason: "Used to filter rooms worth calling — the confirm still happens live, with the kitchen.",
+      },
     ],
     stays: [
-      "Full host plan, prep route, and shopping state",
-      "Guest names and private notes",
-      "Any inference about why you switched to dining out",
+      {
+        field: "Full host plan, prep route, and shopping state",
+        reason: "None of it has a reader job on the dine-out side.",
+      },
+      {
+        field: "Guest names and private notes",
+        reason: "Packets are public-safe. Guest identity never leaves the tool it was typed into.",
+      },
+      {
+        field: "Any inference about why you switched to dining out",
+        reason: "The desk does not build a motive record. The switch is a choice, not a signal.",
+      },
+    ],
+    canConclude: [
+      "Which rooms can physically seat the party in the window",
+      "Which rooms are worth the confirm call for your filters",
+    ],
+    cannotConclude: [
+      "That a room is allergy-safe for anyone at the table",
+      "That hosting failed, or why",
     ],
   },
   {
@@ -170,19 +244,107 @@ export const HANDOFFS = [
     toId: "Editorial",
     contract: "Public-safe packet",
     tag: "Optional",
-    moves: ["First-party case file", "Evidence trail with confidence labels and open unknowns"],
-    stays: ["Your shortlists and rejections", "Booking attempts and confirm burden notes"],
+    purpose:
+      "So a night you actually had becomes a first-party record with its unknowns still visible.",
+    breaksIf:
+      "If shortlists and rejections travelled, the record would read as a ranking you never published.",
+    moves: [
+      {
+        field: "First-party case file",
+        reason: "What was observed at the source, dated, with the observer's position stated.",
+      },
+      {
+        field: "Evidence trail with confidence labels and open unknowns",
+        reason: "A record without its unknowns reads as certainty it never had.",
+      },
+    ],
+    stays: [
+      {
+        field: "Your shortlists and rejections",
+        reason: "A rejection is private judgment, not evidence about the room.",
+      },
+      {
+        field: "Booking attempts and confirm burden notes",
+        reason: "Operational friction on your side says nothing durable about the venue.",
+      },
+    ],
+    canConclude: [
+      "What was true at that room, on that date, from the source",
+      "Which questions were left open",
+    ],
+    cannotConclude: [
+      "A star rating or a 'best restaurant' ordering",
+      "Anything about rooms you considered but never visited",
+    ],
   },
 ];
 
-export const BOUNDARIES = [
-  "No allergen safety or cross-contact control — dietary tags are planning filters only",
-  "No silent movement of data between tools until you choose a handoff",
-  "No star ratings, social proof collapse, or inferred “best restaurant” rankings",
-  "No forced account for core planning tools",
-  "Educational only — not professional kitchen, medical, or legal advice",
-  "Fail closed on hard stops: capacity, allergen boundary, official conflicts",
+export type BoundaryGroup = "Safety" | "Data movement" | "Evidence" | "Scope";
+
+export type Boundary = {
+  id:
+    | "allergen"
+    | "movement"
+    | "rankings"
+    | "account"
+    | "educational"
+    | "fail-closed";
+  group: BoundaryGroup;
+  limit: string;
+  why: string;
+  instead: string;
+};
+
+export const BOUNDARIES: Boundary[] = [
+  {
+    id: "allergen",
+    group: "Safety",
+    limit: "No allergen safety or cross-contact control",
+    why: "Cross-contact is a kitchen-surface and handling problem. No planning tool can observe it, so no planning tool can certify it.",
+    instead:
+      "Dietary categories work as planning filters. The safety conversation happens live, with whoever is cooking.",
+  },
+  {
+    id: "fail-closed",
+    group: "Safety",
+    limit: "Fail closed on hard stops: capacity, allergen boundary, official conflicts",
+    why: "A quietly degraded plan is more dangerous than a refused one, because it still looks like a plan.",
+    instead:
+      "The tool refuses and names the breached constraint. A refusal is an outcome, not an error to click past.",
+  },
+  {
+    id: "movement",
+    group: "Data movement",
+    limit: "No silent movement of data between tools",
+    why: "Each tool owns its own state. Background sync would make a handoff something you did not choose.",
+    instead:
+      "You send a public-safe packet, and the map shows what travels and what is withheld before you send it.",
+  },
+  {
+    id: "account",
+    group: "Data movement",
+    limit: "No forced account for core planning tools",
+    why: "Planning is local work. An account requirement would collect identity the tools do not need.",
+    instead: "Core planning runs on local state. Nothing is uploaded to use the desk.",
+  },
+  {
+    id: "rankings",
+    group: "Evidence",
+    limit: "No star ratings, social-proof collapse, or inferred “best restaurant” rankings",
+    why: "A single score hides the disagreement that made it. Collapsed proof cannot be audited.",
+    instead:
+      "First-party case files with confidence labels and open unknowns left visible, ranked only against your stated occasion.",
+  },
+  {
+    id: "educational",
+    group: "Scope",
+    limit: "Educational planning only — not professional kitchen, medical, or legal advice",
+    why: "The suite has no view of your kitchen, your health, or your jurisdiction.",
+    instead:
+      "Use it to make the decision legible, then take the decision to the people qualified to certify it.",
+  },
 ];
+
 
 export const PHILOSOPHY = [
   { k: "Reader-job-first", v: "Every surface names the decision it serves before it shows a control." },
