@@ -156,7 +156,7 @@ function ReferencePage() {
         <div className="rule-brass mt-3 w-24" />
         <h2 className="mt-5 font-display text-4xl leading-tight text-bone">Recent to the desk</h2>
         <ul className="mt-10 divide-y divide-border border-t border-border">
-          {DESK_LOG.map((l) => (
+          {log.map((l) => (
             <li key={l.date + l.id} className="grid gap-2 py-5 sm:grid-cols-[9rem_7rem_1fr]">
               <span className="label-mono">{l.date}</span>
               <span className="label-mono text-brass">{l.id}</span>
