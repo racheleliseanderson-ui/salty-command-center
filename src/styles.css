@@ -174,8 +174,9 @@
   --sidebar-border: oklch(0.855 0.012 84);
   --sidebar-ring: var(--brass-deep);
 
-  --media-opacity: 0.17;
-  --media-opacity-soft: 0.1;
+  --media-opacity: 0.42;
+  --media-opacity-soft: 0.18;
+
   --grain-strength: 0.35;
   --grid-strength: 10%;
 }
