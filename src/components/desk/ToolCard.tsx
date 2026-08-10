@@ -17,7 +17,7 @@ export function StatusPip({ status, note }: { status: Tool["status"]; note?: str
 
 export function ToolCard({ tool, index }: { tool: Tool; index: number }) {
   return (
-    <article className="panel grain rise group relative overflow-hidden rounded-lg">
+    <article className="panel grain rise lift group relative overflow-hidden rounded-lg">
       <div className="absolute inset-x-0 top-0 rule-brass opacity-60" />
 
       <div className="grid gap-8 p-6 sm:p-9 lg:grid-cols-[1.15fr_1fr]">
