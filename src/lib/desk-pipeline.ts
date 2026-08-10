@@ -211,8 +211,7 @@ export function blockingGates(stage: Stage, gates: Record<string, boolean>) {
 }
 
 export function runProgress(state: RunState) {
-  const cleared = STAGES.filter((s, i) => i < state.stage || (state.status === "complete" && true))
-    .length;
+  const cleared = state.status === "complete" ? STAGES.length : state.stage;
   return Math.round((Math.min(cleared, STAGES.length) / STAGES.length) * 100);
 }
 
