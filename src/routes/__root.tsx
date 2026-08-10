@@ -110,7 +110,7 @@ const THEME_BOOTSTRAP = `(function(){try{var t=localStorage.getItem("salty-desk-
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
         <HeadContent />
