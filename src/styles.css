@@ -437,3 +437,41 @@
     transform: none;
   }
 }
+
+/* Hatched fill: fit bars stay distinguishable without relying on hue. */
+@utility fit-hatch {
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--muted-foreground) 0 2px,
+    transparent 2px 5px
+  );
+}
+
+/*
+ * Colour-vision-safe variant. Signal moves off the brass/oxblood/pine axis
+ * onto a blue/amber pair that stays separable for deutan and protan vision.
+ * Icons and text labels carry the meaning; colour only reinforces it.
+ */
+.cvd {
+  --brass: oklch(0.82 0.15 85);
+  --brass-deep: oklch(0.66 0.13 82);
+  --oxblood: oklch(0.55 0.17 255);
+  --pine: oklch(0.45 0.09 250);
+  --live: oklch(0.72 0.13 235);
+  --accent: var(--pine);
+  --destructive: var(--oxblood);
+  --destructive-foreground: oklch(0.97 0.01 250);
+  --chart-2: var(--live);
+  --chart-3: var(--oxblood);
+  --chart-4: var(--pine);
+}
+
+.cvd.light {
+  --brass: oklch(0.52 0.12 75);
+  --brass-deep: oklch(0.42 0.1 72);
+  --oxblood: oklch(0.44 0.17 258);
+  --pine: oklch(0.86 0.05 250);
+  --live: oklch(0.46 0.14 240);
+  --destructive-foreground: oklch(0.985 0.008 250);
+}
+
