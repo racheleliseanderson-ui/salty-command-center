@@ -74,35 +74,36 @@
 :root {
   --radius: 0.25rem;
 
-  --ink-deep: oklch(0.13 0.014 158);
-  --ink: oklch(0.168 0.016 158);
-  --surface: oklch(0.212 0.018 158);
-  --surface-raised: oklch(0.257 0.02 158);
-  --pine: oklch(0.32 0.045 158);
-  --brass: oklch(0.79 0.115 84);
-  --brass-deep: oklch(0.6 0.1 74);
-  --oxblood: oklch(0.45 0.145 26);
-  --bone: oklch(0.94 0.014 84);
-  --live: oklch(0.78 0.13 155);
+  /* Dark: ink-green, lifted a step out of near-black so panels read as material. */
+  --ink-deep: oklch(0.172 0.015 158);
+  --ink: oklch(0.216 0.017 158);
+  --surface: oklch(0.257 0.019 158);
+  --surface-raised: oklch(0.302 0.021 158);
+  --pine: oklch(0.375 0.048 158);
+  --brass: oklch(0.8 0.115 84);
+  --brass-deep: oklch(0.62 0.1 74);
+  --oxblood: oklch(0.48 0.15 26);
+  --bone: oklch(0.95 0.014 84);
+  --live: oklch(0.79 0.13 155);
 
   --background: var(--ink);
-  --foreground: oklch(0.93 0.012 84);
+  --foreground: oklch(0.94 0.012 84);
   --card: var(--surface);
-  --card-foreground: oklch(0.93 0.012 84);
+  --card-foreground: oklch(0.94 0.012 84);
   --popover: var(--surface-raised);
-  --popover-foreground: oklch(0.93 0.012 84);
+  --popover-foreground: oklch(0.94 0.012 84);
   --primary: var(--brass);
-  --primary-foreground: oklch(0.16 0.02 84);
+  --primary-foreground: oklch(0.17 0.02 84);
   --secondary: var(--surface-raised);
-  --secondary-foreground: oklch(0.93 0.012 84);
+  --secondary-foreground: oklch(0.94 0.012 84);
   --muted: var(--surface);
-  --muted-foreground: oklch(0.7 0.014 120);
+  --muted-foreground: oklch(0.755 0.014 120);
   --accent: var(--pine);
-  --accent-foreground: oklch(0.95 0.012 84);
+  --accent-foreground: oklch(0.96 0.012 84);
   --destructive: var(--oxblood);
-  --destructive-foreground: oklch(0.95 0.01 84);
-  --border: oklch(0.32 0.018 158);
-  --input: oklch(0.32 0.018 158);
+  --destructive-foreground: oklch(0.96 0.01 84);
+  --border: oklch(0.375 0.019 158);
+  --input: oklch(0.375 0.019 158);
   --ring: var(--brass-deep);
 
   --chart-1: var(--brass);
@@ -111,14 +112,75 @@
   --chart-4: var(--pine);
   --chart-5: var(--bone);
   --sidebar: var(--surface);
-  --sidebar-foreground: oklch(0.93 0.012 84);
+  --sidebar-foreground: oklch(0.94 0.012 84);
   --sidebar-primary: var(--brass);
-  --sidebar-primary-foreground: oklch(0.16 0.02 84);
+  --sidebar-primary-foreground: oklch(0.17 0.02 84);
   --sidebar-accent: var(--surface-raised);
-  --sidebar-accent-foreground: oklch(0.93 0.012 84);
-  --sidebar-border: oklch(0.32 0.018 158);
+  --sidebar-accent-foreground: oklch(0.94 0.012 84);
+  --sidebar-border: oklch(0.375 0.019 158);
   --sidebar-ring: var(--brass-deep);
+
+  --media-opacity: 0.7;
+  --media-opacity-soft: 0.25;
+  --grain-strength: 0.5;
+  --grid-strength: 5%;
 }
+
+/*
+ * Light: printed operations sheet. Same token names, inverted material.
+ * --bone stays the high-contrast reading colour, so markup never changes.
+ */
+.light {
+  color-scheme: light;
+
+  --ink-deep: oklch(0.955 0.009 84);
+  --ink: oklch(0.982 0.006 84);
+  --surface: oklch(0.945 0.011 84);
+  --surface-raised: oklch(0.915 0.013 84);
+  --pine: oklch(0.86 0.032 158);
+  --brass: oklch(0.53 0.108 72);
+  --brass-deep: oklch(0.43 0.09 68);
+  --oxblood: oklch(0.45 0.15 26);
+  --bone: oklch(0.235 0.022 158);
+  --live: oklch(0.5 0.115 155);
+
+  --background: var(--ink);
+  --foreground: oklch(0.245 0.02 158);
+  --card: var(--surface);
+  --card-foreground: oklch(0.245 0.02 158);
+  --popover: oklch(0.99 0.005 84);
+  --popover-foreground: oklch(0.245 0.02 158);
+  --primary: var(--brass);
+  --primary-foreground: oklch(0.985 0.006 84);
+  --secondary: var(--surface-raised);
+  --secondary-foreground: oklch(0.245 0.02 158);
+  --muted: var(--surface);
+  --muted-foreground: oklch(0.455 0.016 158);
+  --accent: var(--pine);
+  --accent-foreground: oklch(0.245 0.02 158);
+  --destructive: var(--oxblood);
+  --destructive-foreground: oklch(0.985 0.008 84);
+  --border: oklch(0.855 0.012 84);
+  --input: oklch(0.855 0.012 84);
+  --ring: var(--brass-deep);
+
+  --chart-5: oklch(0.3 0.02 158);
+  --sidebar: var(--surface);
+  --sidebar-foreground: oklch(0.245 0.02 158);
+  --sidebar-primary: var(--brass);
+  --sidebar-primary-foreground: oklch(0.985 0.006 84);
+  --sidebar-accent: var(--surface-raised);
+  --sidebar-accent-foreground: oklch(0.245 0.02 158);
+  --sidebar-border: oklch(0.855 0.012 84);
+  --sidebar-ring: var(--brass-deep);
+
+  --media-opacity: 0.42;
+  --media-opacity-soft: 0.18;
+
+  --grain-strength: 0.35;
+  --grid-strength: 10%;
+}
+
 
 .dark {
   color-scheme: dark;
@@ -249,6 +311,129 @@
   }
   to {
     opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- media tone (image intensity follows the theme) --------------------- */
+
+@utility media-tone {
+  opacity: var(--media-opacity);
+}
+
+@utility media-tone-soft {
+  opacity: var(--media-opacity-soft);
+}
+
+/* --- light-mode material overrides ------------------------------------- */
+
+.light .panel {
+  background: linear-gradient(
+    160deg,
+    oklch(1 0 0 / 0.9),
+    color-mix(in oklab, var(--surface) 92%, transparent)
+  );
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.7),
+    0 18px 40px -28px oklch(0.25 0.02 158 / 0.45);
+}
+
+.light .panel-brass {
+  background:
+    radial-gradient(
+      120% 140% at 0% 0%,
+      color-mix(in oklab, var(--brass) 14%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(160deg, oklch(1 0 0 / 0.92), color-mix(in oklab, var(--surface) 90%, transparent));
+  box-shadow: 0 22px 50px -34px color-mix(in oklab, var(--brass) 55%, transparent);
+}
+
+.light .grain::after {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--bone) 12%, transparent) 0.5px,
+    transparent 0.6px
+  );
+}
+
+.light .ink-veil {
+  background: linear-gradient(
+    to top,
+    var(--ink) 4%,
+    color-mix(in oklab, var(--ink) 82%, transparent) 45%,
+    color-mix(in oklab, var(--ink) 62%, transparent) 100%
+  );
+}
+
+.light .hairline-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--bone) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--bone) 8%, transparent) 1px, transparent 1px);
+}
+
+/* --- motion ------------------------------------------------------------ */
+
+@utility reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  &[data-shown="true"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility draw-rule {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 120ms;
+  &[data-shown="true"] {
+    transform: scaleX(1);
+  }
+}
+
+@utility lift {
+  transition:
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+  &:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--brass) 45%, transparent);
+  }
+}
+
+@utility trace-arrow {
+  animation: trace-x 2.6s ease-in-out infinite;
+}
+
+@keyframes trace-x {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateX(6px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .draw-rule {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .rise,
+  .trace-arrow {
+    animation: none !important;
+  }
+  .lift:hover {
     transform: none;
   }
 }

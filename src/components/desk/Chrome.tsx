@@ -1,37 +1,43 @@
 import { Link } from "@tanstack/react-router";
+import { ThemeToggle } from "@/components/desk/ThemeToggle";
 
 const NAV = [
   { to: "/", label: "Desk" },
   { to: "/host-path", label: "Host Path" },
   { to: "/handoffs", label: "Handoffs" },
+  { to: "/reference", label: "Reference" },
   { to: "/boundary", label: "Boundary" },
 ] as const;
 
 export function DeskHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-ink-deep/85 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-[1240px] items-center justify-between gap-6 px-5 py-3.5 sm:px-8">
+      <div className="mx-auto flex max-w-[1240px] items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
         <Link to="/" className="group flex items-baseline gap-3">
           <span className="font-display text-xl leading-none text-bone">Salty Desk</span>
           <span className="label-mono hidden sm:inline">Salty &amp; Clever</span>
         </Link>
 
-        <nav className="flex items-center gap-1 sm:gap-2">
-          {NAV.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              activeOptions={{ exact: item.to === "/" }}
-              className="rounded-sm px-2.5 py-1.5 text-[0.78rem] tracking-wide text-muted-foreground transition-colors hover:text-bone data-[status=active]:text-brass"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <nav className="flex items-center gap-0.5 sm:gap-2">
+            {NAV.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                activeOptions={{ exact: item.to === "/" }}
+                className="rounded-sm px-2 py-1.5 text-[0.74rem] tracking-wide text-muted-foreground transition-colors hover:text-bone data-[status=active]:text-brass sm:px-2.5 sm:text-[0.78rem]"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
 }
+
 
 export function DeskFooter() {
   return (
@@ -60,12 +66,18 @@ export function DeskFooter() {
               </Link>
             </li>
             <li>
+              <Link to="/reference" className="transition-colors hover:text-brass">
+                Reference &amp; desk log
+              </Link>
+            </li>
+            <li>
               <Link to="/boundary" className="transition-colors hover:text-brass">
                 Privacy boundary
               </Link>
             </li>
           </ul>
         </div>
+
 
         <div>
           <p className="label-mono">Standing constraints</p>

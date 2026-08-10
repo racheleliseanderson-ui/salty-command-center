@@ -196,3 +196,206 @@ export const PHILOSOPHY = [
 export const MENU_BUILDER = TOOLS[0]!;
 export const OCCASION_OS = TOOLS[1]!;
 export const RESTAURANT_INTELLIGENCE = TOOLS[2]!;
+
+/* --------------------------------------------------------------------------
+ * Suite telemetry — hand-curated, shaped so it can later be swapped for a
+ * live feed without touching components.
+ * ----------------------------------------------------------------------- */
+
+export type Counter = { value: number; suffix?: string; label: string; note: string };
+
+export const SUITE_COUNTERS: Counter[] = [
+  { value: 41, suffix: "+", label: "Case files", note: "First-party restaurant records" },
+  { value: 26, suffix: "+", label: "Regions", note: "Covered by Restaurant Intelligence" },
+  { value: 14, label: "Occasions", note: "Situation types the suite recognises" },
+  { value: 6, label: "Booking pathways", note: "Phone, Resy, OpenTable, Tock, Direct, Walk-in" },
+  { value: 5, label: "Stress axes", note: "Balance, make-ahead, service, equipment, freedom" },
+  { value: 5, label: "Menu roles", note: "Architecture slots per menu" },
+];
+
+export type LedgerRow = {
+  id: string;
+  name: string;
+  state: "Live" | "Beta" | "Planned";
+  build: string;
+  contract: string;
+  updated: string;
+  accepts: string;
+  rejects: string;
+};
+
+export const LEDGER: LedgerRow[] = [
+  {
+    id: "SC-MB-001",
+    name: "Menu Builder",
+    state: "Live",
+    build: "Engine 0.4.3",
+    contract: "Emits 1.1.0",
+    updated: "2026-07-30",
+    accepts: "Declared occasion, guests, service style, attention, equipment",
+    rejects: "Allergen safety claims, recipes, pricing, cloud accounts",
+  },
+  {
+    id: "SC-OOS-001",
+    name: "Occasion Operating System",
+    state: "Live",
+    build: "Build 1.8.0",
+    contract: "Receives 1.1.0",
+    updated: "2026-07-22",
+    accepts: "Menu Builder packets, host conditions, capacity and attention",
+    rejects: "Silent cross-app inference, allergen guarantees, forced accounts",
+  },
+  {
+    id: "SC-RI-001",
+    name: "Restaurant Intelligence",
+    state: "Live",
+    build: "Case set 41",
+    contract: "Reader-initiated",
+    updated: "2026-08-04",
+    accepts: "Occasion, party size, days-out, commitment ceiling, planning load",
+    rejects: "Aggregator scores, resolved conflicts, unverified operating changes",
+  },
+];
+
+export const DESK_LOG = [
+  {
+    date: "2026-08-04",
+    id: "SC-RI-001",
+    entry: "Confirm-burden labels split from booking pathway; conflicts now surfaced separately.",
+  },
+  {
+    date: "2026-07-30",
+    id: "SC-MB-001",
+    entry: "Plated-capacity hard stop tightened; anchor re-scoring now reruns all five axes.",
+  },
+  {
+    date: "2026-07-22",
+    id: "SC-OOS-001",
+    entry: "Handoff receiver pinned to contract 1.1.0; dietary tags labelled as planning filters.",
+  },
+  {
+    date: "2026-07-14",
+    id: "Desk",
+    entry: "Triage console added: the desk now names the wrong tool as clearly as the right one.",
+  },
+];
+
+export const GLOSSARY = [
+  {
+    term: "Anchor",
+    def: "A dish you lock before the rest of the menu is scored. Locking one re-scores every other role against it.",
+  },
+  {
+    term: "Hard stop",
+    def: "A refusal, not a warning. The plan does not continue past a hard stop — capacity, allergen boundary, or an official conflict.",
+  },
+  {
+    term: "Stress axis",
+    def: "One of five operational readings: Balance, Make Ahead, Service Fit, Equipment Fit, Host Freedom.",
+  },
+  {
+    term: "Contract version",
+    def: "The versioned shape of a handoff packet. A receiver states which version it accepts; mismatches fail closed.",
+  },
+  {
+    term: "Confirm burden",
+    def: "How much you must still verify directly with a room before the booking is real.",
+  },
+  {
+    term: "Thin field",
+    def: "A record with too little first-party evidence to rank confidently. Kept visible rather than filled in.",
+  },
+  {
+    term: "Planning filter",
+    def: "A dietary category used to shape a plan. Never a safety guarantee — cross-contact stays with the kitchen.",
+  },
+  {
+    term: "Fail closed",
+    def: "When a constraint is breached, the tool stops instead of quietly degrading the plan.",
+  },
+];
+
+export type ToolDetail = {
+  slug: Tool["slug"];
+  inputs: string[];
+  returns: string[];
+  hardStops: string[];
+  wrongTool: { name: string; reason: string }[];
+};
+
+export const TOOL_DETAILS: Record<Tool["slug"], ToolDetail> = {
+  "menu-builder": {
+    slug: "menu-builder",
+    inputs: [
+      "Occasion type and guest count",
+      "Service style — plated, family, buffet, standing",
+      "Host attention available during service",
+      "Oven, burner, cold, and counter capacity",
+      "Budget pressure, if any",
+    ],
+    returns: [
+      "Five-role menu architecture with pairing mode",
+      "Stress reading across all five axes",
+      "Hard stops with the constraint that triggered them",
+      "Anchor effect when a dish is locked",
+      "A packet Occasion OS accepts at contract 1.1.0",
+    ],
+    hardStops: [
+      "Plated service beyond declared capacity",
+      "Allergen boundary reached — the tool refuses rather than reassures",
+      "Equipment contention that cannot be sequenced away",
+    ],
+    wrongTool: [
+      { name: "Occasion Operating System", reason: "Sequences the night; it does not choose dishes." },
+      { name: "Restaurant Intelligence", reason: "Ranks rooms; it has no view of your kitchen." },
+    ],
+  },
+  "occasion-os": {
+    slug: "occasion-os",
+    inputs: [
+      "A settled menu — ideally a Menu Builder packet",
+      "Guests, service style, and room constraints",
+      "Attention you can hold during service",
+      "Days available before the night",
+    ],
+    returns: [
+      "Condition-driven host plan",
+      "Shop → prep → serve route with holding points",
+      "Dietary categories carried forward as planning filters",
+      "Food-safety boundary printed on every plan",
+    ],
+    hardStops: [
+      "Prep route that cannot fit the days declared",
+      "Service plan that exceeds host attention",
+      "Any request to certify a dish as allergen-safe",
+    ],
+    wrongTool: [
+      { name: "Menu Builder", reason: "Decides whether the menu survives; run it first." },
+      { name: "Restaurant Intelligence", reason: "The alternative when hosting does not survive." },
+    ],
+  },
+  "restaurant-intelligence": {
+    slug: "restaurant-intelligence",
+    inputs: [
+      "Occasion and party size",
+      "Days out and the commitment ceiling you accept",
+      "Planning load you are willing to carry",
+      "Guest constraints as planning filters",
+    ],
+    returns: [
+      "Situation rank across first-party case files",
+      "Critical and watch findings with confidence labels",
+      "Booking pathway and confirm burden",
+      "Open unknowns and official conflicts, preserved",
+    ],
+    hardStops: [
+      "Conflicting official claims — surfaced, never resolved silently",
+      "Thin field: too little evidence to rank",
+      "Operating change that must be confirmed directly before booking",
+    ],
+    wrongTool: [
+      { name: "Menu Builder", reason: "For cooking decisions, not rooms." },
+      { name: "Occasion Operating System", reason: "For running a night you are hosting yourself." },
+    ],
+  },
+};

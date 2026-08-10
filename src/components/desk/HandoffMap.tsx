@@ -5,7 +5,7 @@ export function HandoffMap({ compact = false }: { compact?: boolean }) {
   return (
     <div className="space-y-5">
       {HANDOFFS.map((h) => (
-        <article key={h.fromId + h.toId} className="panel rounded-lg p-6 sm:p-8">
+        <article key={h.fromId + h.toId} className="panel lift rounded-lg p-6 sm:p-8">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <span className="label-mono border border-brass/40 px-2 py-1 text-brass">{h.tag}</span>
             <span className="label-mono">{h.contract}</span>
@@ -13,9 +13,10 @@ export function HandoffMap({ compact = false }: { compact?: boolean }) {
 
           <div className="mt-5 flex flex-wrap items-center gap-3 sm:gap-5">
             <Node name={h.from} id={h.fromId} />
-            <ArrowRight className="h-5 w-5 text-brass" />
+            <ArrowRight className="trace-arrow h-5 w-5 text-brass" />
             <Node name={h.to} id={h.toId} />
           </div>
+
 
           {!compact && (
             <div className="mt-7 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-2">
