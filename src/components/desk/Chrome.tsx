@@ -7,6 +7,7 @@ import type { MessageKey } from "@/lib/i18n";
 const NAV: { to: string; key: MessageKey }[] = [
   { to: "/", key: "nav.desk" },
   { to: "/host-path", key: "nav.hostPath" },
+  { to: "/pipeline", key: "nav.pipeline" },
   { to: "/handoffs", key: "nav.handoffs" },
   { to: "/reference", key: "nav.reference" },
   { to: "/boundary", key: "nav.boundary" },
@@ -83,6 +84,11 @@ export function DeskFooter() {
             <li>
               <Link to="/host-path" className="gold-underline transition-colors hover:text-brass">
                 {t("nav.hostPath")}
+              </Link>
+            </li>
+            <li>
+              <Link to="/pipeline" className="gold-underline transition-colors hover:text-brass">
+                {t("nav.pipeline")}
               </Link>
             </li>
             <li>
