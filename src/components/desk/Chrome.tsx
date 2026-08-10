@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ThemeToggle } from "@/components/desk/ThemeToggle";
+import { ColorSafeToggle, ThemeToggle } from "@/components/desk/ThemeToggle";
 
 const NAV = [
   { to: "/", label: "Desk" },
@@ -11,32 +11,51 @@ const NAV = [
 
 export function DeskHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-ink-deep/85 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-[1240px] items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
-        <Link to="/" className="group flex items-baseline gap-3">
-          <span className="font-display text-xl leading-none text-bone">Salty Desk</span>
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-ink-deep/90 backdrop-blur-xl">
+      <div className="mx-auto grid max-w-[1240px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 py-2.5 sm:px-8">
+        <Link to="/" className="group flex min-w-0 items-baseline gap-3">
+          <span className="truncate font-display text-xl leading-none text-bone">Salty Desk</span>
           <span className="label-mono hidden sm:inline">Salty &amp; Clever</span>
         </Link>
 
-        <div className="flex items-center gap-2 sm:gap-3">
-          <nav className="flex items-center gap-0.5 sm:gap-2">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <nav className="hidden items-center gap-0.5 md:flex md:gap-2">
             {NAV.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
                 activeOptions={{ exact: item.to === "/" }}
-                className="rounded-sm px-2 py-1.5 text-[0.74rem] tracking-wide text-muted-foreground transition-colors hover:text-bone data-[status=active]:text-brass sm:px-2.5 sm:text-[0.78rem]"
+                className="rounded-sm px-2.5 py-1.5 text-[0.78rem] tracking-wide text-muted-foreground transition-colors hover:text-bone data-[status=active]:text-brass"
               >
                 {item.label}
               </Link>
             ))}
           </nav>
+          <ColorSafeToggle />
           <ThemeToggle />
         </div>
       </div>
+
+      {/* Mobile: the nav becomes its own scrollable rail with real tap targets. */}
+      <nav
+        aria-label="Desk sections"
+        className="flex gap-1 overflow-x-auto border-t border-border/60 px-3 pb-1.5 pt-1 md:hidden"
+      >
+        {NAV.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            activeOptions={{ exact: item.to === "/" }}
+            className="inline-flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-sm border border-transparent px-3 text-[0.78rem] tracking-wide text-muted-foreground transition-colors data-[status=active]:border-brass/40 data-[status=active]:text-brass"
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
     </header>
   );
 }
+
 
 
 export function DeskFooter() {
