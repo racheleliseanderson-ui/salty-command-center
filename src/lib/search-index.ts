@@ -1,6 +1,7 @@
+import { STAGES } from "@/lib/desk-pipeline";
 import { BOUNDARIES, DESK_LOG, GLOSSARY, HANDOFFS, LEDGER, TOOLS } from "@/lib/desk-data";
 
-export type SearchKind = "tool" | "handoff" | "limit" | "term" | "ledger" | "log";
+export type SearchKind = "tool" | "handoff" | "limit" | "term" | "ledger" | "log" | "stage";
 
 export type SearchHit = {
   id: string;
@@ -23,6 +24,7 @@ export const KIND_LABEL: Record<SearchKind, string> = {
   term: "Term",
   ledger: "Ledger",
   log: "Desk log",
+  stage: "Run stage",
 };
 
 function entry(
@@ -46,6 +48,16 @@ function entry(
 
 /** Flattened, deterministic index over everything the desk holds. */
 export const SEARCH_INDEX: SearchHit[] = [
+  ...STAGES.map((st) =>
+    entry(
+      "stage",
+      `stage-${st.id}`,
+      `${st.code} · ${st.name}`,
+      st.decision,
+      [st.owner, st.produces, st.duration, ...st.gates.flatMap((g) => [g.label, g.detail])],
+      { to: "/pipeline" },
+    ),
+  ),
   ...TOOLS.map((t) =>
     entry(
       "tool",
