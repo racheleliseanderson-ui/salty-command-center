@@ -3,13 +3,50 @@ import { HANDOFFS } from "@/lib/desk-data";
 import { useTriageState } from "@/hooks/use-triage-state";
 import { describeCase, packetExample } from "@/lib/desk-examples";
 
-export function HandoffMap({ compact = false }: { compact?: boolean }) {
+export function HandoffMap({
+  compact = false,
+  query = "",
+}: {
+  compact?: boolean;
+  query?: string;
+}) {
   const { answers } = useTriageState();
   const declared = describeCase(answers);
+  const needle = query.trim().toLowerCase();
+
+  const visible = needle
+    ? HANDOFFS.filter((h) =>
+        [
+          h.from,
+          h.to,
+          h.fromId,
+          h.toId,
+          h.tag,
+          h.contract,
+          h.purpose,
+          h.breaksIf,
+          ...h.moves.flatMap((m) => [m.field, m.reason]),
+          ...h.stays.flatMap((m) => [m.field, m.reason]),
+          ...h.canConclude,
+          ...h.cannotConclude,
+        ]
+          .join(" ")
+          .toLowerCase()
+          .includes(needle),
+      )
+    : HANDOFFS;
+
+  if (visible.length === 0) {
+    return (
+      <p className="label-mono border border-dashed border-border p-6 leading-relaxed">
+        No packet field matches “{query}”. Clear the filter to see all three contracts.
+      </p>
+    );
+  }
 
   return (
     <div className="space-y-5">
-      {HANDOFFS.map((h) => {
+      {visible.map((h) => {
         const example = compact ? null : packetExample(answers, h.fromId);
         return (
           <article key={h.fromId + h.toId} className="panel lift rounded-lg p-5 sm:p-8">
