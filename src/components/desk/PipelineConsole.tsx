@@ -105,9 +105,24 @@ export function PipelineConsole() {
               </Control>
             </>
           )}
+          <Control
+            onClick={() => exportPackage("markdown")}
+            icon={<FileText className="h-3.5 w-3.5" />}
+            disabled={idle}
+          >
+            Export packet (MD)
+          </Control>
+          <Control
+            onClick={() => exportPackage("json")}
+            icon={<Download className="h-3.5 w-3.5" />}
+            disabled={idle}
+          >
+            Export packet (JSON)
+          </Control>
           <Control onClick={reset} icon={<RotateCcw className="h-3.5 w-3.5" />} disabled={idle}>
             Clear
           </Control>
+
         </div>
       </div>
 
