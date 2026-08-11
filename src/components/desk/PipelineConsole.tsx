@@ -63,7 +63,7 @@ export function PipelineConsole() {
   return (
     <div className="panel grain rounded-lg">
       {/* ── Transport bar ─────────────────────────────────────── */}
-      <div className="grid gap-5 border-b border-border p-5 sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+      <div className="grid gap-6 border-b border-border p-5 sm:p-8">
         <div className="min-w-0">
           <p className="label-mono text-brass">Pipeline run console</p>
           <h3 className="mt-3 font-display text-3xl leading-[0.95] text-bone sm:text-5xl">
