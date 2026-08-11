@@ -197,7 +197,14 @@ export function PipelineConsole() {
         gates={run.gates}
         editable={!idle && !stopped}
         onToggle={toggleGate}
+        note={run.notes[STAGES[open]!.id] ?? ""}
+        evidence={run.evidence[STAGES[open]!.id] ?? []}
+        onNote={setNote}
+        onNoteCommit={logNote}
+        onAttach={addEvidence}
+        onRemove={removeEvidence}
       />
+
 
       {/* ── Run log ───────────────────────────────────────────── */}
       <div className="border-t border-border p-5 sm:p-8">
