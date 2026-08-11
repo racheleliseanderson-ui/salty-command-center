@@ -1,5 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
-import { EMPTY_RUN, STAGES, blockingGates, type RunState } from "@/lib/desk-pipeline";
+import {
+  EMPTY_RUN,
+  EVIDENCE_INLINE_LIMIT,
+  STAGES,
+  blockingGates,
+  buildRunPackage,
+  formatBytes,
+  runPackageMarkdown,
+  type Evidence,
+  type RunState,
+} from "@/lib/desk-pipeline";
 
 export const RUN_STORAGE_KEY = "salty-desk-run";
 const EVENT = "salty-desk-run-change";
@@ -15,11 +25,37 @@ function read(): RunState {
     if (!raw) return EMPTY_RUN;
     const parsed = JSON.parse(raw) as RunState;
     if (!parsed || typeof parsed !== "object") return EMPTY_RUN;
-    return { ...EMPTY_RUN, ...parsed, gates: parsed.gates ?? {}, log: parsed.log ?? [] };
+    return {
+      ...EMPTY_RUN,
+      ...parsed,
+      gates: parsed.gates ?? {},
+      log: parsed.log ?? [],
+      notes: parsed.notes ?? {},
+      evidence: parsed.evidence ?? {},
+    };
   } catch {
     return EMPTY_RUN;
   }
 }
+
+function download(name: string, mime: string, body: string) {
+  const url = URL.createObjectURL(new Blob([body], { type: mime }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function readAsDataUrl(file: File) {
+  return new Promise<string | null>((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : null);
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
+
 
 /**
  * Run state is local and persistent: the run follows the reader between pages
