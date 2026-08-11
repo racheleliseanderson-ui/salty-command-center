@@ -66,8 +66,8 @@ export const TOOLS: Tool[] = [
     summary:
       "Set conditions, build a controlled hosting route, then shop, prep, and serve from one plan. Receives Menu Builder packets and keeps dietary categories as planning filters — never allergy guarantees.",
     status: "live",
-    statusNote: "Host plan · local + plan state",
-    href: "https://salty-occasion-os.vercel.app/",
+    statusNote: "Host Planning Instrument · local plan state",
+    href: "https://occasion-planner-suite.vercel.app/",
     metrics: [
       { value: "2", label: "Modes" },
       { value: "3", label: "Route stages" },
@@ -101,11 +101,11 @@ export const TOOLS: Tool[] = [
     summary:
       "Situation-aware ranking from first-party evidence only. Multi-layer findings, booking pathways, confirm burden, guest-constraint matrix, and official conflicts — so you choose the room that fits the occasion, not the photograph.",
     status: "live",
-    statusNote: "First-party case files · unknowns preserved",
-    href: "https://salty-restaurant-intelligence.vercel.app/",
+    statusNote: "136 first-party case files · unknowns preserved",
+    href: "https://deep-dish-decision-e3c9f8ee.vercel.app/",
     metrics: [
-      { value: "41+", label: "Case files" },
-      { value: "26+", label: "Regions" },
+      { value: "136", label: "Case files" },
+      { value: "43", label: "Regions" },
       { value: "14", label: "Occasions" },
       { value: "6", label: "Pathways" },
     ],
@@ -367,8 +367,8 @@ export const RESTAURANT_INTELLIGENCE = TOOLS[2]!;
 export type Counter = { value: number; suffix?: string; label: string; note: string };
 
 export const SUITE_COUNTERS: Counter[] = [
-  { value: 41, suffix: "+", label: "Case files", note: "First-party restaurant records" },
-  { value: 26, suffix: "+", label: "Regions", note: "Covered by Restaurant Intelligence" },
+  { value: 136, label: "Case files", note: "First-party restaurant records" },
+  { value: 43, label: "Regions", note: "Covered by Restaurant Intelligence" },
   { value: 14, label: "Occasions", note: "Situation types the suite recognises" },
   { value: 6, label: "Booking pathways", note: "Phone, Resy, OpenTable, Tock, Direct, Walk-in" },
   { value: 5, label: "Stress axes", note: "Balance, make-ahead, service, equipment, freedom" },
@@ -391,9 +391,9 @@ export const LEDGER: LedgerRow[] = [
     id: "SC-MB-001",
     name: "Menu Builder",
     state: "Live",
-    build: "Engine 0.4.3",
+    build: "Package 0.6.0 · Engine 0.4.3",
     contract: "Emits 1.1.0",
-    updated: "2026-07-30",
+    updated: "2026-08-11",
     accepts: "Declared occasion, guests, service style, attention, equipment",
     rejects: "Allergen safety claims, recipes, pricing, cloud accounts",
   },
@@ -401,9 +401,9 @@ export const LEDGER: LedgerRow[] = [
     id: "SC-OOS-001",
     name: "Occasion Operating System",
     state: "Live",
-    build: "Build 1.8.0",
+    build: "Host Planning Instrument V2",
     contract: "Receives 1.1.0",
-    updated: "2026-07-22",
+    updated: "2026-08-11",
     accepts: "Menu Builder packets, host conditions, capacity and attention",
     rejects: "Silent cross-app inference, allergen guarantees, forced accounts",
   },
@@ -411,15 +411,20 @@ export const LEDGER: LedgerRow[] = [
     id: "SC-RI-001",
     name: "Restaurant Intelligence",
     state: "Live",
-    build: "Case set 41",
+    build: "Case set 136",
     contract: "Reader-initiated",
-    updated: "2026-08-04",
+    updated: "2026-08-11",
     accepts: "Occasion, party size, days-out, commitment ceiling, planning load",
     rejects: "Aggregator scores, resolved conflicts, unverified operating changes",
   },
 ];
 
 export const DESK_LOG = [
+  {
+    date: "2026-08-11",
+    id: "Desk",
+    entry: "Production URLs locked: Menu Builder, Occasion OS (planner-suite), RI (deep-dish). Menu Builder elevated to 0.6.0 with scenario spine and packet stage.",
+  },
   {
     date: "2026-08-04",
     id: "SC-RI-001",
