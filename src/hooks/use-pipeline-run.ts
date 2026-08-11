@@ -1,5 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
-import { EMPTY_RUN, STAGES, blockingGates, type RunState } from "@/lib/desk-pipeline";
+import {
+  EMPTY_RUN,
+  EVIDENCE_INLINE_LIMIT,
+  STAGES,
+  blockingGates,
+  buildRunPackage,
+  formatBytes,
+  runPackageMarkdown,
+  type Evidence,
+  type RunState,
+} from "@/lib/desk-pipeline";
 
 export const RUN_STORAGE_KEY = "salty-desk-run";
 const EVENT = "salty-desk-run-change";
@@ -15,11 +25,37 @@ function read(): RunState {
     if (!raw) return EMPTY_RUN;
     const parsed = JSON.parse(raw) as RunState;
     if (!parsed || typeof parsed !== "object") return EMPTY_RUN;
-    return { ...EMPTY_RUN, ...parsed, gates: parsed.gates ?? {}, log: parsed.log ?? [] };
+    return {
+      ...EMPTY_RUN,
+      ...parsed,
+      gates: parsed.gates ?? {},
+      log: parsed.log ?? [],
+      notes: parsed.notes ?? {},
+      evidence: parsed.evidence ?? {},
+    };
   } catch {
     return EMPTY_RUN;
   }
 }
+
+function download(name: string, mime: string, body: string) {
+  const url = URL.createObjectURL(new Blob([body], { type: mime }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function readAsDataUrl(file: File) {
+  return new Promise<string | null>((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : null);
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
+
 
 /**
  * Run state is local and persistent: the run follows the reader between pages
@@ -148,5 +184,108 @@ export function usePipelineRun() {
 
   const reset = useCallback(() => commit(EMPTY_RUN), [commit]);
 
-  return { run, hydrated, start, advance, rewind, hold, abort, reset, toggleGate };
+  /** Per-stage note. Saved silently; only logged when the field is committed. */
+  const setNote = useCallback(
+    (stageId: string, text: string) => {
+      const current = read();
+      commit({ ...current, notes: { ...current.notes, [stageId]: text } });
+    },
+    [commit],
+  );
+
+  const logNote = useCallback(
+    (stageId: string, code: string) => {
+      const current = read();
+      const text = (current.notes[stageId] ?? "").trim();
+      commit(
+        append(current, "note", text ? `Note recorded at ${code} (${text.length} chars).` : `Note cleared at ${code}.`),
+      );
+    },
+    [append, commit],
+  );
+
+  const addEvidence = useCallback(
+    async (stageId: string, code: string, gateId: string | null, files: FileList | File[]) => {
+      for (const file of Array.from(files)) {
+        const inline = file.size <= EVIDENCE_INLINE_LIMIT ? await readAsDataUrl(file) : null;
+        const item: Evidence = {
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+          stageId,
+          gateId,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          addedAt: stamp(),
+          dataUrl: inline,
+        };
+        const current = read();
+        const next: RunState = {
+          ...current,
+          evidence: { ...current.evidence, [stageId]: [item, ...(current.evidence[stageId] ?? [])] },
+        };
+        commit(
+          append(
+            next,
+            "evidence",
+            `Attached ${file.name} (${formatBytes(file.size)}) at ${code}${gateId ? " · gate-tied" : ""}${
+              inline ? "" : " · recorded by reference only"
+            }.`,
+          ),
+        );
+      }
+    },
+    [append, commit],
+  );
+
+  const removeEvidence = useCallback(
+    (stageId: string, id: string, code: string) => {
+      const current = read();
+      const item = (current.evidence[stageId] ?? []).find((e) => e.id === id);
+      const next: RunState = {
+        ...current,
+        evidence: {
+          ...current.evidence,
+          [stageId]: (current.evidence[stageId] ?? []).filter((e) => e.id !== id),
+        },
+      };
+      commit(append(next, "evidence", `Withdrew ${item?.name ?? "attachment"} at ${code}.`));
+    },
+    [append, commit],
+  );
+
+  const exportPackage = useCallback(
+    (format: "json" | "markdown") => {
+      const current = read();
+      const slug = new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-");
+      if (format === "json") {
+        download(
+          `salty-desk-run-${slug}.json`,
+          "application/json",
+          JSON.stringify(buildRunPackage(current), null, 2),
+        );
+      } else {
+        download(`salty-desk-run-${slug}.md`, "text/markdown", runPackageMarkdown(current));
+      }
+      commit(append(current, "control", `Run package exported as ${format.toUpperCase()}. Local file, no upload.`));
+    },
+    [append, commit],
+  );
+
+  return {
+    run,
+    hydrated,
+    start,
+    advance,
+    rewind,
+    hold,
+    abort,
+    reset,
+    toggleGate,
+    setNote,
+    logNote,
+    addEvidence,
+    removeEvidence,
+    exportPackage,
+  };
 }
+

@@ -1,10 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowUpRight,
   Check,
   CircleDot,
+  Download,
+  FileText,
   Lock,
+  Paperclip,
   Pause,
   Play,
   RotateCcw,
@@ -12,17 +15,40 @@ import {
   SkipForward,
   Square,
   TriangleAlert,
+  X,
 } from "lucide-react";
-import { STAGES, blockingGates, statusCopy } from "@/lib/desk-pipeline";
+import {
+  STAGES,
+  blockingGates,
+  formatBytes,
+  statusCopy,
+  type Evidence,
+} from "@/lib/desk-pipeline";
 import { usePipelineRun } from "@/hooks/use-pipeline-run";
 import { TOOLS } from "@/lib/desk-data";
 
 const TOOL_BY_SLUG = Object.fromEntries(TOOLS.map((t) => [t.slug, t]));
 
+
 export function PipelineConsole() {
-  const { run, hydrated, start, advance, rewind, hold, abort, reset, toggleGate } =
-    usePipelineRun();
+  const {
+    run,
+    hydrated,
+    start,
+    advance,
+    rewind,
+    hold,
+    abort,
+    reset,
+    toggleGate,
+    setNote,
+    logNote,
+    addEvidence,
+    removeEvidence,
+    exportPackage,
+  } = usePipelineRun();
   const [open, setOpen] = useState(0);
+
 
   useEffect(() => setOpen(run.stage), [run.stage]);
 
@@ -37,7 +63,7 @@ export function PipelineConsole() {
   return (
     <div className="panel grain rounded-lg">
       {/* ── Transport bar ─────────────────────────────────────── */}
-      <div className="grid gap-5 border-b border-border p-5 sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+      <div className="grid gap-6 border-b border-border p-5 sm:p-8">
         <div className="min-w-0">
           <p className="label-mono text-brass">Pipeline run console</p>
           <h3 className="mt-3 font-display text-3xl leading-[0.95] text-bone sm:text-5xl">
@@ -79,9 +105,24 @@ export function PipelineConsole() {
               </Control>
             </>
           )}
+          <Control
+            onClick={() => exportPackage("markdown")}
+            icon={<FileText className="h-3.5 w-3.5" />}
+            disabled={idle}
+          >
+            Export packet (MD)
+          </Control>
+          <Control
+            onClick={() => exportPackage("json")}
+            icon={<Download className="h-3.5 w-3.5" />}
+            disabled={idle}
+          >
+            Export packet (JSON)
+          </Control>
           <Control onClick={reset} icon={<RotateCcw className="h-3.5 w-3.5" />} disabled={idle}>
             Clear
           </Control>
+
         </div>
       </div>
 
@@ -156,7 +197,14 @@ export function PipelineConsole() {
         gates={run.gates}
         editable={!idle && !stopped}
         onToggle={toggleGate}
+        note={run.notes[STAGES[open]!.id] ?? ""}
+        evidence={run.evidence[STAGES[open]!.id] ?? []}
+        onNote={setNote}
+        onNoteCommit={logNote}
+        onAttach={addEvidence}
+        onRemove={removeEvidence}
       />
+
 
       {/* ── Run log ───────────────────────────────────────────── */}
       <div className="border-t border-border p-5 sm:p-8">
@@ -191,12 +239,30 @@ function StageDetail({
   gates,
   editable,
   onToggle,
+  note,
+  evidence,
+  onNote,
+  onNoteCommit,
+  onAttach,
+  onRemove,
 }: {
   index: number;
   gates: Record<string, boolean>;
   editable: boolean;
   onToggle: (id: string, label: string) => void;
+  note: string;
+  evidence: Evidence[];
+  onNote: (stageId: string, text: string) => void;
+  onNoteCommit: (stageId: string, code: string) => void;
+  onAttach: (
+    stageId: string,
+    code: string,
+    gateId: string | null,
+    files: FileList | File[],
+  ) => void | Promise<void>;
+  onRemove: (stageId: string, id: string, code: string) => void;
 }) {
+
   const stage = STAGES[index]!;
   const tool = stage.tool === "desk" ? null : TOOL_BY_SLUG[stage.tool];
 
@@ -292,9 +358,183 @@ function StageDetail({
           })}
         </ul>
       </fieldset>
+
+      <EvidencePanel
+        stage={stage}
+        editable={editable}
+        note={note}
+        evidence={evidence}
+        onNote={onNote}
+        onNoteCommit={onNoteCommit}
+        onAttach={onAttach}
+        onRemove={onRemove}
+      />
     </div>
   );
 }
+
+/**
+ * First-party evidence for the open stage: a note field and attachments that can
+ * be tied to a specific gate decision. Files stay on this device; small ones are
+ * copied into the exported packet, larger ones are recorded by reference only.
+ */
+function EvidencePanel({
+  stage,
+  editable,
+  note,
+  evidence,
+  onNote,
+  onNoteCommit,
+  onAttach,
+  onRemove,
+}: {
+  stage: (typeof STAGES)[number];
+  editable: boolean;
+  note: string;
+  evidence: Evidence[];
+  onNote: (stageId: string, text: string) => void;
+  onNoteCommit: (stageId: string, code: string) => void;
+  onAttach: (
+    stageId: string,
+    code: string,
+    gateId: string | null,
+    files: FileList | File[],
+  ) => void | Promise<void>;
+  onRemove: (stageId: string, id: string, code: string) => void;
+}) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [tie, setTie] = useState<string>("");
+
+  return (
+    <div className="bg-surface p-5 sm:p-8 lg:col-span-2">
+      <div className="grid gap-8 lg:grid-cols-[1fr_1.15fr]">
+        <div>
+          <label htmlFor={`note-${stage.id}`} className="label-mono text-brass">
+            {stage.code} · Stage note
+          </label>
+          <p className="mt-2 max-w-[52ch] text-[0.83rem] leading-relaxed text-muted-foreground">
+            What you observed, what you decided, and why. First-party only — this is your record of
+            the stage, not a guarantee from the suite.
+          </p>
+          <textarea
+            id={`note-${stage.id}`}
+            value={note}
+            disabled={!editable}
+            onChange={(e) => onNote(stage.id, e.target.value)}
+            onBlur={() => onNoteCommit(stage.id, stage.code)}
+            rows={6}
+            placeholder="e.g. 14 covers fixed, family style. Oven single-rack, so the anchor bakes before service."
+            className="mt-4 w-full resize-y border border-border bg-ink-deep p-3 text-[0.86rem] leading-relaxed text-bone placeholder:text-muted-foreground/70 focus:border-brass focus:outline-none disabled:opacity-50"
+          />
+          <p className="label-mono mt-2 text-[0.55rem]">
+            {note.trim().length} characters · saved on this device
+          </p>
+        </div>
+
+        <div>
+          <p className="label-mono text-brass">Evidence attachments</p>
+          <p className="mt-2 max-w-[52ch] text-[0.83rem] leading-relaxed text-muted-foreground">
+            Attach a photo, receipt, timing sheet or supplier note and tie it to the gate it settles.
+            Nothing is uploaded. Files under 1 MB travel inside the exported packet; larger ones are
+            listed by name, size and type.
+          </p>
+
+          <div className="mt-4 grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+            <div>
+              <label htmlFor={`tie-${stage.id}`} className="label-mono text-[0.55rem]">
+                Tie to decision
+              </label>
+              <select
+                id={`tie-${stage.id}`}
+                value={tie}
+                disabled={!editable}
+                onChange={(e) => setTie(e.target.value)}
+                className="tap mt-1 w-full border border-border bg-ink-deep p-2 text-[0.83rem] text-bone focus:border-brass focus:outline-none disabled:opacity-50"
+              >
+                <option value="">Stage level — no single gate</option>
+                {stage.gates.map((g) => (
+                  <option key={g.id} value={g.id}>
+                    {g.hard ? "Hard" : "Soft"} · {g.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button
+              type="button"
+              disabled={!editable}
+              onClick={() => fileRef.current?.click()}
+              className="press tap inline-flex items-center justify-center gap-2 border border-brass/50 px-4 py-2 text-[0.8rem] tracking-wide text-brass transition-colors hover:bg-brass hover:text-primary-foreground disabled:opacity-40"
+            >
+              <Paperclip className="h-4 w-4" />
+              Attach files
+            </button>
+          </div>
+
+          <input
+            ref={fileRef}
+            type="file"
+            multiple
+            className="sr-only"
+            onChange={(e) => {
+              const files = e.target.files;
+              if (files && files.length) void onAttach(stage.id, stage.code, tie || null, files);
+              e.target.value = "";
+            }}
+          />
+
+          {evidence.length === 0 ? (
+            <p className="mt-5 border-l border-border pl-4 text-[0.83rem] leading-relaxed text-muted-foreground">
+              No evidence on this stage yet. A signed gate with no evidence is still a signed gate —
+              it just carries less weight in the packet.
+            </p>
+          ) : (
+            <ul className="mt-5 divide-y divide-border border-t border-border">
+              {evidence.map((e) => {
+                const gate = stage.gates.find((g) => g.id === e.gateId);
+                return (
+                  <li key={e.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 py-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-[0.86rem] text-bone">{e.name}</p>
+                      <p className="label-mono mt-1 text-[0.55rem]">
+                        {formatBytes(e.size)} · {e.type || "unknown type"} · {e.addedAt} ·{" "}
+                        {e.dataUrl ? "in packet" : "by reference"}
+                      </p>
+                      <p className="mt-1 text-[0.79rem] leading-relaxed text-muted-foreground">
+                        {gate ? `Tied to: ${gate.label}` : "Stage-level evidence"}
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-1">
+                      {e.dataUrl ? (
+                        <a
+                          href={e.dataUrl}
+                          download={e.name}
+                          className="press tap inline-flex h-9 w-9 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-brass/50 hover:text-brass"
+                          aria-label={`Download ${e.name}`}
+                        >
+                          <Download className="h-4 w-4" />
+                        </a>
+                      ) : null}
+                      <button
+                        type="button"
+                        disabled={!editable}
+                        onClick={() => onRemove(stage.id, e.id, stage.code)}
+                        aria-label={`Withdraw ${e.name}`}
+                        className="press tap inline-flex h-9 w-9 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-destructive/60 hover:text-destructive-foreground disabled:opacity-40"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 function Readout({ k, v, note, live }: { k: string; v: string; note: string; live?: boolean }) {
   return (

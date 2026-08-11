@@ -182,12 +182,28 @@ export const STAGES: Stage[] = [
 
 export const ALL_GATES: Gate[] = STAGES.flatMap((s) => s.gates);
 
+export type Evidence = {
+  id: string;
+  stageId: string;
+  gateId: string | null;
+  name: string;
+  size: number;
+  type: string;
+  addedAt: string;
+  /** Inline copy, retained only for small files so the export is self-contained. */
+  dataUrl: string | null;
+};
+
 export type RunState = {
   status: RunStatus;
   stage: number;
   gates: Record<string, boolean>;
-  log: { at: string; kind: "control" | "gate" | "stage" | "stop"; text: string }[];
+  log: { at: string; kind: "control" | "gate" | "stage" | "stop" | "note" | "evidence"; text: string }[];
   startedAt: string | null;
+  /** First-party notes, keyed by stage id. */
+  notes: Record<string, string>;
+  /** Attachment records, keyed by stage id. */
+  evidence: Record<string, Evidence[]>;
 };
 
 export const EMPTY_RUN: RunState = {
@@ -196,7 +212,98 @@ export const EMPTY_RUN: RunState = {
   gates: {},
   log: [],
   startedAt: null,
+  notes: {},
+  evidence: {},
 };
+
+/** Bytes above which a file is recorded by reference only, never copied. */
+export const EVIDENCE_INLINE_LIMIT = 1_000_000;
+
+export function formatBytes(n: number) {
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+/** Deterministic, self-contained package of the run as it stands on this device. */
+export function buildRunPackage(state: RunState) {
+  return {
+    format: "salty-desk.run-package",
+    version: "1.1.0",
+    exportedAt: new Date().toISOString(),
+    run: {
+      status: state.status,
+      openedAt: state.startedAt,
+      openStage: STAGES[state.stage]?.code ?? null,
+      progress: `${runProgress(state)}%`,
+    },
+    stages: STAGES.map((s) => ({
+      code: s.code,
+      name: s.name,
+      owner: s.owner,
+      decision: s.decision,
+      produces: s.produces,
+      cleared: state.status === "complete" || STAGES.indexOf(s) < state.stage,
+      gates: s.gates.map((g) => ({
+        label: g.label,
+        kind: g.hard ? "hard" : "soft",
+        signed: state.gates[g.id] === true,
+      })),
+      notes: state.notes[s.id]?.trim() || null,
+      evidence: (state.evidence[s.id] ?? []).map((e) => ({
+        name: e.name,
+        size: e.size,
+        type: e.type,
+        addedAt: e.addedAt,
+        gate: s.gates.find((g) => g.id === e.gateId)?.label ?? null,
+        retained: e.dataUrl ? "inline" : "by reference only",
+        dataUrl: e.dataUrl,
+      })),
+    })),
+    log: state.log,
+    limits: [
+      "No allergen or dietary safety guarantee at any stage.",
+      "Evidence is first-party and local. Nothing was uploaded to produce this package.",
+      "Files above 1 MB are listed by name, size and type only.",
+    ],
+  };
+}
+
+export function runPackageMarkdown(state: RunState) {
+  const pkg = buildRunPackage(state);
+  const lines: string[] = [
+    "# Salty Desk — run package",
+    "",
+    `- Exported: ${pkg.exportedAt}`,
+    `- Status: ${statusCopy(state.status).label}`,
+    `- Opened: ${state.startedAt ?? "—"}`,
+    `- Open stage: ${pkg.run.openStage ?? "—"} (${pkg.run.progress} cleared)`,
+    "",
+  ];
+  for (const s of pkg.stages) {
+    lines.push(`## ${s.code} · ${s.name} — ${s.cleared ? "cleared" : "not cleared"}`);
+    lines.push(`Owner: ${s.owner} · Decision: ${s.decision}`);
+    lines.push("");
+    for (const g of s.gates) {
+      lines.push(`- [${g.signed ? "x" : " "}] (${g.kind}) ${g.label}`);
+    }
+    lines.push("");
+    lines.push(`Notes: ${s.notes ?? "—"}`);
+    if (s.evidence.length) {
+      lines.push("", "Evidence:");
+      for (const e of s.evidence) {
+        lines.push(
+          `- ${e.name} · ${formatBytes(e.size)} · ${e.type || "unknown type"} · ${e.gate ? `gate: ${e.gate}` : "stage-level"} · ${e.retained}`,
+        );
+      }
+    }
+    lines.push("");
+  }
+  lines.push("## Standing limits", ...pkg.limits.map((l) => `- ${l}`), "");
+  lines.push("## Run log", ...state.log.map((e) => `- ${e.at} · ${e.kind} · ${e.text}`));
+  return lines.join("\n");
+}
+
 
 export function hardGatesFor(stage: Stage) {
   return stage.gates.filter((g) => g.hard);
