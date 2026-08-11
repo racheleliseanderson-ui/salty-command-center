@@ -31,9 +31,24 @@ const TOOL_BY_SLUG = Object.fromEntries(TOOLS.map((t) => [t.slug, t]));
 
 
 export function PipelineConsole() {
-  const { run, hydrated, start, advance, rewind, hold, abort, reset, toggleGate } =
-    usePipelineRun();
+  const {
+    run,
+    hydrated,
+    start,
+    advance,
+    rewind,
+    hold,
+    abort,
+    reset,
+    toggleGate,
+    setNote,
+    logNote,
+    addEvidence,
+    removeEvidence,
+    exportPackage,
+  } = usePipelineRun();
   const [open, setOpen] = useState(0);
+
 
   useEffect(() => setOpen(run.stage), [run.stage]);
 
