@@ -1,10 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowUpRight,
   Check,
   CircleDot,
+  Download,
+  FileText,
   Lock,
+  Paperclip,
   Pause,
   Play,
   RotateCcw,
@@ -12,12 +15,20 @@ import {
   SkipForward,
   Square,
   TriangleAlert,
+  X,
 } from "lucide-react";
-import { STAGES, blockingGates, statusCopy } from "@/lib/desk-pipeline";
+import {
+  STAGES,
+  blockingGates,
+  formatBytes,
+  statusCopy,
+  type Evidence,
+} from "@/lib/desk-pipeline";
 import { usePipelineRun } from "@/hooks/use-pipeline-run";
 import { TOOLS } from "@/lib/desk-data";
 
 const TOOL_BY_SLUG = Object.fromEntries(TOOLS.map((t) => [t.slug, t]));
+
 
 export function PipelineConsole() {
   const { run, hydrated, start, advance, rewind, hold, abort, reset, toggleGate } =
