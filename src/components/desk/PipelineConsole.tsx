@@ -239,12 +239,30 @@ function StageDetail({
   gates,
   editable,
   onToggle,
+  note,
+  evidence,
+  onNote,
+  onNoteCommit,
+  onAttach,
+  onRemove,
 }: {
   index: number;
   gates: Record<string, boolean>;
   editable: boolean;
   onToggle: (id: string, label: string) => void;
+  note: string;
+  evidence: Evidence[];
+  onNote: (stageId: string, text: string) => void;
+  onNoteCommit: (stageId: string, code: string) => void;
+  onAttach: (
+    stageId: string,
+    code: string,
+    gateId: string | null,
+    files: FileList | File[],
+  ) => void | Promise<void>;
+  onRemove: (stageId: string, id: string, code: string) => void;
 }) {
+
   const stage = STAGES[index]!;
   const tool = stage.tool === "desk" ? null : TOOL_BY_SLUG[stage.tool];
 
