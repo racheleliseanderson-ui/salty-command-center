@@ -32,7 +32,7 @@ export const TOOLS: Tool[] = [
     summary:
       "Five-role architecture, stress meters, anchor locking, bounded simplification, and hard stops. Scores Balance, Make Ahead, Service Fit, Equipment Fit, and Host Freedom from your declared inputs — then hands a clean packet to Occasion OS.",
     status: "live",
-    statusNote: "Deterministic engine · browser-only storage",
+    statusNote: "Standalone instrument · also layered inside Occasion OS as Architecture",
     href: "https://salty-menu-builder.vercel.app/",
     metrics: [
       { value: "5", label: "Roles" },
@@ -64,7 +64,7 @@ export const TOOLS: Tool[] = [
     notFor: "Choosing dishes, or ranking restaurants.",
     decision: "What happens, in what order, and who is holding it?",
     summary:
-      "Set conditions, build a controlled hosting route, then shop, prep, and serve from one plan. Receives Menu Builder packets and keeps dietary categories as planning filters — never allergy guarantees.",
+      "Host shell with three layers: Plan (night route), Architecture (menu stress under the same chrome), and Card (table wording). Receives Menu Builder packets (contract 1.1.0) and keeps dietary categories as planning filters — never allergy guarantees.",
     status: "live",
     statusNote: "Host Planning Instrument · local plan state",
     href: "https://occasion-planner-suite.vercel.app/",
@@ -75,9 +75,10 @@ export const TOOLS: Tool[] = [
       { value: "1.8.0", label: "Build" },
     ],
     capabilities: [
+      "Layered host path: Plan · Architecture · Card under one visual system",
       "Condition-driven host plan: guests, service style, attention, capacity",
       "Controlled route — shop → prep → serve, without theater",
-      "Menu Builder handoff receiver (contract 1.1.0)",
+      "In-app Architecture (SC-MB-001 engine) + contract 1.1.0 apply-to-plan",
       "Food-safety boundary surfaced on every plan",
     ],
     refusals: [
@@ -153,7 +154,7 @@ export const HANDOFFS: Handoff[] = [
     contract: "Contract 1.1.0",
     tag: "Primary",
     purpose:
-      "So the night can be sequenced against a menu that has already been stress-tested — not against a wish list.",
+      "So the night can be sequenced against a menu that has already been stress-tested — not against a wish list. Primary path can run in-app (Architecture → Plan) or cross-origin from standalone Menu Builder.",
     breaksIf:
       "If drafts and simplification history travelled too, Occasion OS would route a menu you already rejected.",
     moves: [
@@ -420,6 +421,11 @@ export const LEDGER: LedgerRow[] = [
 ];
 
 export const DESK_LOG = [
+  {
+    date: "2026-08-12",
+    id: "SC-OOS-001",
+    entry: "Architecture layer shipped inside Occasion OS: Plan · Architecture · Card under one chrome. SC-MB-001 engine runs in-app; standalone Menu Builder remains live.",
+  },
   {
     date: "2026-08-11",
     id: "Desk",
