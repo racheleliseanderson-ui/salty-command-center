@@ -31,12 +31,17 @@ export type Tool = {
  * A **case file** is every first-party record in the live set — thin fields
  * and unknowns included, each with an openable dossier. The enriched/resolved
  * subset is tracked separately and is never labelled "case files".
+ * **Still to add** is the never-enriched remainder (listing-only).
  *
  * Regions are jurisdictions (14 US states + British Columbia), not metro areas.
  */
+const RI_CASE_FILES = 225;
+const RI_ENRICHED = 111;
+
 export const RI_COVERAGE = {
-  caseFiles: 225,
-  enriched: 111,
+  caseFiles: RI_CASE_FILES,
+  enriched: RI_ENRICHED,
+  neverEnriched: RI_CASE_FILES - RI_ENRICHED,
   regions: 15,
   usStates: 14,
   outsideUs: "British Columbia",
@@ -60,7 +65,7 @@ export const TOOL_VERSIONS = {
     contract: "1.1.0",
   },
   "restaurant-intelligence": {
-    build: `Case set ${RI_COVERAGE.caseFiles} · ${RI_COVERAGE.enriched} enriched`,
+    build: `Case set ${RI_COVERAGE.caseFiles} · ${RI_COVERAGE.enriched} enriched · ${RI_COVERAGE.neverEnriched} to add`,
     contract: "Reader-initiated",
   },
 } as const;
@@ -147,7 +152,7 @@ export const TOOLS: Tool[] = [
     summary:
       "Situation-aware ranking from first-party evidence only. Multi-layer findings, booking pathways, confirm burden, guest-constraint matrix, and official conflicts — so you choose the room that fits the occasion, not the photograph.",
     status: "live",
-    statusNote: `${RI_COVERAGE.caseFiles} first-party case files · ${RI_COVERAGE.enriched} enriched · unknowns preserved`,
+    statusNote: `${RI_COVERAGE.caseFiles} first-party case files · ${RI_COVERAGE.enriched} enriched · ${RI_COVERAGE.neverEnriched} still to add`,
     href: "https://deepdish.saltnotes.blog",
     metrics: [
       { value: String(RI_COVERAGE.caseFiles), label: "Case files" },
@@ -413,7 +418,7 @@ export const RESTAURANT_INTELLIGENCE = TOOLS[2]!;
 export type Counter = { value: number; suffix?: string; label: string; note: string };
 
 export const SUITE_COUNTERS: Counter[] = [
-  { value: RI_COVERAGE.caseFiles, label: "Case files", note: `${RI_COVERAGE.enriched} fully enriched/resolved` },
+  { value: RI_COVERAGE.caseFiles, label: "Case files", note: `${RI_COVERAGE.enriched} enriched · ${RI_COVERAGE.neverEnriched} still to add` },
   { value: RI_COVERAGE.regions, label: "Regions", note: RI_COVERAGE.regionNote },
   { value: RI_COVERAGE.occasions, label: "Occasions", note: "Situation types the suite recognises" },
   { value: RI_COVERAGE.pathways, label: "Booking pathways", note: "Phone, Resy, OpenTable, Tock, Direct, Walk-in" },
