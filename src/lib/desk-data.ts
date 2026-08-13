@@ -20,6 +20,51 @@ export type Tool = {
   track: "host" | "dine";
 };
 
+/* --------------------------------------------------------------------------
+ * Single source of truth — card metrics, hero counters, and the ledger
+ * all read from these objects so they cannot drift apart again.
+ * ----------------------------------------------------------------------- */
+
+/**
+ * Restaurant Intelligence corpus snapshot (coverage.json, 2026-08-12).
+ *
+ * A **case file** is every first-party record in the live set — thin fields
+ * and unknowns included, each with an openable dossier. The enriched/resolved
+ * subset is tracked separately and is never labelled "case files".
+ *
+ * Regions are jurisdictions (14 US states + British Columbia), not metro areas.
+ */
+export const RI_COVERAGE = {
+  caseFiles: 225,
+  enriched: 111,
+  regions: 15,
+  usStates: 14,
+  outsideUs: "British Columbia",
+  regionNote: "14 US states + British Columbia",
+  occasions: 14,
+  pathways: 6,
+  generatedAt: "2026-08-12",
+} as const;
+
+/** Public build / contract identity for each tool. */
+export const TOOL_VERSIONS = {
+  "menu-builder": {
+    package: "0.6.0",
+    engine: "0.4.3",
+    contract: "1.1.0",
+    build: "Package 0.6.0 · Engine 0.4.3",
+  },
+  "occasion-os": {
+    build: "Host Planning Instrument V2",
+    shortBuild: "V2",
+    contract: "1.1.0",
+  },
+  "restaurant-intelligence": {
+    build: `Case set ${RI_COVERAGE.caseFiles}`,
+    contract: "Reader-initiated",
+  },
+} as const;
+
 export const TOOLS: Tool[] = [
   {
     id: "SC-MB-001",
@@ -37,8 +82,8 @@ export const TOOLS: Tool[] = [
     metrics: [
       { value: "5", label: "Roles" },
       { value: "5", label: "Stress axes" },
-      { value: "1.1.0", label: "Contract" },
-      { value: "0.4.3", label: "Engine" },
+      { value: TOOL_VERSIONS["menu-builder"].contract, label: "Contract" },
+      { value: TOOL_VERSIONS["menu-builder"].package, label: "Package" },
     ],
     capabilities: [
       "Five roles with congruence / contrast / balanced pairing modes",
@@ -71,8 +116,8 @@ export const TOOLS: Tool[] = [
     metrics: [
       { value: "2", label: "Modes" },
       { value: "3", label: "Route stages" },
-      { value: "1.1.0", label: "Receives" },
-      { value: "1.8.0", label: "Build" },
+      { value: TOOL_VERSIONS["occasion-os"].contract, label: "Receives" },
+      { value: TOOL_VERSIONS["occasion-os"].shortBuild, label: "Build" },
     ],
     capabilities: [
       "Layered host path: Plan · Architecture · Card under one visual system",
@@ -102,13 +147,13 @@ export const TOOLS: Tool[] = [
     summary:
       "Situation-aware ranking from first-party evidence only. Multi-layer findings, booking pathways, confirm burden, guest-constraint matrix, and official conflicts — so you choose the room that fits the occasion, not the photograph.",
     status: "live",
-    statusNote: "136 first-party case files · unknowns preserved",
+    statusNote: `${RI_COVERAGE.caseFiles} first-party case files · unknowns preserved`,
     href: "https://deepdish.saltnotes.blog",
     metrics: [
-      { value: "136", label: "Case files" },
-      { value: "43", label: "Regions" },
-      { value: "14", label: "Occasions" },
-      { value: "6", label: "Pathways" },
+      { value: String(RI_COVERAGE.caseFiles), label: "Case files" },
+      { value: String(RI_COVERAGE.regions), label: "Regions" },
+      { value: String(RI_COVERAGE.occasions), label: "Occasions" },
+      { value: String(RI_COVERAGE.pathways), label: "Pathways" },
     ],
     capabilities: [
       "Situation rank: occasion, party size, days-out, max commitment, planning load",
@@ -361,17 +406,17 @@ export const OCCASION_OS = TOOLS[1]!;
 export const RESTAURANT_INTELLIGENCE = TOOLS[2]!;
 
 /* --------------------------------------------------------------------------
- * Suite telemetry — hand-curated, shaped so it can later be swapped for a
- * live feed without touching components.
+ * Suite telemetry — derived from RI_COVERAGE / TOOL_VERSIONS so it can later
+ * be swapped for a live feed without touching components.
  * ----------------------------------------------------------------------- */
 
 export type Counter = { value: number; suffix?: string; label: string; note: string };
 
 export const SUITE_COUNTERS: Counter[] = [
-  { value: 136, label: "Case files", note: "First-party restaurant records" },
-  { value: 43, label: "Regions", note: "Covered by Restaurant Intelligence" },
-  { value: 14, label: "Occasions", note: "Situation types the suite recognises" },
-  { value: 6, label: "Booking pathways", note: "Phone, Resy, OpenTable, Tock, Direct, Walk-in" },
+  { value: RI_COVERAGE.caseFiles, label: "Case files", note: "First-party restaurant records" },
+  { value: RI_COVERAGE.regions, label: "Regions", note: RI_COVERAGE.regionNote },
+  { value: RI_COVERAGE.occasions, label: "Occasions", note: "Situation types the suite recognises" },
+  { value: RI_COVERAGE.pathways, label: "Booking pathways", note: "Phone, Resy, OpenTable, Tock, Direct, Walk-in" },
   { value: 5, label: "Stress axes", note: "Balance, make-ahead, service, equipment, freedom" },
   { value: 5, label: "Menu roles", note: "Architecture slots per menu" },
 ];
@@ -392,8 +437,8 @@ export const LEDGER: LedgerRow[] = [
     id: "SC-MB-001",
     name: "Menu Builder",
     state: "Live",
-    build: "Package 0.6.0 · Engine 0.4.3",
-    contract: "Emits 1.1.0",
+    build: TOOL_VERSIONS["menu-builder"].build,
+    contract: `Emits ${TOOL_VERSIONS["menu-builder"].contract}`,
     updated: "2026-08-11",
     accepts: "Declared occasion, guests, service style, attention, equipment",
     rejects: "Allergen safety claims, recipes, pricing, cloud accounts",
@@ -402,8 +447,8 @@ export const LEDGER: LedgerRow[] = [
     id: "SC-OOS-001",
     name: "Occasion Operating System",
     state: "Live",
-    build: "Host Planning Instrument V2",
-    contract: "Receives 1.1.0",
+    build: TOOL_VERSIONS["occasion-os"].build,
+    contract: `Receives ${TOOL_VERSIONS["occasion-os"].contract}`,
     updated: "2026-08-11",
     accepts: "Menu Builder packets, host conditions, capacity and attention",
     rejects: "Silent cross-app inference, allergen guarantees, forced accounts",
@@ -412,9 +457,9 @@ export const LEDGER: LedgerRow[] = [
     id: "SC-RI-001",
     name: "Restaurant Intelligence",
     state: "Live",
-    build: "Case set 136",
-    contract: "Reader-initiated",
-    updated: "2026-08-11",
+    build: TOOL_VERSIONS["restaurant-intelligence"].build,
+    contract: TOOL_VERSIONS["restaurant-intelligence"].contract,
+    updated: RI_COVERAGE.generatedAt,
     accepts: "Occasion, party size, days-out, commitment ceiling, planning load",
     rejects: "Aggregator scores, resolved conflicts, unverified operating changes",
   },
