@@ -33,7 +33,7 @@ export const TOOLS: Tool[] = [
       "Five-role architecture, stress meters, anchor locking, bounded simplification, and hard stops. Scores Balance, Make Ahead, Service Fit, Equipment Fit, and Host Freedom from your declared inputs — then hands a clean packet to Occasion OS.",
     status: "live",
     statusNote: "Standalone instrument · also layered inside Occasion OS as Architecture",
-    href: "https://salty-menu-builder.vercel.app/",
+    href: "https://occasion.saltnotes.blog/architecture",
     metrics: [
       { value: "5", label: "Roles" },
       { value: "5", label: "Stress axes" },
@@ -67,7 +67,7 @@ export const TOOLS: Tool[] = [
       "Host shell with three layers: Plan (night route), Architecture (menu stress under the same chrome), and Card (table wording). Receives Menu Builder packets (contract 1.1.0) and keeps dietary categories as planning filters — never allergy guarantees.",
     status: "live",
     statusNote: "Host Planning Instrument · local plan state",
-    href: "https://occasion-planner-suite.vercel.app/",
+    href: "https://occasion.saltnotes.blog",
     metrics: [
       { value: "2", label: "Modes" },
       { value: "3", label: "Route stages" },
@@ -103,7 +103,7 @@ export const TOOLS: Tool[] = [
       "Situation-aware ranking from first-party evidence only. Multi-layer findings, booking pathways, confirm burden, guest-constraint matrix, and official conflicts — so you choose the room that fits the occasion, not the photograph.",
     status: "live",
     statusNote: "136 first-party case files · unknowns preserved",
-    href: "https://deep-dish-decision-e3c9f8ee.vercel.app/",
+    href: "https://deepdish.saltnotes.blog",
     metrics: [
       { value: "136", label: "Case files" },
       { value: "43", label: "Regions" },
