@@ -60,7 +60,7 @@ export const TOOL_VERSIONS = {
     contract: "1.1.0",
   },
   "restaurant-intelligence": {
-    build: `Case set ${RI_COVERAGE.caseFiles}`,
+    build: `Case set ${RI_COVERAGE.caseFiles} · ${RI_COVERAGE.enriched} enriched`,
     contract: "Reader-initiated",
   },
 } as const;
@@ -147,7 +147,7 @@ export const TOOLS: Tool[] = [
     summary:
       "Situation-aware ranking from first-party evidence only. Multi-layer findings, booking pathways, confirm burden, guest-constraint matrix, and official conflicts — so you choose the room that fits the occasion, not the photograph.",
     status: "live",
-    statusNote: `${RI_COVERAGE.caseFiles} first-party case files · unknowns preserved`,
+    statusNote: `${RI_COVERAGE.caseFiles} first-party case files · ${RI_COVERAGE.enriched} enriched · unknowns preserved`,
     href: "https://deepdish.saltnotes.blog",
     metrics: [
       { value: String(RI_COVERAGE.caseFiles), label: "Case files" },
@@ -413,7 +413,7 @@ export const RESTAURANT_INTELLIGENCE = TOOLS[2]!;
 export type Counter = { value: number; suffix?: string; label: string; note: string };
 
 export const SUITE_COUNTERS: Counter[] = [
-  { value: RI_COVERAGE.caseFiles, label: "Case files", note: "First-party restaurant records" },
+  { value: RI_COVERAGE.caseFiles, label: "Case files", note: `${RI_COVERAGE.enriched} fully enriched/resolved` },
   { value: RI_COVERAGE.regions, label: "Regions", note: RI_COVERAGE.regionNote },
   { value: RI_COVERAGE.occasions, label: "Occasions", note: "Situation types the suite recognises" },
   { value: RI_COVERAGE.pathways, label: "Booking pathways", note: "Phone, Resy, OpenTable, Tock, Direct, Walk-in" },
