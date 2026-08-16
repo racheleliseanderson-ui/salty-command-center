@@ -87,6 +87,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#101a2e" },
+      {
+        property: "og:image",
+        content:
+          "https://i0.wp.com/saltnotes.blog/wp-content/uploads/2026/08/Chef-station-overhead-ingredients.jpg?resize=1200%2C630&ssl=1",
+      },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      {
+        property: "og:image:alt",
+        content: "Overhead view of ingredients and tools on a chef station",
+      },
+      { property: "og:url", content: "https://salty-command-center.vercel.app/" },
+      {
+        name: "twitter:image",
+        content:
+          "https://i0.wp.com/saltnotes.blog/wp-content/uploads/2026/08/Chef-station-overhead-ingredients.jpg?resize=1200%2C630&ssl=1",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
