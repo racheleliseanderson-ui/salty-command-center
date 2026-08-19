@@ -1,7 +1,7 @@
 import type { Tool } from "./desk-data";
 
 export type Answers = {
-  mode?: "cook" | "out" | "unsure";
+  mode?: "cook" | "pantry" | "out" | "unsure";
   covers?: "small" | "medium" | "large";
   attention?: "hands-on" | "split" | "none";
   runway?: "tonight" | "days" | "weeks";
@@ -22,6 +22,7 @@ export const QUESTIONS = [
     label: "Where does the night happen?",
     options: [
       { value: "cook" as const, label: "I'm cooking", note: "Kitchen is committed" },
+      { value: "pantry" as const, label: "From the pantry & bar", note: "Cook what's already in the house" },
       { value: "out" as const, label: "We're going out", note: "A room has to fit" },
       { value: "unsure" as const, label: "Undecided", note: "That is a valid answer" },
     ],
@@ -56,31 +57,43 @@ export const QUESTIONS = [
 ];
 
 const NOT_THIS_TOOL: Record<Tool["slug"], string> = {
+  "kitchen-bar": "Wrong tool: it reads the shelf, it does not sequence a hosted night.",
   "menu-builder": "Wrong tool: it will not tell you whether to host, or where to eat.",
   "occasion-os": "Wrong tool: it sequences a night, it does not choose the food.",
-  "restaurant-intelligence": "Wrong tool: it has no view of your kitchen or prep.",
+  "restaurant-intelligence": "Wrong tool: it has no view of your kitchen, pantry, or prep.",
 };
+
+const clamp = (n: number) => Math.max(4, Math.min(98, Math.round(n)));
 
 /** Deterministic, local scoring. No inference beyond the declared answers. */
 export function evaluate(a: Answers): Verdict {
   const answered = Object.values(a).filter(Boolean).length;
 
-  let mb = 40;
-  let os = 34;
-  let ri = 30;
+  let kbi = 32;
+  let mb = 36;
+  let os = 30;
+  let ri = 28;
   let hardStop: string | undefined;
 
-  if (a.mode === "cook") {
-    mb += 34;
-    os += 30;
+  if (a.mode === "pantry") {
+    kbi += 46;
+    mb += 8;
+    os -= 4;
+    ri -= 18;
+  } else if (a.mode === "cook") {
+    mb += 28;
+    os += 24;
+    kbi += 10;
     ri -= 18;
   } else if (a.mode === "out") {
-    ri += 46;
-    mb -= 24;
-    os -= 20;
+    ri += 48;
+    mb -= 22;
+    os -= 18;
+    kbi -= 16;
   } else if (a.mode === "unsure") {
-    mb += 10;
+    kbi += 10;
     ri += 12;
+    mb += 6;
   }
 
   if (a.covers === "medium") {
@@ -95,30 +108,42 @@ export function evaluate(a: Answers): Verdict {
   if (a.attention === "split") {
     os += 12;
   } else if (a.attention === "none") {
-    os += 6;
-    ri += 20;
+    os += 4;
+    ri += 18;
     mb -= 8;
+    kbi += 4;
   } else if (a.attention === "hands-on") {
     mb += 6;
+    kbi += 4;
   }
 
   if (a.runway === "tonight") {
-    ri += 18;
-    os -= 6;
-    mb -= 4;
+    if (a.mode === "cook" || a.mode === "pantry") {
+      kbi += 22;
+      mb -= 8;
+      os -= 10;
+    } else {
+      ri += 16;
+      os -= 6;
+    }
   } else if (a.runway === "weeks") {
+    mb += 8;
+    os += 10;
+  } else if (a.runway === "days") {
     mb += 6;
     os += 8;
   }
 
-  // Hard stops: constraints that end the hosting path rather than degrade it.
   if (a.mode !== "out") {
     if (a.covers === "large" && a.attention === "none") {
-      hardStop = "9+ covers with no host attention during service. Plated capacity fails; this is a hard stop, not a warning.";
+      hardStop =
+        "9+ covers with no host attention during service. Plated capacity fails; this is a hard stop, not a warning.";
     } else if (a.runway === "tonight" && a.covers === "large") {
-      hardStop = "9+ covers with no prep window. The prep route cannot be staged; the plan fails closed.";
-    } else if (a.runway === "tonight" && a.attention === "none") {
-      hardStop = "Service tonight with no attention to give it. Nothing downstream can recover that.";
+      hardStop =
+        "9+ covers with no prep window. The prep route cannot be staged; the plan fails closed.";
+    } else if (a.runway === "tonight" && a.attention === "none" && a.mode === "cook") {
+      hardStop =
+        "Service tonight with no attention to give it. Nothing downstream can recover that.";
     }
   }
 
@@ -126,10 +151,11 @@ export function evaluate(a: Answers): Verdict {
     ri += 40;
     mb -= 20;
     os -= 20;
+    kbi -= 12;
   }
 
-  const clamp = (n: number) => Math.max(4, Math.min(98, Math.round(n)));
   const scored = [
+    { slug: "kitchen-bar" as const, fit: clamp(kbi) },
     { slug: "menu-builder" as const, fit: clamp(mb) },
     { slug: "occasion-os" as const, fit: clamp(os) },
     { slug: "restaurant-intelligence" as const, fit: clamp(ri) },
@@ -141,6 +167,11 @@ export function evaluate(a: Answers): Verdict {
       if (hardStop) return "Start here: the hosting path does not survive the constraints you declared.";
       if (a.mode === "out") return "Start here: the decision is which room fits, not what to cook.";
       return "Start here: off-site is the lower-risk outcome on these constraints.";
+    }
+    if (slug === "kitchen-bar") {
+      if (a.mode === "pantry") return "Start here: the question is what's already in the house.";
+      if (a.runway === "tonight") return "Start here: no prep window — cook from the shelf, then stop.";
+      return "Start here: read the pantry before you architect a menu.";
     }
     if (slug === "menu-builder") {
       if (a.covers === "large") return "Start here: at 9+ covers, plated capacity is the binding constraint.";
@@ -157,7 +188,8 @@ export function evaluate(a: Answers): Verdict {
       ranked,
       entry: null,
       headline: "No verdict yet",
-      detail: "Answer the four questions. The desk will name one entry point and say plainly which tools are wrong for it.",
+      detail:
+        "Answer the four questions. The desk will name one entry point and say plainly which tools are wrong for it.",
       handoff: "Nothing moves between tools until you choose a handoff.",
     };
   }
@@ -168,30 +200,35 @@ export function evaluate(a: Answers): Verdict {
       entry: "restaurant-intelligence",
       headline: "Don't host this one",
       detail: "The constraints breach a hard stop. Dining out is the correct outcome here, not a failure.",
-      handoff: "Optional, reader-initiated: occasion type, party size, and date window → Restaurant Intelligence.",
+      handoff:
+        "Optional, reader-initiated: occasion type, party size, and date window → Restaurant Intelligence.",
       hardStop,
     };
   }
 
-  const headline =
-    top.slug === "restaurant-intelligence"
-      ? "Dine out — rank the room"
-      : top.slug === "menu-builder"
-        ? "Start at Menu Builder"
-        : "Start at Occasion OS";
+  const headlines: Record<Tool["slug"], string> = {
+    "kitchen-bar": "Start at Kitchen & Bar",
+    "menu-builder": "Start at Menu Builder",
+    "occasion-os": "Start at Occasion OS",
+    "restaurant-intelligence": "Dine out — rank the room",
+  };
 
-  const handoff =
-    top.slug === "menu-builder"
-      ? "Next handoff: menu architecture + stress summary + anchor → Occasion OS, contract 1.1.0."
-      : top.slug === "occasion-os"
-        ? "Next handoff: optional occasion context → Restaurant Intelligence, only if you choose it."
-        : "Next handoff: first-party case file + evidence trail → your own records.";
+  const handoffs: Record<Tool["slug"], string> = {
+    "kitchen-bar":
+      "Next handoff: Availability Packet 1.0 → Occasion OS. You send it. Nothing silent.",
+    "menu-builder":
+      "Next handoff: menu architecture + stress summary + anchor → Occasion OS, contract 1.1.0.",
+    "occasion-os":
+      "Next handoff: optional occasion context → Restaurant Intelligence, only if you choose it.",
+    "restaurant-intelligence":
+      "Next handoff: first-party case file + evidence trail → your own records.",
+  };
 
   return {
     ranked,
     entry: top.slug,
-    headline,
+    headline: headlines[top.slug],
     detail: top.reason,
-    handoff,
+    handoff: handoffs[top.slug],
   };
 }

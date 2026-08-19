@@ -2,18 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
 import { ToolCard } from "@/components/desk/ToolCard";
-import { HandoffMap } from "@/components/desk/HandoffMap";
 import { Triage } from "@/components/desk/Triage";
-import { PipelineStrip } from "@/components/desk/PipelineConsole";
-import { Reveal } from "@/components/desk/Reveal";
-import { StatusLedger, SuiteCounters } from "@/components/desk/StatusLedger";
-import { useParallax } from "@/hooks/use-parallax";
-import { useReveal } from "@/hooks/use-reveal";
-
-import { BOUNDARIES, DESK_LOG, PHILOSOPHY, RESTAURANT_INTELLIGENCE, TOOLS } from "@/lib/desk-data";
+import { HANDOFFS, PHILOSOPHY, TOOLS } from "@/lib/desk-data";
 import heroPass from "@/assets/hero-pass.jpg";
-import diningRoom from "@/assets/dining-room.jpg";
-
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,417 +13,217 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "The front door to Salty & Clever: Menu Builder, Occasion Operating System, and Restaurant Intelligence. Pick the right tool, see every handoff, commit the kitchen on purpose.",
-      },
-      { property: "og:title", content: "Salty Desk — Host & dine intelligence command center" },
-      {
-        property: "og:description",
-        content:
-          "Three independent tools, one orientation surface. Explicit handoffs only. Vanity is allowed; the oven still has to finish on time.",
+          "The front door to Salty & Clever: Kitchen & Bar Intelligence, Menu Builder, Occasion Operating System, and Restaurant Intelligence. Pick the right tool, see every handoff, commit the kitchen on purpose.",
       },
     ],
   }),
   component: Desk,
 });
 
-function Desk() {
-  const hostTools = TOOLS.filter((t) => t.track === "host");
-  const dineTools = TOOLS.filter((t) => t.track === "dine");
-  const heroRef = useParallax<HTMLImageElement>(0.14);
-  const dineRef = useParallax<HTMLImageElement>(0.1);
+const STATS = [
+  { value: "4", label: "Live tools" },
+  { value: "225", label: "Case files" },
+  { value: "15", label: "Regions" },
+  { value: "1.0", label: "Kitchen packet" },
+] as const;
 
+const PATH = [
+  {
+    n: "01",
+    id: "SC-KBI-001",
+    title: "What's on the shelf?",
+    body: "Kitchen & Bar reads the pantry and bar, ranks a pour, and packs what is actually available.",
+  },
+  {
+    n: "02",
+    id: "SC-MB-001",
+    title: "Can the menu finish?",
+    body: "Menu Builder returns stress scores and hard stops before you commit the kitchen.",
+  },
+  {
+    n: "03",
+    id: "SC-OOS-001",
+    title: "Can the night run?",
+    body: "Occasion OS sequences shop → prep → serve against your real attention and capacity.",
+  },
+  {
+    n: "04",
+    id: "SC-RI-001",
+    title: "Or dine out.",
+    body: "If either answer is no, ranking a room is the correct outcome — not a failure.",
+  },
+] as const;
+
+function Desk() {
   return (
-    <div className="min-h-dvh bg-ink">
+    <div className="min-h-dvh min-w-0 overflow-x-hidden bg-ink">
       <DeskHeader />
 
-      {/* ── Hero ─────────────────────────────────────────────── */}
       <section className="relative isolate overflow-hidden">
         <img
-          ref={heroRef}
           src={heroPass}
           alt="Hands finishing a plate on a dark kitchen pass under brass service light"
           width={1600}
           height={1104}
-          className="media-tone absolute inset-0 h-full w-full object-cover object-center will-change-transform"
+          className="media-tone absolute inset-0 h-full w-full object-cover object-center"
         />
-
         <div className="ink-veil absolute inset-0" />
         <div className="hairline-grid absolute inset-0 opacity-40" />
 
-        <div className="relative mx-auto max-w-[1240px] px-5 pb-20 pt-24 sm:px-8 sm:pb-28 sm:pt-36">
-          <p className="label-mono rise text-brass">Salty &amp; Clever · Host &amp; dine suite</p>
-
-          <h1 className="rise display-xl mt-6 max-w-[18ch] text-bone">
+        <div className="relative mx-auto max-w-[1120px] min-w-0 px-5 pb-16 pt-20 sm:px-8 sm:pb-24 sm:pt-28">
+          <p className="label-mono text-brass">Salty & Clever · Four live instruments</p>
+          <h1 className="display-xl mt-6 max-w-[18ch] text-bone">
             Commit the kitchen
             <span className="block text-brass">on purpose.</span>
           </h1>
-
-          <p className="rise mt-8 max-w-[52ch] text-lg leading-relaxed text-foreground/85">
-            Salty Desk is the orientation surface for three independent tools. It tells you which
-            one answers the question you actually have — then routes you there with the handoff
-            stated out loud.
+          <p className="mt-8 max-w-[52ch] text-lg leading-relaxed text-foreground/85">
+            Salty Desk is the orientation surface for four independent tools. It names the one that
+            answers the question you actually have — then routes you there with the handoff stated
+            out loud.
           </p>
-
-          <div className="rise mt-10 flex flex-wrap gap-3">
-            <Link
-              to="/host-path"
+          <div className="mt-10 flex min-w-0 flex-wrap gap-3">
+            <a
+              href="#triage"
               className="press tap inline-flex items-center gap-2 bg-brass px-5 py-3 text-sm font-medium tracking-wide text-primary-foreground transition-colors hover:bg-bone"
             >
-              I'm hosting at home
+              Find the right tool
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </a>
             <a
-              href={RESTAURANT_INTELLIGENCE.href}
-              target="_blank"
-              rel="noreferrer"
+              href="#tools"
               className="press tap inline-flex items-center gap-2 border border-bone/30 px-5 py-3 text-sm font-medium tracking-wide text-bone transition-colors hover:border-brass hover:text-brass"
             >
-              I'm dining out
-              <ArrowUpRight className="h-4 w-4" />
+              See the suite
             </a>
-            <Link
-              to="/handoffs"
-              className="press tap inline-flex items-center gap-2 px-2 py-3 text-sm tracking-wide text-muted-foreground transition-colors hover:text-brass"
-            >
-              What moves between tools?
-            </Link>
           </div>
-
-          <p className="mt-14 max-w-[46ch] border-l border-brass/50 pl-5 font-display text-2xl leading-snug text-bone/90">
+          <p className="mt-12 max-w-[46ch] border-l border-brass/50 pl-5 font-display text-2xl leading-snug text-bone/90">
             Vanity is allowed. The oven still has to finish on time.
           </p>
         </div>
       </section>
 
-      {/* ── Suite counters ────────────────────────────────────── */}
       <section className="border-y border-border bg-ink-deep">
-        <div className="mx-auto max-w-[1240px] px-5 py-14 sm:px-8">
-          <SuiteCounters />
-        </div>
+        <dl className="mx-auto grid max-w-[1120px] min-w-0 grid-cols-2 gap-px overflow-hidden sm:grid-cols-4">
+          {STATS.map((s) => (
+            <div key={s.label} className="min-w-0 bg-ink-deep px-5 py-8">
+              <dt className="font-display text-3xl tabular-nums text-brass">{s.value}</dt>
+              <dd className="label-mono mt-2 break-words">{s.label}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
-      {/* ── Triage console ───────────────────────────────────── */}
-      <section className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8">
-        <SectionHead
-          kicker="Routing intelligence"
-          title="Answer four constraints. Get one entry point."
-          lede="The desk does not sell you all three tools. It names the one that answers your question — and the ones that do not."
-        />
-        <Reveal className="mt-12">
-          <Triage />
-        </Reveal>
-
-        <Reveal className="mt-10">
-          <PipelineStrip />
-        </Reveal>
-      </section>
-
-      {/* ── Status ledger ────────────────────────────────────── */}
-      <section className="border-t border-border bg-ink-deep">
-        <div className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8">
-          <SectionHead
-            kicker="Suite status"
-            title="What each tool accepts right now"
-            lede="Build, contract version, and last change — with what the tool will and will not take today."
-          />
-          <div className="mt-12">
-            <StatusLedger />
-          </div>
-        </div>
-      </section>
-
-      {/* ── Choose your surface ──────────────────────────────── */}
-      <section className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8">
-        <SectionHead
-          kicker="Triage grid"
-          title="Three tools. One question each."
-          lede="If two tools seem to overlap, you're holding the wrong question. Read the decision line, not the feature list."
-        />
-
-        <div className="mt-12 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-3">
-          {TOOLS.map((t, i) => (
-            <Reveal key={t.id} delay={i * 90} className="bg-surface p-7">
-              <p className="label-mono text-brass">{t.id}</p>
-              <h3 className="mt-3 font-display text-2xl leading-tight text-bone">{t.name}</h3>
-              <p className="mt-4 font-display text-lg leading-snug text-brass/90">{t.decision}</p>
-              <div className="mt-6 space-y-3 text-[0.83rem] leading-relaxed">
-                <p className="text-foreground/80">
-                  <span className="label-mono block">Use when</span>
-                  {t.useWhen}
-                </p>
-                <p className="text-muted-foreground">
-                  <span className="label-mono block">Wrong tool for</span>
-                  {t.notFor}
-                </p>
-              </div>
-              <Link
-                to="/tools/$slug"
-                params={{ slug: t.slug }}
-                className="mt-6 inline-flex items-center gap-2 text-[0.8rem] text-brass transition-colors hover:text-bone"
-              >
-                Full record
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </Reveal>
+      <section id="tools" className="mx-auto max-w-[1120px] min-w-0 px-5 py-20 sm:px-8">
+        <p className="label-mono text-brass">The suite</p>
+        <h2 className="mt-3 max-w-[20ch] font-display text-4xl leading-[1.05] text-bone sm:text-5xl">
+          Four tools. One question each.
+        </h2>
+        <p className="mt-5 max-w-[58ch] text-base leading-relaxed text-muted-foreground">
+          If two tools seem to overlap, you're holding the wrong question. Read the decision
+          line, not the feature list.
+        </p>
+        <div className="mt-12 grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-2">
+          {TOOLS.map((tool, i) => (
+            <ToolCard key={tool.id} tool={tool} index={i} />
           ))}
         </div>
       </section>
 
-
-      {/* ── Host suite ───────────────────────────────────────── */}
-      <section className="relative border-t border-border bg-ink-deep">
-        <div className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8">
-          <SectionHead
-            kicker="Host decision suite"
-            title="Before you commit the kitchen"
-            lede="Two decisions, in order: whether the menu can be finished, then whether the night can be run. Skipping the first makes the second a guess."
-          />
-
-          <div className="mt-8 panel-brass rounded-lg p-6 sm:p-8">
-            <p className="label-mono text-brass">The commit moment</p>
-            <div className="mt-4 grid gap-6 md:grid-cols-3">
-              <Commit n="01" q="Can the menu be finished?" a="Menu Builder returns stress scores and hard stops. A hard stop is a refusal, not a warning." />
-              <Commit n="02" q="Can the night be run?" a="Occasion OS sequences shop → prep → serve against your real attention and capacity." />
-              <Commit n="03" q="Should you host at all?" a="If either answer is no, dining out is the correct outcome — not a failure." />
-            </div>
-          </div>
-
-          <div className="mt-10 space-y-10">
-            {hostTools.map((t, i) => (
-              <ToolCard key={t.id} tool={t} index={i} />
-            ))}
-          </div>
+      <section id="triage" className="mx-auto max-w-[1120px] min-w-0 px-5 pb-20 sm:px-8">
+        <p className="label-mono text-brass">Routing intelligence</p>
+        <h2 className="mt-3 max-w-[22ch] font-display text-4xl leading-[1.05] text-bone sm:text-5xl">
+          Answer four constraints. Get one entry point.
+        </h2>
+        <p className="mt-5 max-w-[58ch] text-base leading-relaxed text-muted-foreground">
+          The desk does not sell you all four tools. It names the one that answers your question —
+          and the ones that do not.
+        </p>
+        <div className="mt-12 min-w-0">
+          <Triage />
         </div>
       </section>
 
-      {/* ── Dine suite ───────────────────────────────────────── */}
-      <section className="relative isolate overflow-hidden border-t border-border">
-        <img
-          ref={dineRef}
-          src={diningRoom}
-          alt="Empty candlelit restaurant banquette in a dark green dining room"
-          width={1408}
-          height={1008}
-          loading="lazy"
-          className="media-tone-soft absolute inset-0 h-full w-full object-cover will-change-transform"
-        />
-
-        <div className="ink-veil absolute inset-0" />
-        <div className="relative mx-auto max-w-[1240px] px-5 py-24 sm:px-8">
-          <SectionHead
-            kicker="Dine decision suite"
-            title="Before you book the room"
-            lede="Rank rooms by occasion fit and operating reality. Unknowns, conflicts, and confirm burden stay in the open."
-          />
-          <div className="mt-10">
-            {dineTools.map((t) => (
-              <ToolCard key={t.id} tool={t} index={2} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Host path ────────────────────────────────────────── */}
       <section className="border-t border-border bg-ink-deep">
-        <div className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8">
-          <SectionHead
-            kicker="Recommended sequence"
-            title="The Host Path"
-            lede="Menu Builder → Occasion Operating System. Restaurant Intelligence is the dine-out alternative, not step three."
-          />
-
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
-            <PathStep
-              n="1"
-              id="SC-MB-001"
-              title="Architect the menu"
-              body="Declare occasion, guests, service style, host attention, and equipment. Lock an anchor if the table needs one. Simplify what will break."
-              tone="primary"
-            />
-            <PathStep
-              n="2"
-              id="SC-OOS-001"
-              title="Run the night"
-              body="Carry the Menu Builder packet forward and build the shop → prep → serve route you can actually hold."
-              tone="primary"
-            />
-            <PathStep
-              n="Alt"
-              id="SC-RI-001"
-              title="Or dine out instead"
-              body="When hosting doesn't survive the stress test, rank rooms by situation and confirm the hard details live."
-              tone="alt"
-            />
-          </div>
-
-          <Link
-            to="/host-path"
-            className="mt-10 inline-flex items-center gap-2 border border-brass/50 px-5 py-3 text-sm tracking-wide text-brass transition-colors hover:bg-brass hover:text-primary-foreground"
-          >
-            Open the full Host Path
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+        <div className="mx-auto max-w-[1120px] min-w-0 px-5 py-20 sm:px-8">
+          <p className="label-mono text-brass">Host path</p>
+          <h2 className="mt-3 max-w-[22ch] font-display text-4xl leading-[1.05] text-bone sm:text-5xl">
+            Pantry, then menu, then the night — or dine out.
+          </h2>
+          <ol className="mt-10 grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2">
+            {PATH.map((step) => (
+              <li key={step.n} className="panel min-w-0 overflow-hidden rounded-lg p-6">
+                <p className="label-mono text-brass">
+                  {step.n} · {step.id}
+                </p>
+                <h3 className="mt-3 font-display text-2xl leading-snug text-bone">{step.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground break-words">
+                  {step.body}
+                </p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
-      {/* ── Handoffs ─────────────────────────────────────────── */}
-      <section className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8">
-        <SectionHead
-          kicker="Explicit handoffs only"
-          title="What moves — and what stays"
-          lede="Tools stay independent. When you choose, a public-safe packet moves downstream. Nothing is uploaded and nothing is inferred across apps without your action."
-        />
-        <div className="mt-12">
-          <HandoffMap />
-        </div>
-      </section>
-
-      {/* ── Philosophy + boundary ────────────────────────────── */}
-      <section className="border-t border-border bg-ink-deep">
-        <div className="mx-auto grid max-w-[1240px] gap-14 px-5 py-24 sm:px-8 lg:grid-cols-[1fr_1fr]">
-          <div>
-            <SectionHead kicker="Standing rules" title="How the desk behaves" />
-            <dl className="mt-8 divide-y divide-border">
-              {PHILOSOPHY.map((p) => (
-                <div key={p.k} className="py-4">
-                  <dt className="font-display text-xl text-bone">{p.k}</dt>
-                  <dd className="mt-1 text-[0.86rem] leading-relaxed text-muted-foreground">
-                    {p.v}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-
-          <div className="panel rounded-lg p-7 sm:p-9">
-            <p className="label-mono text-brass">Shared boundary</p>
-            <h3 className="mt-3 font-display text-3xl text-bone">Local-first, first-party, no forced account</h3>
-            <ul className="mt-7 space-y-4">
-              {BOUNDARIES.map((b) => (
-                <li key={b.id} className="flex gap-3 text-[0.86rem] leading-relaxed text-foreground/85">
-                  <span className="mt-2.5 h-px w-4 shrink-0 bg-destructive" />
-                  <span>
-                    <span className="label-mono block text-[0.58rem]">{b.group}</span>
-                    {b.limit}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            <Link
-              to="/boundary"
-              className="mt-8 inline-flex items-center gap-2 text-sm text-brass transition-colors hover:text-bone"
-            >
-              Read the boundary in full
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Desk log ─────────────────────────────────────────── */}
-      <section className="mx-auto max-w-[1240px] px-5 pb-24 sm:px-8">
-        <SectionHead
-          kicker="Desk log"
-          title="Recent to the desk"
-          lede="Dated, dry, and first-party. What changed in the suite, and which record it changed."
-        />
-        <ul className="mt-10 divide-y divide-border border-t border-border">
-          {DESK_LOG.map((l, i) => (
-            <Reveal
-              key={l.date + l.id}
-              as="li"
-              delay={i * 70}
-              className="grid gap-2 py-5 sm:grid-cols-[9rem_7rem_1fr]"
-            >
-              <span className="label-mono">{l.date}</span>
-              <span className="label-mono text-brass">{l.id}</span>
-              <span className="text-[0.88rem] leading-relaxed text-foreground/85">{l.entry}</span>
-            </Reveal>
+      <section className="mx-auto max-w-[1120px] min-w-0 px-5 py-20 sm:px-8">
+        <p className="label-mono text-brass">Handoffs</p>
+        <h2 className="mt-3 font-display text-4xl leading-[1.05] text-bone">
+          What moves. What doesn't.
+        </h2>
+        <p className="mt-5 max-w-[58ch] text-base leading-relaxed text-muted-foreground">
+          Nothing travels unless you send it. Each packet is public-safe and versioned.
+        </p>
+        <ul className="mt-10 grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2">
+          {HANDOFFS.filter((h) => h.toId !== "Editorial").map((h) => (
+            <li key={h.fromId + h.toId} className="panel min-w-0 overflow-hidden rounded-lg p-6">
+              <p className="label-mono">
+                {h.tag} · {h.contract}
+              </p>
+              <p className="mt-3 font-display text-xl leading-snug text-bone break-words">
+                {h.from}
+                <span className="mx-2 text-brass">→</span>
+                {h.to}
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground break-words">
+                {h.purpose}
+              </p>
+              <Link
+                to="/handoffs"
+                className="mt-4 inline-flex items-center gap-2 text-sm text-brass"
+              >
+                Packet map
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </Link>
+            </li>
           ))}
         </ul>
-        <Link
-          to="/reference"
-          className="mt-10 inline-flex items-center gap-2 text-sm text-brass transition-colors hover:text-bone"
-        >
-          Suite vocabulary &amp; build ledger
-          <ArrowRight className="h-4 w-4" />
-        </Link>
+      </section>
+
+      <section className="border-t border-border bg-ink-deep">
+        <div className="mx-auto max-w-[1120px] min-w-0 px-5 py-20 sm:px-8">
+          <div className="flex min-w-0 flex-wrap items-end justify-between gap-4">
+            <div className="min-w-0 max-w-xl">
+              <p className="label-mono text-brass">Standing rules</p>
+              <h2 className="mt-3 font-display text-4xl leading-[1.05] text-bone">
+                The desk will not do these things.
+              </h2>
+            </div>
+            <Link to="/boundary" className="text-sm text-brass">
+              Full boundary
+            </Link>
+          </div>
+          <ul className="mt-10 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {PHILOSOPHY.map((item) => (
+              <li key={item.k} className="panel min-w-0 overflow-hidden rounded-lg p-5">
+                <p className="label-mono text-brass">{item.k}</p>
+                <p className="mt-2 text-sm leading-relaxed text-foreground/85 break-words">{item.v}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <DeskFooter />
-    </div>
-  );
-}
-
-function SectionHead({
-  kicker,
-  title,
-  lede,
-}: {
-  kicker: string;
-  title: string;
-  lede?: string;
-}) {
-  const { ref, shown } = useReveal<HTMLDivElement>(0.3);
-  return (
-    <div ref={ref} className="max-w-[62ch]">
-      <p className="label-mono text-brass">{kicker}</p>
-      <div data-shown={shown} className="rule-brass draw-rule mt-3 w-24" />
-      <h2 className="mt-5 font-display text-4xl leading-[1.05] text-bone sm:text-5xl">{title}</h2>
-      {lede ? (
-        <p className="mt-5 text-base leading-relaxed text-muted-foreground">{lede}</p>
-      ) : null}
-    </div>
-  );
-}
-
-
-function Commit({ n, q, a }: { n: string; q: string; a: string }) {
-  return (
-    <div>
-      <p className="label-mono text-brass">{n}</p>
-      <p className="mt-2 font-display text-2xl leading-snug text-bone">{q}</p>
-      <p className="mt-2 text-[0.84rem] leading-relaxed text-muted-foreground">{a}</p>
-    </div>
-  );
-}
-
-function PathStep({
-  n,
-  id,
-  title,
-  body,
-  tone,
-}: {
-  n: string;
-  id: string;
-  title: string;
-  body: string;
-  tone: "primary" | "alt";
-}) {
-  return (
-    <div
-      className={
-        tone === "primary"
-          ? "panel relative rounded-lg p-7"
-          : "relative rounded-lg border border-dashed border-border bg-ink/60 p-7"
-      }
-    >
-      <div className="flex items-baseline justify-between">
-        <span
-          className={
-            tone === "primary"
-              ? "font-display text-5xl leading-none text-brass"
-              : "font-display text-3xl leading-none text-muted-foreground"
-          }
-        >
-          {n}
-        </span>
-        <span className="label-mono">{id}</span>
-      </div>
-      <h3 className="mt-5 font-display text-2xl text-bone">{title}</h3>
-      <p className="mt-3 text-[0.86rem] leading-relaxed text-muted-foreground">{body}</p>
     </div>
   );
 }

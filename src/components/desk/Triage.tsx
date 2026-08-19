@@ -17,7 +17,9 @@ export function Triage() {
     const top = verdict.entry;
     if (top && prevTop.current && prevTop.current !== top) {
       const tool = TOOLS.find((t) => t.slug === top);
-      setChanged(`Entry point moved to ${tool?.name} — the last constraint you declared changed the binding one.`);
+      setChanged(
+        `Entry point moved to ${tool?.name} — the last constraint you declared changed the binding one.`,
+      );
     } else if (!top) {
       setChanged(null);
     }
@@ -25,8 +27,8 @@ export function Triage() {
   }, [verdict.entry]);
 
   return (
-    <div className="panel grain rounded-lg p-5 sm:p-9">
-      <div className="grid gap-4 sm:flex sm:flex-wrap sm:items-start sm:justify-between">
+    <div className="panel grain min-w-0 overflow-hidden rounded-lg p-5 sm:p-9">
+      <div className="grid min-w-0 gap-4 sm:flex sm:flex-wrap sm:items-start sm:justify-between">
         <div className="min-w-0">
           <p className="label-mono text-brass">Triage console</p>
           <h3 className="mt-3 font-display text-2xl leading-tight text-bone sm:text-4xl">
@@ -34,12 +36,13 @@ export function Triage() {
           </h3>
           <p className="mt-3 max-w-[54ch] text-sm leading-relaxed text-muted-foreground">
             Four declared constraints. Deterministic and local — nothing is uploaded, nothing is
-            inferred, no account. Your answers stay on this device and tailor the handoff map and the
-            boundary page.
+            inferred, no account.
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-3">
-          <span className="label-mono">{answered} of 4 declared</span>
+          <span className="label-mono">
+            {answered} of {QUESTIONS.length} declared
+          </span>
           <button
             type="button"
             onClick={reset}
@@ -54,18 +57,18 @@ export function Triage() {
       <div className="mt-4 h-px w-full bg-border">
         <div
           className="h-px bg-brass transition-[width] duration-500"
-          style={{ width: `${(answered / 4) * 100}%` }}
+          style={{ width: `${(answered / QUESTIONS.length) * 100}%` }}
         />
       </div>
 
-      <div className="mt-8 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-2">
+      <div className="mt-8 grid min-w-0 gap-px overflow-hidden border border-border bg-border md:grid-cols-2">
         {QUESTIONS.map((q, qi) => (
-          <fieldset key={q.key} className="bg-ink-deep p-4 sm:p-6">
+          <fieldset key={q.key} className="min-w-0 bg-ink-deep p-4 sm:p-6">
             <legend className="label-mono text-brass">
               {String(qi + 1).padStart(2, "0")} · {q.key}
             </legend>
             <p className="mt-2 font-display text-lg leading-snug text-bone sm:text-xl">{q.label}</p>
-            <div className="mt-4 grid gap-2 sm:flex sm:flex-wrap">
+            <div className="mt-4 grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2">
               {q.options.map((o) => {
                 const active = answers[q.key] === (o.value as never);
                 return (
@@ -76,14 +79,14 @@ export function Triage() {
                     onClick={() => setAnswer(q.key, active ? undefined : (o.value as never))}
                     className={
                       active
-                        ? "press flex min-h-11 w-full items-start gap-2 border border-brass bg-brass/15 px-3 py-2.5 text-left text-[0.8rem] text-brass sm:w-auto"
-                        : "press flex min-h-11 w-full items-start gap-2 border border-border px-3 py-2.5 text-left text-[0.8rem] text-foreground/80 hover:border-brass/50 hover:text-brass sm:w-auto"
+                        ? "press flex min-h-11 min-w-0 items-start gap-2 border border-brass bg-brass/15 px-3 py-2.5 text-left text-[0.8rem] text-brass"
+                        : "press flex min-h-11 min-w-0 items-start gap-2 border border-border px-3 py-2.5 text-left text-[0.8rem] text-foreground/80 hover:border-brass/50 hover:text-brass"
                     }
                   >
                     {active ? <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" /> : null}
-                    <span>
-                      <span className="block font-medium">{o.label}</span>
-                      <span className="label-mono mt-1 block text-[0.55rem]">{o.note}</span>
+                    <span className="min-w-0">
+                      <span className="block font-medium break-words">{o.label}</span>
+                      <span className="label-mono mt-1 block text-[0.55rem] break-words">{o.note}</span>
                     </span>
                   </button>
                 );
@@ -93,26 +96,27 @@ export function Triage() {
         ))}
       </div>
 
-      {/* Verdict */}
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_1.05fr]">
+      <div className="mt-8 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
         <div
           aria-live="polite"
           className={
             verdict.hardStop
-              ? "border border-destructive/50 bg-destructive/10 p-5 sm:p-6"
-              : "panel-brass rounded-lg p-5 sm:p-6"
+              ? "min-w-0 overflow-hidden border border-destructive/50 bg-destructive/10 p-5 sm:p-6"
+              : "panel-brass min-w-0 overflow-hidden rounded-lg p-5 sm:p-6"
           }
         >
           <p className="label-mono text-brass">Verdict</p>
           <h4 className="mt-3 font-display text-2xl leading-tight text-bone sm:text-3xl">
             {verdict.headline}
           </h4>
-          <p className="mt-3 text-[0.9rem] leading-relaxed text-foreground/85">{verdict.detail}</p>
+          <p className="mt-3 text-[0.9rem] leading-relaxed text-foreground/85 break-words">
+            {verdict.detail}
+          </p>
 
           {verdict.hardStop ? (
             <p className="mt-5 flex gap-3 border-t border-destructive/40 pt-4 text-[0.85rem] leading-relaxed text-foreground/85">
               <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-destructive-foreground" />
-              <span>
+              <span className="min-w-0 break-words">
                 <span className="label-mono block text-[0.58rem]">Hard stop</span>
                 {verdict.hardStop}
               </span>
@@ -120,22 +124,22 @@ export function Triage() {
           ) : null}
 
           {changed ? (
-            <p className="label-mono mt-5 border-l border-brass/60 pl-3 leading-relaxed text-brass">
+            <p className="label-mono mt-5 border-l border-brass/60 pl-3 leading-relaxed text-brass break-words">
               {changed}
             </p>
           ) : null}
 
-          <p className="label-mono mt-6 leading-relaxed">{verdict.handoff}</p>
+          <p className="label-mono mt-6 leading-relaxed break-words">{verdict.handoff}</p>
 
           {verdict.entry ? (
-            <div className="mt-6 grid gap-3 sm:flex sm:flex-wrap">
+            <div className="mt-6 flex min-w-0 flex-wrap gap-3">
               <Link
                 to="/tools/$slug"
                 params={{ slug: verdict.entry }}
-                className="inline-flex min-h-11 items-center justify-center gap-2 border border-brass/50 bg-brass/10 px-4 text-[0.8rem] tracking-wide text-brass transition-colors hover:bg-brass hover:text-primary-foreground"
+                className="inline-flex min-h-11 min-w-0 items-center justify-center gap-2 border border-brass/50 bg-brass/10 px-4 text-[0.8rem] tracking-wide text-brass transition-colors hover:bg-brass hover:text-primary-foreground"
               >
                 Read the entry point
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 shrink-0" />
               </Link>
               <a
                 href={TOOLS.find((t) => t.slug === verdict.entry)!.href}
@@ -146,17 +150,11 @@ export function Triage() {
                 Launch it now
                 <ArrowUpRight className="h-4 w-4" />
               </a>
-              <Link
-                to="/handoffs"
-                className="inline-flex min-h-11 items-center justify-center gap-2 px-2 text-[0.8rem] tracking-wide text-muted-foreground transition-colors hover:text-brass"
-              >
-                See the packet for this case
-              </Link>
             </div>
           ) : null}
         </div>
 
-        <ul className="space-y-3">
+        <ul className="min-w-0 space-y-3">
           {verdict.ranked.map((r, i) => {
             const tool = TOOLS.find((t) => t.slug === r.slug)!;
             const lead = i === 0 && verdict.entry !== null;
@@ -165,20 +163,20 @@ export function Triage() {
                 key={r.slug}
                 className={
                   lead
-                    ? "border border-brass/40 bg-brass/5 p-4 transition-opacity sm:p-5"
-                    : "border border-dashed border-border p-4 opacity-70 transition-opacity sm:p-5"
+                    ? "min-w-0 overflow-hidden border border-brass/40 bg-brass/5 p-4 sm:p-5"
+                    : "min-w-0 overflow-hidden border border-dashed border-border p-4 opacity-70 sm:p-5"
                 }
               >
-                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                  <p className="min-w-0 font-display text-lg leading-tight text-bone sm:text-xl">
+                <div className="flex min-w-0 flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <p className="min-w-0 font-display text-lg leading-tight text-bone break-words sm:text-xl">
                     {tool.name}
                   </p>
                   <span className="label-mono flex shrink-0 items-center gap-1.5 text-brass">
                     {lead ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
-                    {lead ? "Entry point" : "Not this one"} · {r.fit}% fit
+                    {lead ? "Entry" : "Not this"} · {r.fit}%
                   </span>
                 </div>
-                <div className="mt-3 h-1 w-full bg-border">
+                <div className="mt-3 h-1 w-full overflow-hidden bg-border">
                   <div
                     className={
                       lead
@@ -188,7 +186,7 @@ export function Triage() {
                     style={{ width: `${r.fit}%` }}
                   />
                 </div>
-                <p className="mt-3 text-[0.82rem] leading-relaxed text-muted-foreground">
+                <p className="mt-3 text-[0.82rem] leading-relaxed text-muted-foreground break-words">
                   {r.reason}
                 </p>
               </li>

@@ -2,7 +2,7 @@ export type ToolStatus = "live" | "beta" | "planned";
 
 export type Tool = {
   id: string;
-  slug: "menu-builder" | "occasion-os" | "restaurant-intelligence";
+  slug: "kitchen-bar" | "menu-builder" | "occasion-os" | "restaurant-intelligence";
   name: string;
   short: string;
   useWhen: string;
@@ -20,21 +20,6 @@ export type Tool = {
   track: "host" | "dine";
 };
 
-/* --------------------------------------------------------------------------
- * Single source of truth — card metrics, hero counters, and the ledger
- * all read from these objects so they cannot drift apart again.
- * ----------------------------------------------------------------------- */
-
-/**
- * Restaurant Intelligence corpus snapshot (coverage.json, 2026-08-12).
- *
- * A **case file** is every first-party record in the live set — thin fields
- * and unknowns included, each with an openable dossier. The enriched/resolved
- * subset is tracked separately and is never labelled "case files".
- * **Still to add** is the never-enriched remainder (listing-only).
- *
- * Regions are jurisdictions (14 US states + British Columbia), not metro areas.
- */
 const RI_CASE_FILES = 225;
 const RI_ENRICHED = 111;
 
@@ -51,8 +36,11 @@ export const RI_COVERAGE = {
   generatedAt: "2026-08-12",
 } as const;
 
-/** Public build / contract identity for each tool. */
 export const TOOL_VERSIONS = {
+  "kitchen-bar": {
+    build: "Availability Packet 1.0",
+    contract: "1.0",
+  },
   "menu-builder": {
     package: "0.6.0",
     engine: "0.4.3",
@@ -65,12 +53,44 @@ export const TOOL_VERSIONS = {
     contract: "1.1.0",
   },
   "restaurant-intelligence": {
-    build: `Case set ${RI_COVERAGE.caseFiles} · ${RI_COVERAGE.enriched} enriched · ${RI_COVERAGE.neverEnriched} to add`,
+    build: `Case set ${RI_COVERAGE.caseFiles} · ${RI_COVERAGE.enriched} enriched`,
     contract: "Reader-initiated",
   },
 } as const;
 
 export const TOOLS: Tool[] = [
+  {
+    id: "SC-KBI-001",
+    slug: "kitchen-bar",
+    name: "Kitchen & Bar Intelligence",
+    short: "See the shelf. Rank the pour.",
+    useWhen: "You're cooking from what's already on the pantry and bar — not from a shopping list.",
+    notFor: "Sequencing a hosted night, ranking restaurants, or certifying allergens.",
+    decision: "What's on the shelf, what pairs, and what can you cook from it tonight?",
+    summary:
+      "Daily pantry and bar layer. Scan a shelf, rank a pour, match what's already in the house, then hand a clean availability packet to Occasion OS. Pairing is explainable chemistry plus recipe practice — Occasions stays the planner.",
+    status: "live",
+    statusNote: "Availability Packet 1.0",
+    href: "https://kitchen.saltnotes.blog/",
+    metrics: [
+      { value: "90s", label: "Bar reads" },
+      { value: "1.0", label: "Packet" },
+    ],
+    capabilities: [
+      "Vision: scan a shelf or fridge, review every candidate, then commit",
+      "Pairing: molecular overlap plus recipe co-occurrence, with explainable scores",
+      "Inventory + match: local-first pantry and bar, expiry ranking, Almost, Smart Buy",
+      "Availability Packet 1.0 — you send it; nothing moves silently",
+    ],
+    refusals: [
+      "Allergen claims or cross-contact control",
+      "Silent inference into Occasion OS",
+      "Replacing the occasion planner",
+      "Recipes treated as gospel",
+    ],
+    handoffOut: "Availability Packet 1.0 → Occasion OS (user-initiated)",
+    track: "host",
+  },
   {
     id: "SC-MB-001",
     slug: "menu-builder",
@@ -80,15 +100,13 @@ export const TOOLS: Tool[] = [
     notFor: "Deciding whether to host at all, or where to eat instead.",
     decision: "Can this kitchen finish this menu on time?",
     summary:
-      "Five-role architecture, stress meters, anchor locking, bounded simplification, and hard stops. Scores Balance, Make Ahead, Service Fit, Equipment Fit, and Host Freedom from your declared inputs — then hands a clean packet to Occasion OS.",
+      "Five-role architecture, stress meters, anchor locking, bounded simplification, and hard stops. Scores Balance, Make Ahead, Service Fit, Equipment Fit, and Host Freedom from declared inputs — then hands a clean packet to Occasion OS.",
     status: "live",
     statusNote: "Standalone instrument · also layered inside Occasion OS as Architecture",
     href: "https://occasion.saltnotes.blog/architecture",
     metrics: [
       { value: "5", label: "Roles" },
       { value: "5", label: "Stress axes" },
-      { value: TOOL_VERSIONS["menu-builder"].contract, label: "Contract" },
-      { value: TOOL_VERSIONS["menu-builder"].package, label: "Package" },
     ],
     capabilities: [
       "Five roles with congruence / contrast / balanced pairing modes",
@@ -111,18 +129,16 @@ export const TOOLS: Tool[] = [
     name: "Occasion Operating System",
     short: "The night, sequenced",
     useWhen: "The menu is settled and the night still has to run itself.",
-    notFor: "Choosing dishes, or ranking restaurants.",
+    notFor: "Choosing dishes, ranking restaurants, or reading the pantry.",
     decision: "What happens, in what order, and who is holding it?",
     summary:
-      "Host shell with three layers: Plan (night route), Architecture (menu stress under the same chrome), and Card (table wording). Receives Menu Builder packets (contract 1.1.0) and keeps dietary categories as planning filters — never allergy guarantees.",
+      "Host shell with three layers: Plan (night route), Architecture (menu stress under the same chrome), and Card (table wording). Receives Menu Builder packets (contract 1.1.0) and Kitchen & Bar Availability Packet 1.0. Dietary categories stay planning filters — never allergy guarantees.",
     status: "live",
     statusNote: "Host Planning Instrument · local plan state",
     href: "https://occasion.saltnotes.blog",
     metrics: [
-      { value: "2", label: "Modes" },
-      { value: "3", label: "Route stages" },
-      { value: TOOL_VERSIONS["occasion-os"].contract, label: "Receives" },
-      { value: TOOL_VERSIONS["occasion-os"].shortBuild, label: "Build" },
+      { value: "3", label: "Layers" },
+      { value: "1.1.0", label: "Receives" },
     ],
     capabilities: [
       "Layered host path: Plan · Architecture · Card under one visual system",
@@ -137,7 +153,7 @@ export const TOOLS: Tool[] = [
       "Star ratings or social proof",
       "Forced accounts for core planning",
     ],
-    handoffIn: "Menu Builder packet (contract 1.1.0)",
+    handoffIn: "Menu Builder packet (contract 1.1.0) · Kitchen & Bar Availability Packet 1.0",
     handoffOut: "Optional occasion context → Restaurant Intelligence",
     track: "host",
   },
@@ -147,18 +163,16 @@ export const TOOLS: Tool[] = [
     name: "Restaurant Intelligence",
     short: "Dine out, with receipts",
     useWhen: "The night is better off-site and the room still has to fit the occasion.",
-    notFor: "Cooking, prep sequencing, or menu construction.",
+    notFor: "Cooking, pantry matching, prep sequencing, or menu construction.",
     decision: "Which room fits this occasion — and what must still be confirmed?",
     summary:
       "Situation-aware ranking from first-party evidence only. Multi-layer findings, booking pathways, confirm burden, guest-constraint matrix, and official conflicts — so you choose the room that fits the occasion, not the photograph.",
     status: "live",
-    statusNote: `${RI_COVERAGE.caseFiles} first-party case files · ${RI_COVERAGE.enriched} enriched · ${RI_COVERAGE.neverEnriched} still to add`,
+    statusNote: `${RI_COVERAGE.caseFiles} first-party case files · ${RI_COVERAGE.regions} regions`,
     href: "https://deepdish.saltnotes.blog",
     metrics: [
       { value: String(RI_COVERAGE.caseFiles), label: "Case files" },
       { value: String(RI_COVERAGE.regions), label: "Regions" },
-      { value: String(RI_COVERAGE.occasions), label: "Occasions" },
-      { value: String(RI_COVERAGE.pathways), label: "Pathways" },
     ],
     capabilities: [
       "Situation rank: occasion, party size, days-out, max commitment, planning load",
@@ -197,6 +211,50 @@ export type Handoff = {
 
 export const HANDOFFS: Handoff[] = [
   {
+    from: "Kitchen & Bar Intelligence",
+    fromId: "SC-KBI-001",
+    to: "Occasion Operating System",
+    toId: "SC-OOS-001",
+    contract: "Availability Packet 1.0",
+    tag: "Primary",
+    purpose:
+      "So the night is planned against what is actually on the shelf — not against a shopping list you have not yet committed.",
+    breaksIf:
+      "If recipes, guest names, or inferred allergen claims travelled, Occasion OS would treat a pantry snapshot as a certified plan.",
+    moves: [
+      {
+        field: "Confirmed pantry and bar contents",
+        reason: "The route can only sequence what is actually available.",
+      },
+      {
+        field: "Declared intent (cook, mix, pack)",
+        reason: "Occasion OS needs the job, not the vision candidates you discarded.",
+      },
+    ],
+    stays: [
+      {
+        field: "Raw vision candidates you did not confirm",
+        reason: "Unreviewed detections are not inventory.",
+      },
+      {
+        field: "Recipes, pairing scores, and shopping suggestions",
+        reason: "Those are local execution, not occasion state.",
+      },
+      {
+        field: "Anything you did not explicitly send",
+        reason: "There is no background sync. Silence is withholding, not consent.",
+      },
+    ],
+    canConclude: [
+      "What is on the shelf tonight",
+      "Which declared items can leave as an availability packet",
+    ],
+    cannotConclude: [
+      "That a dish is allergen-safe",
+      "That Occasion OS should silently adopt the pantry as the menu",
+    ],
+  },
+  {
     from: "Menu Builder",
     fromId: "SC-MB-001",
     to: "Occasion Operating System",
@@ -204,7 +262,7 @@ export const HANDOFFS: Handoff[] = [
     contract: "Contract 1.1.0",
     tag: "Primary",
     purpose:
-      "So the night can be sequenced against a menu that has already been stress-tested — not against a wish list. Primary path can run in-app (Architecture → Plan) or cross-origin from standalone Menu Builder.",
+      "So the night can be sequenced against a menu that has already been stress-tested — not against a wish list.",
     breaksIf:
       "If drafts and simplification history travelled too, Occasion OS would route a menu you already rejected.",
     moves: [
@@ -396,7 +454,6 @@ export const BOUNDARIES: Boundary[] = [
   },
 ];
 
-
 export const PHILOSOPHY = [
   { k: "Reader-job-first", v: "Every surface names the decision it serves before it shows a control." },
   { k: "Explicit handoffs only", v: "Nothing moves between tools unless you choose to move it." },
@@ -406,24 +463,18 @@ export const PHILOSOPHY = [
   { k: "Fail closed", v: "Hard constraints stop the plan instead of quietly degrading it." },
 ];
 
-export const MENU_BUILDER = TOOLS[0]!;
-export const OCCASION_OS = TOOLS[1]!;
-export const RESTAURANT_INTELLIGENCE = TOOLS[2]!;
-
-/* --------------------------------------------------------------------------
- * Suite telemetry — derived from RI_COVERAGE / TOOL_VERSIONS so it can later
- * be swapped for a live feed without touching components.
- * ----------------------------------------------------------------------- */
+export const KITCHEN_BAR = TOOLS.find((t) => t.slug === "kitchen-bar")!;
+export const MENU_BUILDER = TOOLS.find((t) => t.slug === "menu-builder")!;
+export const OCCASION_OS = TOOLS.find((t) => t.slug === "occasion-os")!;
+export const RESTAURANT_INTELLIGENCE = TOOLS.find((t) => t.slug === "restaurant-intelligence")!;
 
 export type Counter = { value: number; suffix?: string; label: string; note: string };
 
 export const SUITE_COUNTERS: Counter[] = [
-  { value: RI_COVERAGE.caseFiles, label: "Case files", note: `${RI_COVERAGE.enriched} enriched · ${RI_COVERAGE.neverEnriched} still to add` },
+  { value: 4, label: "Live tools", note: "Kitchen & Bar, Menu Builder, Occasion OS, Restaurant Intelligence" },
+  { value: RI_COVERAGE.caseFiles, label: "Case files", note: `${RI_COVERAGE.enriched} enriched · first-party only` },
   { value: RI_COVERAGE.regions, label: "Regions", note: RI_COVERAGE.regionNote },
-  { value: RI_COVERAGE.occasions, label: "Occasions", note: "Situation types the suite recognises" },
-  { value: RI_COVERAGE.pathways, label: "Booking pathways", note: "Phone, Resy, OpenTable, Tock, Direct, Walk-in" },
-  { value: 5, label: "Stress axes", note: "Balance, make-ahead, service, equipment, freedom" },
-  { value: 5, label: "Menu roles", note: "Architecture slots per menu" },
+  { value: 1, suffix: ".0", label: "Kitchen packet", note: "Availability Packet, user-initiated" },
 ];
 
 export type LedgerRow = {
@@ -439,6 +490,16 @@ export type LedgerRow = {
 
 export const LEDGER: LedgerRow[] = [
   {
+    id: "SC-KBI-001",
+    name: "Kitchen & Bar Intelligence",
+    state: "Live",
+    build: TOOL_VERSIONS["kitchen-bar"].build,
+    contract: `Emits ${TOOL_VERSIONS["kitchen-bar"].contract}`,
+    updated: "2026-08-19",
+    accepts: "Shelf or fridge scan, local inventory, declared cook/mix intent",
+    rejects: "Allergen claims, silent inference, replacing Occasion OS",
+  },
+  {
     id: "SC-MB-001",
     name: "Menu Builder",
     state: "Live",
@@ -453,9 +514,9 @@ export const LEDGER: LedgerRow[] = [
     name: "Occasion Operating System",
     state: "Live",
     build: TOOL_VERSIONS["occasion-os"].build,
-    contract: `Receives ${TOOL_VERSIONS["occasion-os"].contract}`,
+    contract: `Receives ${TOOL_VERSIONS["occasion-os"].contract} · Packet 1.0`,
     updated: "2026-08-11",
-    accepts: "Menu Builder packets, host conditions, capacity and attention",
+    accepts: "Menu Builder packets, Kitchen & Bar packets, host conditions, capacity and attention",
     rejects: "Silent cross-app inference, allergen guarantees, forced accounts",
   },
   {
@@ -472,38 +533,18 @@ export const LEDGER: LedgerRow[] = [
 
 export const DESK_LOG = [
   {
-    date: "2026-08-12",
-    id: "SC-OOS-001",
-    entry: "Architecture layer shipped inside Occasion OS: Plan · Architecture · Card under one chrome. SC-MB-001 engine runs in-app; standalone Menu Builder remains live.",
-  },
-  {
-    date: "2026-08-11",
-    id: "Desk",
-    entry: "Production URLs locked: Menu Builder, Occasion OS (planner-suite), RI (deep-dish). Menu Builder elevated to 0.6.0 with scenario spine and packet stage.",
-  },
-  {
-    date: "2026-08-04",
-    id: "SC-RI-001",
-    entry: "Confirm-burden labels split from booking pathway; conflicts now surfaced separately.",
-  },
-  {
-    date: "2026-07-30",
-    id: "SC-MB-001",
-    entry: "Plated-capacity hard stop tightened; anchor re-scoring now reruns all five axes.",
-  },
-  {
-    date: "2026-07-22",
-    id: "SC-OOS-001",
-    entry: "Handoff receiver pinned to contract 1.1.0; dietary tags labelled as planning filters.",
-  },
-  {
-    date: "2026-07-14",
-    id: "Desk",
-    entry: "Triage console added: the desk now names the wrong tool as clearly as the right one.",
+    date: "2026-08-19",
+    id: "SC-KBI-001",
+    entry:
+      "Kitchen & Bar Intelligence added as a first-class desk tool. Availability Packet 1.0 is the user-initiated handoff into Occasion OS.",
   },
 ];
 
 export const GLOSSARY = [
+  {
+    term: "Availability Packet",
+    def: "Kitchen & Bar contract 1.0. Confirmed pantry and bar contents you choose to send. No recipes, no allergen claims, no silent inference.",
+  },
   {
     term: "Anchor",
     def: "A dish you lock before the rest of the menu is scored. Locking one re-scores every other role against it.",
@@ -547,6 +588,30 @@ export type ToolDetail = {
 };
 
 export const TOOL_DETAILS: Record<Tool["slug"], ToolDetail> = {
+  "kitchen-bar": {
+    slug: "kitchen-bar",
+    inputs: [
+      "A shelf, fridge, or bar you can photograph or edit",
+      "Declared intent — cook tonight, mix a drink, or pack for an occasion",
+      "Local inventory you are willing to keep on-device",
+    ],
+    returns: [
+      "Confirmed pantry and bar contents",
+      "Explainable pairing scores (molecule + recipe)",
+      "Expiry ranking, Almost matches, and Smart Buy suggestions",
+      "Availability Packet 1.0, only if you send it",
+    ],
+    hardStops: [
+      "Allergen certification — the layer will not claim it",
+      "Silent push into Occasion OS",
+      "Treating a vision candidate as confirmed without your review",
+    ],
+    wrongTool: [
+      { name: "Menu Builder", reason: "Stress-tests a menu; it does not read the shelf." },
+      { name: "Occasion Operating System", reason: "Sequences the night; it is not the pantry." },
+      { name: "Restaurant Intelligence", reason: "Ranks rooms; it has no view of your bar." },
+    ],
+  },
   "menu-builder": {
     slug: "menu-builder",
     inputs: [
@@ -569,6 +634,7 @@ export const TOOL_DETAILS: Record<Tool["slug"], ToolDetail> = {
       "Equipment contention that cannot be sequenced away",
     ],
     wrongTool: [
+      { name: "Kitchen & Bar Intelligence", reason: "Reads the shelf; it does not architect a menu." },
       { name: "Occasion Operating System", reason: "Sequences the night; it does not choose dishes." },
       { name: "Restaurant Intelligence", reason: "Ranks rooms; it has no view of your kitchen." },
     ],
@@ -577,6 +643,7 @@ export const TOOL_DETAILS: Record<Tool["slug"], ToolDetail> = {
     slug: "occasion-os",
     inputs: [
       "A settled menu — ideally a Menu Builder packet",
+      "Optional Kitchen & Bar Availability Packet 1.0",
       "Guests, service style, and room constraints",
       "Attention you can hold during service",
       "Days available before the night",
@@ -593,6 +660,7 @@ export const TOOL_DETAILS: Record<Tool["slug"], ToolDetail> = {
       "Any request to certify a dish as allergen-safe",
     ],
     wrongTool: [
+      { name: "Kitchen & Bar Intelligence", reason: "Daily execution; run it when the shelf is the question." },
       { name: "Menu Builder", reason: "Decides whether the menu survives; run it first." },
       { name: "Restaurant Intelligence", reason: "The alternative when hosting does not survive." },
     ],
@@ -617,6 +685,7 @@ export const TOOL_DETAILS: Record<Tool["slug"], ToolDetail> = {
       "Operating change that must be confirmed directly before booking",
     ],
     wrongTool: [
+      { name: "Kitchen & Bar Intelligence", reason: "For what's already in the house, not a room." },
       { name: "Menu Builder", reason: "For cooking decisions, not rooms." },
       { name: "Occasion Operating System", reason: "For running a night you are hosting yourself." },
     ],
