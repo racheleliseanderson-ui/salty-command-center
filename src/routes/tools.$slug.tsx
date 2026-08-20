@@ -5,6 +5,29 @@ import { Reveal } from "@/components/desk/Reveal";
 import { StatusPip } from "@/components/desk/ToolCard";
 import { TOOLS, TOOL_DETAILS, type Tool } from "@/lib/desk-data";
 import prepMise from "@/assets/prep-mise.jpg";
+import heroGarnish from "@/assets/hero-garnish.jpg";
+import heroCourses from "@/assets/hero-courses.jpg";
+import heroTablescape from "@/assets/hero-tablescape.jpg";
+import heroDining from "@/assets/hero-dining.jpg";
+
+const TOOL_FACE: Record<Tool["slug"], { src: string; alt: string }> = {
+  "kitchen-bar": {
+    src: heroGarnish,
+    alt: "Cocktail garnish station with citrus, herbs, and spices",
+  },
+  "menu-builder": {
+    src: heroCourses,
+    alt: "Assortment of pasta courses on a dark table",
+  },
+  "occasion-os": {
+    src: heroTablescape,
+    alt: "Black plates, gold cutlery, and white roses on a set table",
+  },
+  "restaurant-intelligence": {
+    src: heroDining,
+    alt: "Industrial dining room under hanging lights",
+  },
+};
 
 function findTool(slug: string): Tool {
   const tool = TOOLS.find((t) => t.slug === slug);
@@ -64,6 +87,7 @@ function ToolPage() {
   const { slug } = Route.useParams();
   const tool = findTool(slug);
   const detail = TOOL_DETAILS[tool.slug];
+  const face = TOOL_FACE[tool.slug] ?? { src: prepMise, alt: "" };
 
   return (
     <div className="min-h-dvh bg-ink">
@@ -71,10 +95,9 @@ function ToolPage() {
 
       <section className="relative isolate overflow-hidden border-b border-border">
         <img
-          src={prepMise}
-          alt=""
-          aria-hidden="true"
-          className="media-tone-soft absolute inset-0 h-full w-full object-cover"
+          src={face.src}
+          alt={face.alt}
+          className="media-tone absolute inset-0 h-full w-full object-cover"
         />
         <div className="ink-veil absolute inset-0" />
         <div className="hairline-grid absolute inset-0 opacity-40" />

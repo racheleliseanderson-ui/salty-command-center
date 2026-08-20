@@ -1,6 +1,29 @@
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Tool } from "@/lib/desk-data";
+import heroGarnish from "@/assets/hero-garnish.jpg";
+import heroCourses from "@/assets/hero-courses.jpg";
+import heroTablescape from "@/assets/hero-tablescape.jpg";
+import heroDining from "@/assets/hero-dining.jpg";
+
+const FACE: Record<Tool["slug"], { src: string; alt: string }> = {
+  "kitchen-bar": {
+    src: heroGarnish,
+    alt: "Cocktail garnish station with citrus, herbs, and spices ready for the pour",
+  },
+  "menu-builder": {
+    src: heroCourses,
+    alt: "Assortment of pasta courses on a dark table — a menu the kitchen can finish",
+  },
+  "occasion-os": {
+    src: heroTablescape,
+    alt: "Black plates, gold cutlery, and white roses on a formally set table",
+  },
+  "restaurant-intelligence": {
+    src: heroDining,
+    alt: "Industrial dining room under hanging lights, empty tables waiting for service",
+  },
+};
 
 export function StatusPip({ status, note }: { status: Tool["status"]; note?: string }) {
   const label = status === "live" ? "Live" : status === "beta" ? "Beta" : "Planned";
@@ -17,9 +40,18 @@ export function StatusPip({ status, note }: { status: Tool["status"]; note?: str
 }
 
 export function ToolCard({ tool, index }: { tool: Tool; index: number }) {
+  const face = FACE[tool.slug];
   return (
     <article className="panel grain lift group relative flex h-full min-w-0 flex-col overflow-hidden rounded-lg">
-      <div className="absolute inset-x-0 top-0 rule-brass opacity-60" />
+      <div className="absolute inset-x-0 top-0 z-10 rule-brass opacity-60" />
+      <div className="relative h-40 overflow-hidden sm:h-48">
+        <img
+          src={face.src}
+          alt={face.alt}
+          className="media-tone h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent" />
+      </div>
 
       <div className="flex min-w-0 flex-1 flex-col gap-5 p-5 sm:p-8">
         <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
