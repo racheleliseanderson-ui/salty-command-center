@@ -1,12 +1,9 @@
-import { Contrast, Languages, Palette } from "lucide-react";
+import { Contrast, Palette } from "lucide-react";
 import { MODES, useColorSafe, useDisplayMode } from "@/hooks/use-theme";
-import { useLocale } from "@/hooks/use-locale";
-import { LOCALES } from "@/lib/i18n";
 
-/** Palette picker: navy / pearl / black / white. Label + icon, never colour alone. */
+/** Palette picker: navy / pearl. Label + icon, never colour alone. */
 export function DisplayControls() {
   const { mode, setMode, cycle } = useDisplayMode();
-  const { t } = useLocale();
   const current = MODES.find((m) => m.value === mode)!;
 
   return (
@@ -14,7 +11,7 @@ export function DisplayControls() {
       {/* Desktop: the whole set is visible and named. */}
       <div
         role="group"
-        aria-label={t("display.label")}
+        aria-label="Display mode"
         className="hidden items-center gap-0.5 rounded-sm border border-border p-0.5 lg:flex"
       >
         {MODES.map((m) => {
@@ -42,7 +39,7 @@ export function DisplayControls() {
       <button
         type="button"
         onClick={cycle}
-        aria-label={`${t("display.label")}: ${current.label}. Tap to change.`}
+        aria-label={`Display mode: ${current.label}. Tap to change.`}
         className="press tap inline-flex items-center justify-center gap-2 rounded-sm border border-brass/35 px-2.5 text-brass lg:hidden"
       >
         <Palette className="h-4 w-4" />
@@ -50,21 +47,19 @@ export function DisplayControls() {
       </button>
 
       <ColorSafeToggle />
-      <LanguageSwitcher />
     </div>
   );
 }
 
 export function ColorSafeToggle() {
   const { safe, toggle } = useColorSafe();
-  const { t } = useLocale();
 
   return (
     <button
       type="button"
       onClick={toggle}
       aria-pressed={safe}
-      aria-label={safe ? t("display.cvdOn") : t("display.cvdOff")}
+      aria-label={safe ? "CVD on" : "CVD off"}
       title="Colour-vision-safe palette (gold / cyan signal)"
       className={
         safe
@@ -75,31 +70,5 @@ export function ColorSafeToggle() {
       <Contrast className="h-4 w-4" />
       <span className="label-mono hidden text-[0.58rem] sm:inline">{safe ? "CVD on" : "CVD"}</span>
     </button>
-  );
-}
-
-export function LanguageSwitcher() {
-  const { locale, setLocale, t } = useLocale();
-
-  return (
-    <label className="relative inline-flex items-center">
-      <span className="sr-only">{t("lang.label")}</span>
-      <Languages
-        aria-hidden="true"
-        className="pointer-events-none absolute left-2.5 h-4 w-4 text-muted-foreground"
-      />
-      <select
-        value={locale}
-        onChange={(e) => setLocale(e.target.value as typeof locale)}
-        title={t("lang.note")}
-        className="tap label-mono appearance-none rounded-sm border border-border bg-transparent pl-8 pr-2.5 text-[0.58rem] text-muted-foreground transition-colors hover:border-brass/50 hover:text-brass focus-visible:outline focus-visible:outline-1 focus-visible:outline-brass"
-      >
-        {LOCALES.map((l) => (
-          <option key={l.value} value={l.value} className="bg-popover text-popover-foreground">
-            {l.short}
-          </option>
-        ))}
-      </select>
-    </label>
   );
 }

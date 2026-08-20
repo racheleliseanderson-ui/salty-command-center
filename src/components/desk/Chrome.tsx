@@ -8,6 +8,24 @@ const NAV = [
   { to: "/boundary", label: "Standing rules", exact: false },
 ] as const;
 
+const SUITE = [
+  { href: "https://salty.saltnotes.blog/", label: "Desk", short: "Desk", id: "desk" },
+  { href: "https://kitchen.saltnotes.blog/", label: "Kitchen & Bar", short: "Kitchen", id: "kitchen" },
+  {
+    href: "https://occasion.saltnotes.blog/architecture",
+    label: "Menu Builder",
+    short: "Menu",
+    id: "menu",
+  },
+  { href: "https://occasion.saltnotes.blog/", label: "Occasion OS", short: "Occasion", id: "occasion" },
+  {
+    href: "https://deepdish.saltnotes.blog/",
+    label: "Restaurant Intelligence",
+    short: "RI",
+    id: "ri",
+  },
+] as const;
+
 export function DeskHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-ink-deep/90 backdrop-blur-xl">
@@ -52,7 +70,35 @@ export function DeskHeader() {
           </Link>
         ))}
       </nav>
+      <SuiteRibbon current="desk" />
     </header>
+  );
+}
+
+export function SuiteRibbon({ current }: { current: (typeof SUITE)[number]["id"] }) {
+  return (
+    <div className="border-t border-border/50 bg-ink/80">
+      <div className="mx-auto flex max-w-[1120px] min-w-0 items-center gap-1 overflow-x-auto px-3 py-1.5 sm:px-8">
+        <span className="label-mono mr-2 hidden shrink-0 text-brass sm:inline">Suite</span>
+        {SUITE.map((item) => {
+          const active = item.id === current;
+          return (
+            <a
+              key={item.id}
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+              className={
+                active
+                  ? "tap inline-flex shrink-0 items-center rounded-sm bg-brass/15 px-2.5 text-[0.72rem] tracking-wide text-brass"
+                  : "tap inline-flex shrink-0 items-center rounded-sm px-2.5 text-[0.72rem] tracking-wide text-muted-foreground hover:text-bone"
+              }
+            >
+              {item.short}
+            </a>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
@@ -72,29 +118,13 @@ export function DeskFooter() {
         <div className="min-w-0">
           <p className="label-mono">Suite</p>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-            <li>
-              <a href="https://kitchen.saltnotes.blog/" className="gold-underline hover:text-brass">
-                Kitchen & Bar
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://occasion.saltnotes.blog/architecture"
-                className="gold-underline hover:text-brass"
-              >
-                Menu Builder
-              </a>
-            </li>
-            <li>
-              <a href="https://occasion.saltnotes.blog/" className="gold-underline hover:text-brass">
-                Occasion OS
-              </a>
-            </li>
-            <li>
-              <a href="https://deepdish.saltnotes.blog/" className="gold-underline hover:text-brass">
-                Restaurant Intelligence
-              </a>
-            </li>
+            {SUITE.filter((s) => s.id !== "desk").map((s) => (
+              <li key={s.id}>
+                <a href={s.href} className="gold-underline hover:text-brass">
+                  {s.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
 
