@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
 import { ToolCard } from "@/components/desk/ToolCard";
-import { Triage } from "@/components/desk/Triage";
 import { HANDOFFS, PHILOSOPHY, TOOLS } from "@/lib/desk-data";
 import heroPass from "@/assets/hero-pass.jpg";
 
@@ -83,7 +82,7 @@ function Desk() {
           </p>
           <div className="mt-10 flex min-w-0 flex-wrap gap-3">
             <a
-              href="#triage"
+              href="#tools"
               className="press tap inline-flex items-center gap-2 bg-brass px-5 py-3 text-sm font-medium tracking-wide text-primary-foreground transition-colors hover:bg-bone"
             >
               Find the right tool
@@ -126,20 +125,6 @@ function Desk() {
           {TOOLS.map((tool, i) => (
             <ToolCard key={tool.id} tool={tool} index={i} />
           ))}
-        </div>
-      </section>
-
-      <section id="triage" className="mx-auto max-w-[1120px] min-w-0 px-5 pb-20 sm:px-8">
-        <p className="label-mono text-brass">Routing intelligence</p>
-        <h2 className="mt-3 max-w-[22ch] font-display text-4xl leading-[1.05] text-bone sm:text-5xl">
-          Answer four constraints. Get one entry point.
-        </h2>
-        <p className="mt-5 max-w-[58ch] text-base leading-relaxed text-muted-foreground">
-          The desk does not sell you all four tools. It names the one that answers your question —
-          and the ones that do not.
-        </p>
-        <div className="mt-12 min-w-0">
-          <Triage />
         </div>
       </section>
 

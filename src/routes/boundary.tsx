@@ -1,9 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ShieldAlert, TriangleAlert } from "lucide-react";
+import { ArrowRight, TriangleAlert } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
 import { BOUNDARIES, PHILOSOPHY, type BoundaryGroup } from "@/lib/desk-data";
-import { useTriageState } from "@/hooks/use-triage-state";
-import { bindingBoundaries, describeCase } from "@/lib/desk-examples";
 
 export const Route = createFileRoute("/boundary")({
   head: () => ({
@@ -28,10 +26,6 @@ export const Route = createFileRoute("/boundary")({
 const GROUPS: BoundaryGroup[] = ["Safety", "Data movement", "Evidence", "Scope"];
 
 function Boundary() {
-  const { answers } = useTriageState();
-  const declared = describeCase(answers);
-  const binding = bindingBoundaries(answers);
-
   return (
     <div className="min-h-dvh bg-ink">
       <DeskHeader />
@@ -48,44 +42,6 @@ function Boundary() {
             exists, and what happens instead. They are design decisions, not gaps waiting to be
             filled.
           </p>
-        </div>
-      </section>
-
-      {/* Tailored to the reader's declared case */}
-      <section className="mx-auto max-w-[1240px] px-5 pt-14 sm:px-8">
-        <div className="panel-brass rounded-lg p-5 sm:p-8">
-          <p className="label-mono flex items-center gap-2 text-brass">
-            <ShieldAlert className="h-3.5 w-3.5" /> Binding on your selection
-          </p>
-          {binding.length ? (
-            <>
-              <p className="mt-3 text-[0.82rem] leading-relaxed text-muted-foreground">
-                {declared.join(" · ")}
-              </p>
-              <ul className="mt-6 space-y-5">
-                {binding.map((b) => (
-                  <li key={b.boundary.id} className="border-l border-brass/60 pl-4">
-                    <p className="font-display text-xl leading-snug text-bone">{b.boundary.limit}</p>
-                    <p className="mt-1 text-[0.85rem] leading-relaxed text-foreground/85">
-                      {b.because}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : (
-            <p className="mt-3 max-w-[60ch] text-[0.9rem] leading-relaxed text-foreground/85">
-              Answer the triage console on the desk and this panel names only the limits that
-              actually bind your night — with the reason each one applies to you.
-            </p>
-          )}
-          <Link
-            to="/"
-            className="mt-7 inline-flex min-h-11 items-center gap-2 text-sm text-brass transition-colors hover:text-bone"
-          >
-            Open the triage console
-            <ArrowRight className="h-4 w-4" />
-          </Link>
         </div>
       </section>
 

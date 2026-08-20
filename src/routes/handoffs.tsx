@@ -44,10 +44,6 @@ function Handoffs() {
             states the field, the reason it travels or is withheld, and what the receiving tool can
             and cannot conclude from it.
           </p>
-          <p className="mt-6 max-w-[58ch] text-[0.86rem] leading-relaxed text-muted-foreground">
-            If you have answered the triage console, each packet is also written out against your own
-            constraints.
-          </p>
         </div>
       </section>
 

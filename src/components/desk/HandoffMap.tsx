@@ -174,12 +174,7 @@ export function HandoffMap({
                       </div>
                     </div>
                   </div>
-                ) : (
-                  <p className="label-mono mt-6 border border-dashed border-border p-4 leading-relaxed">
-                    Answer the triage console on the desk to see this packet written against your own
-                    constraints.
-                  </p>
-                )}
+                ) : null}
               </>
             )}
           </article>
