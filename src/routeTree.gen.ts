@@ -13,7 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BoundaryRouteImport } from './routes/boundary'
 import { Route as HandoffsRouteImport } from './routes/handoffs'
 import { Route as HostPathRouteImport } from './routes/host-path'
+import { Route as IntelligenceRouteImport } from './routes/intelligence'
 import { Route as PipelineRouteImport } from './routes/pipeline'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ReferenceRouteImport } from './routes/reference'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 
@@ -37,9 +39,19 @@ const HostPathRoute = HostPathRouteImport.update({
   path: '/host-path',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IntelligenceRoute = IntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PipelineRoute = PipelineRouteImport.update({
   id: '/pipeline',
   path: '/pipeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReferenceRoute = ReferenceRouteImport.update({
@@ -58,7 +70,9 @@ export interface FileRoutesByFullPath {
   '/boundary': typeof BoundaryRoute
   '/handoffs': typeof HandoffsRoute
   '/host-path': typeof HostPathRoute
+  '/intelligence': typeof IntelligenceRoute
   '/pipeline': typeof PipelineRoute
+  '/privacy': typeof PrivacyRoute
   '/reference': typeof ReferenceRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
@@ -67,7 +81,9 @@ export interface FileRoutesByTo {
   '/boundary': typeof BoundaryRoute
   '/handoffs': typeof HandoffsRoute
   '/host-path': typeof HostPathRoute
+  '/intelligence': typeof IntelligenceRoute
   '/pipeline': typeof PipelineRoute
+  '/privacy': typeof PrivacyRoute
   '/reference': typeof ReferenceRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
@@ -77,7 +93,9 @@ export interface FileRoutesById {
   '/boundary': typeof BoundaryRoute
   '/handoffs': typeof HandoffsRoute
   '/host-path': typeof HostPathRoute
+  '/intelligence': typeof IntelligenceRoute
   '/pipeline': typeof PipelineRoute
+  '/privacy': typeof PrivacyRoute
   '/reference': typeof ReferenceRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
@@ -88,7 +106,9 @@ export interface FileRouteTypes {
     | '/boundary'
     | '/handoffs'
     | '/host-path'
+    | '/intelligence'
     | '/pipeline'
+    | '/privacy'
     | '/reference'
     | '/tools/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -97,7 +117,9 @@ export interface FileRouteTypes {
     | '/boundary'
     | '/handoffs'
     | '/host-path'
+    | '/intelligence'
     | '/pipeline'
+    | '/privacy'
     | '/reference'
     | '/tools/$slug'
   id:
@@ -106,7 +128,9 @@ export interface FileRouteTypes {
     | '/boundary'
     | '/handoffs'
     | '/host-path'
+    | '/intelligence'
     | '/pipeline'
+    | '/privacy'
     | '/reference'
     | '/tools/$slug'
   fileRoutesById: FileRoutesById
@@ -116,7 +140,9 @@ export interface RootRouteChildren {
   BoundaryRoute: typeof BoundaryRoute
   HandoffsRoute: typeof HandoffsRoute
   HostPathRoute: typeof HostPathRoute
+  IntelligenceRoute: typeof IntelligenceRoute
   PipelineRoute: typeof PipelineRoute
+  PrivacyRoute: typeof PrivacyRoute
   ReferenceRoute: typeof ReferenceRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
 }
@@ -151,11 +177,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HostPathRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/intelligence': {
+      id: '/intelligence'
+      path: '/intelligence'
+      fullPath: '/intelligence'
+      preLoaderRoute: typeof IntelligenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pipeline': {
       id: '/pipeline'
       path: '/pipeline'
       fullPath: '/pipeline'
       preLoaderRoute: typeof PipelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reference': {
@@ -180,7 +220,9 @@ const rootRouteChildren: RootRouteChildren = {
   BoundaryRoute: BoundaryRoute,
   HandoffsRoute: HandoffsRoute,
   HostPathRoute: HostPathRoute,
+  IntelligenceRoute: IntelligenceRoute,
   PipelineRoute: PipelineRoute,
+  PrivacyRoute: PrivacyRoute,
   ReferenceRoute: ReferenceRoute,
   ToolsSlugRoute: ToolsSlugRoute,
 }
