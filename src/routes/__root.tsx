@@ -81,7 +81,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Salty Desk orients and routes the Salty & Clever host-and-dine suite: Menu Builder, Occasion Operating System, and Restaurant Intelligence.",
+          "Salty Desk orients and routes the Salty & Clever host-and-dine suite: Kitchen & Bar Intelligence, Occasion Operating System (Architecture inside), and Restaurant Intelligence.",
       },
       { name: "author", content: "Salty & Clever" },
       { property: "og:type", content: "website" },
