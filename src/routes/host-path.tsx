@@ -1,8 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
-import { MENU_BUILDER, OCCASION_OS, RESTAURANT_INTELLIGENCE } from "@/lib/desk-data";
-import prepMise from "@/assets/prep-mise.jpg";
+import { HOST_PATH, TOOLS } from "@/lib/desk-data";
 
 export const Route = createFileRoute("/host-path")({
   head: () => ({
@@ -11,151 +10,105 @@ export const Route = createFileRoute("/host-path")({
       {
         name: "description",
         content:
-          "The recommended sequence for hosting at home: Menu Builder, then Occasion Operating System — with Restaurant Intelligence as the dine-out alternative.",
-      },
-      { property: "og:title", content: "Host Path — Salty Desk" },
-      {
-        property: "og:description",
-        content:
-          "Architect the menu, stress-test service, then run the night from one host plan. Handoffs stay explicit.",
+          "Two steps for hosting at home: architecture and plan inside Occasion OS, or rank a room with Restaurant Intelligence when dining out wins.",
       },
     ],
   }),
-  component: HostPath,
+  component: HostPathPage,
 });
 
-const STEPS = [
-  {
-    n: "01",
-    id: "SC-MB-001",
-    title: "Architect the menu",
-    decision: "Can this kitchen finish this menu on time?",
-    does: [
-      "Declare occasion, guest count, service style, host attention, equipment",
-      "Assign five roles and pick a pairing mode",
-      "Lock an anchor dish and re-score around it",
-      "Apply bounded simplification where stress is highest",
-    ],
-    exit: "A stress summary with hard stops resolved — or an honest refusal.",
-    tool: MENU_BUILDER,
-  },
-  {
-    n: "02",
-    id: "SC-OOS-001",
-    title: "Run the night",
-    decision: "What happens, in what order, and who is holding it?",
-    does: [
-      "Carry the Menu Builder packet forward (your choice, contract 1.1.0)",
-      "Set conditions: guests, service style, attention budget, capacity",
-      "Build the shop → prep → serve route",
-      "Keep dietary categories as planning filters only",
-    ],
-    exit: "One host plan you can work from, with the food-safety boundary in view.",
-    tool: OCCASION_OS,
-  },
-] as const;
-
-function HostPath() {
-  const ri = RESTAURANT_INTELLIGENCE;
-
+function HostPathPage() {
   return (
-    <div className="min-h-dvh bg-ink">
+    <div className="min-h-dvh min-w-0 overflow-x-hidden bg-ink">
       <DeskHeader />
 
-      <section className="relative isolate overflow-hidden border-b border-border">
-        <img
-          src={prepMise}
-          alt="Overhead mise en place in steel bowls on a dark slate surface"
-          width={1200}
-          height={1504}
-          className="absolute inset-0 h-full w-full object-cover opacity-30"
-        />
-        <div className="ink-veil absolute inset-0" />
-        <div className="relative mx-auto max-w-[1240px] px-5 pb-20 pt-24 sm:px-8">
-          <p className="label-mono text-brass">Primary path · hosting at home</p>
-          <h1 className="display-xl mt-6 max-w-[16ch] text-bone">
-            Two steps,
-            <span className="block text-brass">in this order.</span>
-          </h1>
-          <p className="mt-8 max-w-[54ch] text-lg leading-relaxed text-foreground/85">
-            The Host Path sequences the two decisions that actually gate a night at home. Nothing
-            moves between the tools until you send it.
-          </p>
-        </div>
-      </section>
+      <main className="mx-auto max-w-[1120px] min-w-0 px-5 py-16 sm:px-8 sm:py-20">
+        <p className="label-mono text-brass">Primary path · hosting at home</p>
+        <h1 className="mt-3 max-w-[18ch] font-display text-4xl leading-[1.05] text-bone sm:text-5xl">
+          Two steps, in this order.
+        </h1>
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
+          The Host Path sequences the decisions that actually gate a night at home. Architecture
+          (five-role menu stress) lives inside Occasion OS — not as a separate peer. Nothing moves
+          between tools until you send it.
+        </p>
 
-      <section className="mx-auto max-w-[1240px] space-y-8 px-5 py-20 sm:px-8">
-        {STEPS.map((s) => (
-          <article key={s.id} className="panel rounded-lg p-7 sm:p-10">
-            <div className="grid gap-9 lg:grid-cols-[0.9fr_1.1fr]">
-              <div>
-                <div className="flex items-baseline justify-between">
-                  <span className="font-display text-6xl leading-none text-brass">{s.n}</span>
-                  <span className="label-mono">{s.id}</span>
-                </div>
-                <h2 className="mt-6 font-display text-4xl leading-tight text-bone">{s.title}</h2>
-                <p className="mt-4 border-l border-brass/40 pl-4 font-display text-xl leading-snug text-brass/90">
-                  {s.decision}
+        <ol className="mt-12 space-y-6">
+          {HOST_PATH.map((step) => {
+            const tool = TOOLS.find((t) => t.slug === step.toolSlug);
+            return (
+              <li key={step.step} className="panel min-w-0 overflow-hidden rounded-lg p-6 sm:p-8">
+                <p className="label-mono text-brass">
+                  {String(step.step).padStart(2, "0")} · {tool?.id ?? step.appId}
                 </p>
-                <a
-                  href={s.tool.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-7 inline-flex items-center gap-2 border border-brass/50 bg-brass/10 px-4 py-2.5 text-[0.8rem] tracking-wide text-brass transition-colors hover:bg-brass hover:text-primary-foreground"
-                >
-                  Open {s.tool.name}
-                  <ArrowUpRight className="h-4 w-4" />
-                </a>
-              </div>
+                <h2 className="mt-3 font-display text-3xl leading-snug text-bone">{step.title}</h2>
+                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                  {step.summary}
+                </p>
+                {tool ? (
+                  <a
+                    href={tool.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-6 inline-flex items-center gap-2 bg-brass px-5 py-3 text-sm font-medium tracking-wide text-primary-foreground transition-colors hover:bg-bone"
+                  >
+                    Open {tool.name}
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                ) : null}
+              </li>
+            );
+          })}
+        </ol>
 
-              <div>
-                <p className="label-mono">In this step</p>
-                <ul className="mt-4 space-y-2.5">
-                  {s.does.map((d) => (
-                    <li
-                      key={d}
-                      className="flex gap-3 text-[0.86rem] leading-relaxed text-foreground/85"
-                    >
-                      <span className="mt-2.5 h-px w-4 shrink-0 bg-brass/70" />
-                      {d}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-7 border border-border bg-ink-deep p-5">
-                  <p className="label-mono text-brass">You leave with</p>
-                  <p className="mt-2 text-[0.9rem] leading-relaxed text-bone/90">{s.exit}</p>
-                </div>
-              </div>
-            </div>
-          </article>
-        ))}
-
-        <article className="rounded-lg border border-dashed border-border bg-ink-deep p-7 sm:p-10">
-          <p className="label-mono">Alternative · dine out</p>
-          <h2 className="mt-4 font-display text-4xl text-bone">When hosting doesn't survive</h2>
-          <p className="mt-4 max-w-[62ch] text-base leading-relaxed text-muted-foreground">
-            A hard stop in step one is a real answer. {ri.name} ranks rooms by occasion fit and
-            operating reality — unknowns, conflicts, and confirm burden left visible.
+        <section className="mt-14 panel rounded-lg p-6 sm:p-8">
+          <p className="label-mono text-brass">Optional · before you plan</p>
+          <h2 className="mt-2 font-display text-2xl text-bone">What&apos;s already on the shelf?</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Kitchen & Bar Intelligence is the daily execution layer — not required for Host Path.
+            Use it when you are cooking from what you already have, then optionally send an
+            Availability Packet into Occasion OS.
           </p>
           <a
-            href={ri.href}
+            href="https://kitchen.saltnotes.blog/"
             target="_blank"
             rel="noreferrer"
-            className="mt-7 inline-flex items-center gap-2 border border-bone/30 px-4 py-2.5 text-[0.8rem] tracking-wide text-bone transition-colors hover:border-brass hover:text-brass"
+            className="mt-5 inline-flex items-center gap-2 text-sm text-brass"
           >
-            Open {ri.name}
-            <ArrowUpRight className="h-4 w-4" />
+            Open Kitchen & Bar
+            <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
-        </article>
+        </section>
 
-        <Link
-          to="/handoffs"
-          className="inline-flex items-center gap-2 text-sm text-brass transition-colors hover:text-bone"
-        >
-          See exactly what moves between the tools
-          <ArrowRight className="h-4 w-4" />
-        </Link>
-      </section>
+        <section className="mt-8 panel rounded-lg p-6 sm:p-8">
+          <p className="label-mono text-brass">Architecture inside Occasion OS</p>
+          <h2 className="mt-2 font-display text-2xl text-bone">Menu stress is not a fourth tool</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Five-role architecture, stress meters, anchor lock, and hard stops run at{" "}
+            <span className="text-bone">occasion.saltnotes.blog/architecture</span> under the same
+            host chrome. SC-MB-001 is a layer, not a peer on this desk.
+          </p>
+          <a
+            href="https://occasion.saltnotes.blog/architecture"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-5 inline-flex items-center gap-2 text-sm text-brass"
+          >
+            Open Architecture
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </a>
+        </section>
+
+        <div className="mt-12 flex flex-wrap gap-4">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-brass">
+            ← Back to desk
+          </Link>
+          <Link to="/handoffs" className="inline-flex items-center gap-2 text-sm text-brass">
+            Handoff map
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      </main>
 
       <DeskFooter />
     </div>
