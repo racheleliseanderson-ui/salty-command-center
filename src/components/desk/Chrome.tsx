@@ -4,19 +4,17 @@ import { DisplayControls } from "@/components/desk/DisplayControls";
 
 const NAV = [
   { to: "/", label: "Desk", exact: true },
+  { to: "/host-path", label: "Host Path", exact: false },
   { to: "/handoffs", label: "Handoffs", exact: false },
+  { to: "/intelligence", label: "Intelligence", exact: false },
+  { to: "/privacy", label: "Privacy", exact: false },
   { to: "/boundary", label: "Standing rules", exact: false },
 ] as const;
 
+/** Peer suite ribbon — three equal tools + this desk. Architecture is inside Occasion OS. */
 const SUITE = [
   { href: "https://salty.saltnotes.blog/", label: "Desk", short: "Desk", id: "desk" },
   { href: "https://kitchen.saltnotes.blog/", label: "Kitchen & Bar", short: "Kitchen", id: "kitchen" },
-  {
-    href: "https://occasion.saltnotes.blog/architecture",
-    label: "Menu Builder",
-    short: "Menu",
-    id: "menu",
-  },
   { href: "https://occasion.saltnotes.blog/", label: "Occasion OS", short: "Occasion", id: "occasion" },
   {
     href: "https://deepdish.saltnotes.blog/",
@@ -38,7 +36,7 @@ export function DeskHeader() {
         </Link>
 
         <div className="ml-auto flex min-w-0 shrink-0 items-center gap-2 sm:gap-3">
-          <nav className="hidden items-center gap-1 lg:flex">
+          <nav className="hidden items-center gap-1 xl:flex">
             {NAV.map((item) => (
               <Link
                 key={item.to}
@@ -57,7 +55,7 @@ export function DeskHeader() {
 
       <nav
         aria-label="Sections"
-        className="flex gap-1 overflow-x-auto border-t border-border/60 px-3 pb-1.5 pt-1 lg:hidden"
+        className="flex gap-1 overflow-x-auto border-t border-border/60 px-3 pb-1.5 pt-1 xl:hidden"
       >
         {NAV.map((item) => (
           <Link
@@ -110,7 +108,8 @@ export function DeskFooter() {
           <p className="font-display text-2xl text-bone">Salty Desk</p>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
             Orientation and routing for the Salty & Clever host-and-dine intelligence suite.
-            Four independent tools. The desk points; the tools do the work.
+            Three independent tools at equal depth. Architecture lives inside Occasion OS. The
+            desk points; the tools do the work.
           </p>
           <p className="label-mono mt-6">Education only · Vanity or Vice</p>
         </div>
@@ -125,6 +124,14 @@ export function DeskFooter() {
                 </a>
               </li>
             ))}
+            <li>
+              <a
+                href="https://occasion.saltnotes.blog/architecture"
+                className="gold-underline hover:text-brass"
+              >
+                Architecture (inside Occasion OS)
+              </a>
+            </li>
           </ul>
         </div>
 
@@ -136,6 +143,14 @@ export function DeskFooter() {
             <li>No allergen safety guarantees</li>
             <li>Fail closed on hard stops</li>
           </ul>
+          <div className="mt-6 flex flex-wrap gap-3 text-sm">
+            <Link to="/privacy" className="text-brass hover:underline">
+              Privacy
+            </Link>
+            <Link to="/intelligence" className="text-muted-foreground hover:text-brass">
+              Intelligence
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
