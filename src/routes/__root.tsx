@@ -77,11 +77,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Salty Desk — Host & dine intelligence" },
+      { title: "Salty Desk — Decide what happens next" },
       {
         name: "description",
         content:
-          "Salty Desk orients and routes the Salty & Clever host-and-dine suite: Kitchen & Bar Intelligence, Occasion Operating System (Architecture inside), and Restaurant Intelligence.",
+          "Decision intake and continuity for Salty & Clever: keep a working brief and move into Kitchen & Bar Intelligence, Occasion OS, or Restaurant Intelligence with a clear next step.",
       },
       { name: "author", content: "Salty & Clever" },
       { property: "og:type", content: "website" },
@@ -98,7 +98,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         property: "og:image:alt",
         content: "Overhead view of ingredients and tools on a chef station",
       },
-      { property: "og:url", content: "https://salty-command-center.vercel.app/" },
+      { property: "og:url", content: "https://salty.saltnotes.blog/" },
       {
         name: "twitter:image",
         content:
@@ -139,7 +139,6 @@ function RootShell({ children }: { children: ReactNode }) {
     </html>
   );
 }
-
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
