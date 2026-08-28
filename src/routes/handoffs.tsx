@@ -12,7 +12,7 @@ export const Route = createFileRoute("/handoffs")({
       {
         name: "description",
         content:
-          "Exactly what moves between Kitchen & Bar, Architecture (inside Occasion OS), Occasion Operating System, and Restaurant Intelligence — and what stays behind. Explicit handoffs only.",
+          "Exactly what moves between Kitchen & Bar, menu building inside Occasion OS, Occasion Operating System, and Restaurant Intelligence — and what stays behind. You send it; nothing moves silently.",
       },
       { property: "og:title", content: "What travels — Salty Desk" },
       {

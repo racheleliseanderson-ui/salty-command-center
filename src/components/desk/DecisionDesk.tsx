@@ -94,7 +94,7 @@ function recommendationFor(intent: Intent | ""): Recommendation | null {
 
   if (intent === "build-menu") {
     return {
-      app: "Occasion OS · Architecture",
+      app: "Occasion OS · menu building",
       href: "https://occasion.saltnotes.blog/architecture",
       action: "Stress-test the menu",
       why: "The menu is the problem, so start where timing, equipment, service fit, and host freedom are tested before the rest of the night is sequenced.",

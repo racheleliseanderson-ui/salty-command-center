@@ -116,11 +116,11 @@ function IntelligencePage() {
         </div>
 
         <section className="panel mt-10 rounded-lg p-6 sm:p-8">
-          <p className="label-mono text-brass">Architecture · inside Occasion OS</p>
-          <h2 className="mt-2 font-display text-2xl text-bone">Menu building is a layer</h2>
+          <p className="label-mono text-brass">Menu building · inside Occasion OS</p>
+          <h2 className="mt-2 font-display text-2xl text-bone">Menu building is a section</h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Five-role menu building, stress meters, and we'll stop rather than guess at{" "}
-            <span className="text-bone">occasion.saltnotes.blog/architecture</span>. Not a peer card on this desk.
+            Five-role menu building, stress meters, and we'll stop rather than guess live inside
+            Occasion OS. Not a peer card on this desk.
           </p>
           <p className="mt-4 text-xs text-muted-foreground">
             RI coverage: {RI_COVERAGE.caseFiles} case files · {RI_COVERAGE.enriched} with a first-party page read ·{" "}

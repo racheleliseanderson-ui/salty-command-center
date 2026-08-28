@@ -28,9 +28,9 @@ function HostPathPage() {
           Two steps, in this order.
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-          The Host Path sequences the decisions that actually gate a night at home. Architecture
-          (five-role menu stress) lives inside Occasion OS — not as a separate peer. Nothing moves
-          between tools until you send it.
+          The Host Path sequences the decisions that actually matter for a night at home. Menu
+          building (five-role menu stress) lives inside Occasion OS — not as a separate tool. Nothing
+          moves between tools until you send it.
         </p>
 
         <ol className="mt-12 space-y-6">
@@ -81,12 +81,12 @@ function HostPathPage() {
         </section>
 
         <section className="mt-8 panel rounded-lg p-6 sm:p-8">
-          <p className="label-mono text-brass">Architecture inside Occasion OS</p>
+          <p className="label-mono text-brass">Menu building inside Occasion OS</p>
           <h2 className="mt-2 font-display text-2xl text-bone">Menu stress is not a fourth tool</h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Five-role architecture, stress meters, anchor lock, and hard stops run at{" "}
-            <span className="text-bone">occasion.saltnotes.blog/architecture</span> under the same
-            host chrome. Menu building is a layer, not a peer on this desk.
+            Five-role menu building, stress meters, locking a dish, and stopping when a real
+            requirement is not met all live inside Occasion OS under the same host look. Menu
+            building is a section, not a peer on this desk.
           </p>
           <a
             href="https://occasion.saltnotes.blog/architecture"
@@ -94,7 +94,7 @@ function HostPathPage() {
             rel="noreferrer"
             className="mt-5 inline-flex items-center gap-2 text-sm text-brass"
           >
-            Open Architecture
+            Open menu building
             <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
         </section>
@@ -104,7 +104,7 @@ function HostPathPage() {
             ← Back to desk
           </Link>
           <Link to="/handoffs" className="inline-flex items-center gap-2 text-sm text-brass">
-            Handoff map
+            What travels
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
