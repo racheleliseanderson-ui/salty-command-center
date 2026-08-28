@@ -19,12 +19,12 @@ export type SearchHit = {
 
 export const KIND_LABEL: Record<SearchKind, string> = {
   tool: "Tool",
-  handoff: "Handoff",
+  handoff: "What travels",
   limit: "Limit",
   term: "Term",
-  ledger: "Ledger",
+  ledger: "Desk",
   log: "Desk log",
-  stage: "Run stage",
+  stage: "Plan step",
 };
 
 function entry(
@@ -52,7 +52,7 @@ export const SEARCH_INDEX: SearchHit[] = [
     entry(
       "stage",
       `stage-${st.id}`,
-      `${st.code} · ${st.name}`,
+      st.name,
       st.decision,
       [st.owner, st.produces, st.duration, ...st.gates.flatMap((g) => [g.label, g.detail])],
       { to: "/pipeline" },

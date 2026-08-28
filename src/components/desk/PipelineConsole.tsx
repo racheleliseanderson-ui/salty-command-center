@@ -65,21 +65,22 @@ export function PipelineConsole() {
       {/* ── Transport bar ─────────────────────────────────────── */}
       <div className="grid gap-6 border-b border-border p-5 sm:p-8">
         <div className="min-w-0">
-          <p className="label-mono text-brass">Pipeline run console</p>
+          <p className="label-mono text-brass">Plan the night</p>
           <h3 className="mt-3 font-display text-3xl leading-[0.95] text-bone sm:text-5xl">
-            Six stages.
-            <span className="block text-brass">No stage skipped.</span>
+            Six steps.
+            <span className="block text-brass">None skipped.</span>
           </h3>
           <p className="mt-4 max-w-[58ch] text-sm leading-relaxed text-muted-foreground">
-            Open a run and take the stages in order. Hard gates refuse rather than warn — the run
-            will not advance until they are signed. Local, deterministic, no account.
+            Start planning and take the steps in order: guests & constraints, menu, stress-test the
+            night, share with Occasions, then the service window. We'll stop rather than guess —
+            the plan will not advance until a real requirement is signed. Local, no account.
           </p>
         </div>
 
         <div className="flex shrink-0 flex-wrap items-center gap-2">
           {idle || stopped ? (
             <Control onClick={start} tone="primary" icon={<Play className="h-4 w-4" />}>
-              {stopped ? "Open a new run" : "Open run"}
+              {stopped ? "Start a new plan" : "Start planning"}
             </Control>
           ) : (
             <>
@@ -89,7 +90,7 @@ export function PipelineConsole() {
                 icon={<SkipForward className="h-4 w-4" />}
                 disabled={run.status === "held"}
               >
-                {run.stage === STAGES.length - 1 ? "Close run" : "Sign off & advance"}
+                {run.stage === STAGES.length - 1 ? "Finish this plan" : "Confirm & continue"}
               </Control>
               <Control onClick={rewind} icon={<SkipBack className="h-4 w-4" />} disabled={run.stage === 0}>
                 Reopen previous
@@ -110,14 +111,14 @@ export function PipelineConsole() {
             icon={<FileText className="h-3.5 w-3.5" />}
             disabled={idle}
           >
-            Export packet (MD)
+            Download this plan (text)
           </Control>
           <Control
             onClick={() => exportPackage("json")}
             icon={<Download className="h-3.5 w-3.5" />}
             disabled={idle}
           >
-            Export packet (JSON)
+            Download this plan (JSON)
           </Control>
           <Control onClick={reset} icon={<RotateCcw className="h-3.5 w-3.5" />} disabled={idle}>
             Clear
@@ -131,10 +132,10 @@ export function PipelineConsole() {
         <Readout k="Status" v={status.label} note={status.note} live={run.status === "running"} />
         <Readout
           k="Stage"
-          v={`${active.code} · ${active.name}`}
+          v={`${active.name}`}
           note={`Owner: ${active.owner} · ${active.duration}`}
         />
-        <Readout k="Gates signed" v={`${signed} of ${STAGES.length} stages cleared`} note={`${Object.values(run.gates).filter(Boolean).length} individual sign-offs on record`} />
+        <Readout k="Steps signed" v={`${signed} of ${STAGES.length} steps cleared`} note={`${Object.values(run.gates).filter(Boolean).length} individual sign-offs on record`} />
         <Readout k="Opened" v={hydrated ? (run.startedAt ?? "—") : "—"} note="Local clock, this device only" />
       </div>
 
@@ -151,8 +152,8 @@ export function PipelineConsole() {
           <p className="mt-6 flex gap-3 border border-destructive/50 bg-destructive/10 p-4 text-[0.85rem] leading-relaxed text-foreground/85">
             <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-destructive-foreground" />
             <span>
-              <span className="label-mono block text-[0.58rem]">Blocked · {active.code}</span>
-              {blocking.length} hard gate{blocking.length > 1 ? "s" : ""} unsigned:{" "}
+              <span className="label-mono block text-[0.58rem]">More information needed · {active.name}</span>
+              {blocking.length} requirement{blocking.length > 1 ? "s" : ""} not confirmed yet:{" "}
               {blocking.map((g) => g.label).join(" · ")}
             </span>
           </p>
@@ -181,10 +182,10 @@ export function PipelineConsole() {
               >
                 <span className="label-mono flex items-center gap-1.5 text-brass">
                   {cleared ? <Check className="h-3 w-3" /> : current ? <CircleDot className="h-3 w-3" /> : <Lock className="h-3 w-3 opacity-60" />}
-                  {s.code}
+                  {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="font-display text-lg leading-tight text-bone">{s.name}</span>
-                <span className="label-mono text-[0.55rem]">{cleared ? "Cleared" : current ? "Open" : "Waiting"}</span>
+                <span className="label-mono text-[0.55rem]">{cleared ? "Cleared" : current ? "In progress" : "Waiting"}</span>
               </button>
             </li>
           );
@@ -208,10 +209,10 @@ export function PipelineConsole() {
 
       {/* ── Run log ───────────────────────────────────────────── */}
       <div className="border-t border-border p-5 sm:p-8">
-        <p className="label-mono text-brass">Run log</p>
+        <p className="label-mono text-brass">Plan log</p>
         {run.log.length === 0 ? (
           <p className="mt-3 text-sm text-muted-foreground">
-            Empty. Every control and sign-off is recorded here, on this device.
+            Empty. Every control and sign-off is recorded here, on this device. Add information to begin.
           </p>
         ) : (
           <ul className="mt-4 divide-y divide-border border-t border-border">
@@ -270,7 +271,7 @@ function StageDetail({
     <div className="grid gap-px bg-border lg:grid-cols-[1fr_1.15fr]">
       <div className="bg-surface p-5 sm:p-8">
         <p className="label-mono text-brass">
-          {stage.code} · {stage.owner}
+          {stage.owner}
         </p>
         <h4 className="mt-3 font-display text-3xl leading-tight text-bone">{stage.name}</h4>
         <p className="mt-4 font-display text-xl leading-snug text-brass/90">{stage.decision}</p>
@@ -300,20 +301,20 @@ function StageDetail({
               rel="noreferrer"
               className="press tap inline-flex items-center justify-center gap-2 px-2 text-[0.8rem] tracking-wide text-muted-foreground transition-colors hover:text-brass"
             >
-              Run the stage
+              Open this step
               <ArrowUpRight className="h-4 w-4" />
             </a>
           </div>
         ) : (
-          <p className="label-mono mt-7 leading-relaxed">Held at the desk — no tool leaves this stage.</p>
+          <p className="label-mono mt-7 leading-relaxed">Stays on this desk — no other tool needed for this step.</p>
         )}
       </div>
 
       <fieldset className="bg-ink-deep p-5 sm:p-8">
-        <legend className="label-mono text-brass">Stage gates</legend>
+        <legend className="label-mono text-brass">What must be true</legend>
         <p className="mt-2 max-w-[52ch] text-[0.83rem] leading-relaxed text-muted-foreground">
-          Sign each gate you have actually satisfied. Hard gates block the advance; soft gates are
-          recorded and let the run continue.
+          Sign each requirement you have actually satisfied. We'll stop rather than guess on the
+          ones marked required; the others are recorded and let the plan continue.
         </p>
         <ul className="mt-5 space-y-2">
           {stage.gates.map((g) => {
@@ -343,7 +344,7 @@ function StageDetail({
                   </span>
                   <span className="min-w-0">
                     <span className="label-mono block text-[0.55rem]">
-                      {g.hard ? "Hard gate · refuses" : "Soft gate · recorded"}
+                      {g.hard ? "Required · we'll stop rather than guess" : "Optional · recorded"}
                     </span>
                     <span className={`mt-1 block text-[0.88rem] leading-snug ${on ? "text-brass" : "text-bone"}`}>
                       {g.label}
@@ -410,18 +411,18 @@ function EvidencePanel({
       <div className="grid gap-8 lg:grid-cols-[1fr_1.15fr]">
         <div>
           <label htmlFor={`note-${stage.id}`} className="label-mono text-brass">
-            {stage.code} · Stage note
+            {stage.name} · note
           </label>
           <p className="mt-2 max-w-[52ch] text-[0.83rem] leading-relaxed text-muted-foreground">
             What you observed, what you decided, and why. First-party only — this is your record of
-            the stage, not a guarantee from the suite.
+            the step, not a guarantee from the suite.
           </p>
           <textarea
             id={`note-${stage.id}`}
             value={note}
             disabled={!editable}
             onChange={(e) => onNote(stage.id, e.target.value)}
-            onBlur={() => onNoteCommit(stage.id, stage.code)}
+            onBlur={() => onNoteCommit(stage.id, stage.name)}
             rows={6}
             placeholder="e.g. 14 covers fixed, family style. Oven single-rack, so the anchor bakes before service."
             className="mt-4 w-full resize-y border border-border bg-ink-deep p-3 text-[0.86rem] leading-relaxed text-bone placeholder:text-muted-foreground/70 focus:border-brass focus:outline-none disabled:opacity-50"
@@ -434,8 +435,8 @@ function EvidencePanel({
         <div>
           <p className="label-mono text-brass">Evidence attachments</p>
           <p className="mt-2 max-w-[52ch] text-[0.83rem] leading-relaxed text-muted-foreground">
-            Attach a photo, receipt, timing sheet or supplier note and tie it to the gate it settles.
-            Nothing is uploaded. Files under 1 MB travel inside the exported packet; larger ones are
+            Attach a photo, receipt, timing sheet or supplier note and tie it to the decision it settles.
+            Nothing is uploaded. Files under 1 MB travel inside the downloaded plan; larger ones are
             listed by name, size and type.
           </p>
 
@@ -451,10 +452,10 @@ function EvidencePanel({
                 onChange={(e) => setTie(e.target.value)}
                 className="tap mt-1 w-full border border-border bg-ink-deep p-2 text-[0.83rem] text-bone focus:border-brass focus:outline-none disabled:opacity-50"
               >
-                <option value="">Stage level — no single gate</option>
+                <option value="">This step — no single requirement</option>
                 {stage.gates.map((g) => (
                   <option key={g.id} value={g.id}>
-                    {g.hard ? "Hard" : "Soft"} · {g.label}
+                    {g.hard ? "Required" : "Optional"} · {g.label}
                   </option>
                 ))}
               </select>
@@ -477,15 +478,15 @@ function EvidencePanel({
             className="sr-only"
             onChange={(e) => {
               const files = e.target.files;
-              if (files && files.length) void onAttach(stage.id, stage.code, tie || null, files);
+              if (files && files.length) void onAttach(stage.id, stage.name, tie || null, files);
               e.target.value = "";
             }}
           />
 
           {evidence.length === 0 ? (
             <p className="mt-5 border-l border-border pl-4 text-[0.83rem] leading-relaxed text-muted-foreground">
-              No evidence on this stage yet. A signed gate with no evidence is still a signed gate —
-              it just carries less weight in the packet.
+              No notes on this step yet. A signed requirement with no attachment is still signed —
+              it just carries less weight in the plan.
             </p>
           ) : (
             <ul className="mt-5 divide-y divide-border border-t border-border">
@@ -497,10 +498,10 @@ function EvidencePanel({
                       <p className="truncate text-[0.86rem] text-bone">{e.name}</p>
                       <p className="label-mono mt-1 text-[0.55rem]">
                         {formatBytes(e.size)} · {e.type || "unknown type"} · {e.addedAt} ·{" "}
-                        {e.dataUrl ? "in packet" : "by reference"}
+                        {e.dataUrl ? "in this plan" : "by name only"}
                       </p>
                       <p className="mt-1 text-[0.79rem] leading-relaxed text-muted-foreground">
-                        {gate ? `Tied to: ${gate.label}` : "Stage-level evidence"}
+                        {gate ? `Tied to: ${gate.label}` : "Step-level note"}
                       </p>
                     </div>
                     <div className="flex shrink-0 items-center gap-1">
@@ -517,7 +518,7 @@ function EvidencePanel({
                       <button
                         type="button"
                         disabled={!editable}
-                        onClick={() => onRemove(stage.id, e.id, stage.code)}
+                        onClick={() => onRemove(stage.id, e.id, stage.name)}
                         aria-label={`Withdraw ${e.name}`}
                         className="press tap inline-flex h-9 w-9 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-destructive/60 hover:text-destructive-foreground disabled:opacity-40"
                       >

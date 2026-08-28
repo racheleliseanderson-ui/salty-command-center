@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
-import { FLEET_STATS, FLEET_TOOLS, RI_COVERAGE, TOOL_VERSIONS } from "@/lib/desk-data";
+import { FLEET_STATS, FLEET_TOOLS, RI_COVERAGE } from "@/lib/desk-data";
 
 export const Route = createFileRoute("/intelligence")({
   head: () => ({
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/intelligence")({
       {
         name: "description",
         content:
-          "Same altitude on every tool. Real contracts, case-file counts, and hard stops for Kitchen & Bar, Occasion OS, and Restaurant Intelligence.",
+          "Same altitude on every tool. Real decisions, case-file counts, and we'll stop rather than guess for Kitchen & Bar, Occasion OS, and Restaurant Intelligence.",
       },
     ],
   }),
@@ -30,8 +30,8 @@ function IntelligencePage() {
           Same altitude. Full population.
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-          Every app on this desk is first-class: real engine contracts, real case-file counts, real
-          hard stops. No thin marketing shells. Architecture is a layer inside Occasion OS — not a
+          Every app on this desk is first-class: real decisions, real case-file counts, real
+          stops when a requirement is not met. No thin marketing shells. Menu building is a layer inside Occasion OS — not a
           fourth peer.
         </p>
 
@@ -47,12 +47,10 @@ function IntelligencePage() {
 
         <div className="mt-14 space-y-6">
           {FLEET_TOOLS.map((tool) => {
-            const version = TOOL_VERSIONS[tool.slug];
             return (
               <article key={tool.id} className="panel min-w-0 overflow-hidden rounded-lg p-6 sm:p-8">
                 <div className="flex min-w-0 flex-wrap items-center gap-3">
-                  <span className="label-mono text-live">Live</span>
-                  <span className="label-mono">{tool.id}</span>
+                  <span className="label-mono text-live">Available now</span>
                   {tool.handoffOut ? (
                     <span className="label-mono text-brass">{tool.handoffOut}</span>
                   ) : null}
@@ -105,25 +103,9 @@ function IntelligencePage() {
                           <dd className="label-mono mt-0.5 break-words">{m.label}</dd>
                         </div>
                       ))}
-                      {"build" in version ? (
-                        <div className="min-w-0 border border-border bg-ink-deep/60 px-3 py-2.5">
-                          <dt className="font-display text-lg text-brass break-words">
-                            {version.build}
-                          </dt>
-                          <dd className="label-mono mt-0.5">Build</dd>
-                        </div>
-                      ) : null}
-                      {"contract" in version ? (
-                        <div className="min-w-0 border border-border bg-ink-deep/60 px-3 py-2.5">
-                          <dt className="font-display text-lg text-brass break-words">
-                            {version.contract}
-                          </dt>
-                          <dd className="label-mono mt-0.5">Contract</dd>
-                        </div>
-                      ) : null}
                     </dl>
                     <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
-                      <span className="text-foreground/80">Refuses: </span>
+                      <span className="text-foreground/80">Will not: </span>
                       {tool.refusals.join(" · ")}
                     </p>
                   </div>
@@ -135,14 +117,13 @@ function IntelligencePage() {
 
         <section className="panel mt-10 rounded-lg p-6 sm:p-8">
           <p className="label-mono text-brass">Architecture · inside Occasion OS</p>
-          <h2 className="mt-2 font-display text-2xl text-bone">SC-MB-001 is a layer</h2>
+          <h2 className="mt-2 font-display text-2xl text-bone">Menu building is a layer</h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Five-role menu architecture, stress meters, and hard stops run at{" "}
-            <span className="text-bone">occasion.saltnotes.blog/architecture</span>. Contract{" "}
-            {TOOL_VERSIONS["menu-builder"].contract}. Not a peer card on this desk.
+            Five-role menu building, stress meters, and we'll stop rather than guess at{" "}
+            <span className="text-bone">occasion.saltnotes.blog/architecture</span>. Not a peer card on this desk.
           </p>
           <p className="mt-4 text-xs text-muted-foreground">
-            RI coverage: {RI_COVERAGE.caseFiles} case files · {RI_COVERAGE.enriched} enriched ·{" "}
+            RI coverage: {RI_COVERAGE.caseFiles} case files · {RI_COVERAGE.enriched} with a first-party page read ·{" "}
             {RI_COVERAGE.regionNote}
           </p>
         </section>

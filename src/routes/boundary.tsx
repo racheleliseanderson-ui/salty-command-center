@@ -10,13 +10,13 @@ export const Route = createFileRoute("/boundary")({
       {
         name: "description",
         content:
-          "The standing limits of the Salty & Clever suite: local-first storage, first-party evidence, no allergen safety guarantees, fail-closed hard stops.",
+          "The standing limits of the Salty & Clever suite: local-first storage, first-party evidence, no allergen safety guarantees, we'll stop rather than guess.",
       },
       { property: "og:title", content: "Shared boundary — Salty Desk" },
       {
         property: "og:description",
         content:
-          "Educational planning only. Dietary tags are filters, not safety controls. Hard constraints fail closed.",
+          "Educational planning only. Dietary tags are filters, not safety controls. If a real requirement is not met, the plan stops.",
       },
     ],
   }),

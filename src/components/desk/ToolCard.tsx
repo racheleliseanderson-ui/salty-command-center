@@ -26,7 +26,7 @@ const FACE: Record<Tool["slug"], { src: string; alt: string }> = {
 };
 
 export function StatusPip({ status, note }: { status: Tool["status"]; note?: string }) {
-  const label = status === "live" ? "Live" : status === "beta" ? "Beta" : "Planned";
+  const label = status === "live" ? "Available now" : status === "beta" ? "In preview" : "Coming later";
   return (
     <span className="inline-flex min-w-0 max-w-full flex-wrap items-center gap-x-2 gap-y-1">
       <span className="relative flex h-1.5 w-1.5 shrink-0">
@@ -57,7 +57,7 @@ export function ToolCard({ tool, index }: { tool: Tool; index: number }) {
         <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
           <StatusPip status={tool.status} note={tool.statusNote} />
           <span className="label-mono shrink-0">
-            {String(index + 1).padStart(2, "0")} · {tool.id}
+            {String(index + 1).padStart(2, "0")}
           </span>
         </div>
 
@@ -98,7 +98,7 @@ export function ToolCard({ tool, index }: { tool: Tool; index: number }) {
         </div>
 
         <div className="min-w-0 overflow-hidden border border-destructive/35 bg-destructive/10 p-4">
-          <p className="label-mono text-destructive-foreground/80">Refuses</p>
+          <p className="label-mono text-destructive-foreground/80">Does not</p>
           <ul className="mt-2 space-y-1.5 text-[0.8rem] leading-relaxed text-foreground/75">
             {tool.refusals.map((r) => (
               <li key={r} className="break-words">

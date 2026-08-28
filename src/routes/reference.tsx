@@ -13,7 +13,7 @@ export const Route = createFileRoute("/reference")({
       {
         name: "description",
         content:
-          "Plain definitions for the Salty & Clever suite: anchor, hard stop, stress axis, confirm burden, thin field, contract version — plus the current build ledger and desk log.",
+          "Plain definitions for the Salty & Clever suite: locked dish, we'll stop rather than guess, stress axis, confirm burden, thin field — plus the current desk log.",
       },
       { property: "og:title", content: "Reference — suite vocabulary & desk log" },
       {
@@ -97,7 +97,7 @@ function ReferencePage() {
 
       <section className="border-t border-border bg-ink-deep">
         <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8">
-          <p className="label-mono text-brass">Build ledger</p>
+          <p className="label-mono text-brass">What each tool takes right now</p>
           <div className="rule-brass mt-3 w-24" />
           <h2 className="mt-5 font-display text-4xl leading-tight text-bone">
             What each tool accepts right now
@@ -107,7 +107,7 @@ function ReferencePage() {
             <table className="w-full min-w-[720px] border-collapse text-left">
               <thead>
                 <tr>
-                  {["Tool", "State", "Build", "Contract", "Updated"].map((h) => (
+                  {["Tool", "State", "Updated"].map((h) => (
                     <th key={h} className="label-mono border-b border-border pb-3 pr-6">
                       {h}
                     </th>
@@ -119,13 +119,10 @@ function ReferencePage() {
                   <tr key={row.id} className="border-b border-border/70">
                     <td className="py-4 pr-6">
                       <span className="block font-display text-xl text-bone">{row.name}</span>
-                      <span className="label-mono">{row.id}</span>
                     </td>
                     <td className="py-4 pr-6">
-                      <span className="label-mono text-live">{row.state}</span>
+                      <span className="label-mono text-live">{row.state === "Live" ? "Available now" : row.state}</span>
                     </td>
-                    <td className="py-4 pr-6 text-[0.84rem] text-foreground/80">{row.build}</td>
-                    <td className="py-4 pr-6 text-[0.84rem] text-foreground/80">{row.contract}</td>
                     <td className="label-mono py-4 pr-6">{row.updated}</td>
                   </tr>
                 ))}
@@ -138,11 +135,11 @@ function ReferencePage() {
               <div key={row.id} className="bg-ink-deep p-6">
                 <p className="label-mono text-brass">{row.name}</p>
                 <p className="mt-4 text-[0.83rem] leading-relaxed text-foreground/85">
-                  <span className="label-mono block">Accepts</span>
+                  <span className="label-mono block">What it takes</span>
                   {row.accepts}
                 </p>
                 <p className="mt-4 text-[0.83rem] leading-relaxed text-muted-foreground">
-                  <span className="label-mono block">Rejects</span>
+                  <span className="label-mono block">What it will not do</span>
                   {row.rejects}
                 </p>
               </div>
@@ -157,9 +154,8 @@ function ReferencePage() {
         <h2 className="mt-5 font-display text-4xl leading-tight text-bone">Recent to the desk</h2>
         <ul className="mt-10 divide-y divide-border border-t border-border">
           {log.map((l) => (
-            <li key={l.date + l.id} className="grid gap-2 py-5 sm:grid-cols-[9rem_7rem_1fr]">
+            <li key={l.date + l.id} className="grid gap-2 py-5 sm:grid-cols-[9rem_1fr]">
               <span className="label-mono">{l.date}</span>
-              <span className="label-mono text-brass">{l.id}</span>
               <span className="text-[0.88rem] leading-relaxed text-foreground/85">{l.entry}</span>
             </li>
           ))}

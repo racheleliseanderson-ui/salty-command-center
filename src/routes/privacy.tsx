@@ -29,7 +29,7 @@ function PrivacyPage() {
           Local-first. First-party. No forced account.
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-          Core planning runs on device. Handoffs are packets you choose to send. Nothing is
+          Core planning stays on this device. Shares move only when you choose to send them. Nothing is
           uploaded to use the desk, and nothing moves between tools until you move it.
         </p>
 
@@ -37,7 +37,7 @@ function PrivacyPage() {
           {BOUNDARIES.map((b) => (
             <li key={b.id} className="panel rounded-lg p-5 sm:p-6">
               <p className="label-mono text-brass">
-                {b.group} · {b.id}
+                {b.group}
               </p>
               <h2 className="mt-2 font-display text-xl text-bone">{b.limit}</h2>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{b.why}</p>

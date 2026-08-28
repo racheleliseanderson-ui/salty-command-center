@@ -31,7 +31,7 @@ export const STAGES: Stage[] = [
   {
     id: "intake",
     code: "P1",
-    name: "Intake",
+    name: "Guests & constraints",
     owner: "Desk",
     decision: "Are the constraints declared, or are we guessing?",
     produces: "Declared case: guests, service style, attention, equipment",
@@ -47,7 +47,7 @@ export const STAGES: Stage[] = [
       {
         id: "intake.attention",
         label: "Host attention is honestly declared",
-        detail: "Attention is the scarcest input in the run. Overstating it corrupts every later stage.",
+        detail: "Attention is the scarcest input. Overstating it corrupts every later step.",
         hard: true,
       },
       {
@@ -61,7 +61,7 @@ export const STAGES: Stage[] = [
   {
     id: "architecture",
     code: "P2",
-    name: "Menu architecture",
+    name: "Menu",
     owner: "Menu Builder",
     decision: "Does the menu have a shape, or just dishes?",
     produces: "Five-role architecture + locked anchor",
@@ -85,7 +85,7 @@ export const STAGES: Stage[] = [
   {
     id: "stress",
     code: "P3",
-    name: "Stress test",
+    name: "Stress-test the night",
     owner: "Menu Builder",
     decision: "Can this kitchen finish this menu on time?",
     produces: "Balance · Make Ahead · Service Fit · Equipment Fit · Host Freedom",
@@ -94,8 +94,8 @@ export const STAGES: Stage[] = [
     gates: [
       {
         id: "stress.clear",
-        label: "No unresolved hard stop",
-        detail: "A hard stop is a refusal. Simplify within bounds or stand the run down.",
+        label: "No unresolved requirement",
+        detail: "If a real requirement is not met, we'll stop rather than guess. Simplify within bounds or stand the plan down.",
         hard: true,
       },
       {
@@ -115,16 +115,16 @@ export const STAGES: Stage[] = [
   {
     id: "handoff",
     code: "P4",
-    name: "Handoff packet",
+    name: "Share with Occasions",
     owner: "Desk",
     decision: "What moves forward, and what stays behind?",
-    produces: "Contract 1.1.0 packet: architecture, stress summary, anchor",
+    produces: "Menu, stress summary, and locked dish",
     duration: "2 min",
     tool: "desk",
     gates: [
       {
         id: "handoff.scope",
-        label: "Packet carries architecture, not private notes",
+        label: "Share carries the menu, not private notes",
         detail: "Drafts, rejected dishes and personal notes stay in the originating tool.",
         hard: true,
       },
@@ -165,15 +165,15 @@ export const STAGES: Stage[] = [
     code: "P6",
     name: "Service window",
     owner: "You",
-    decision: "Is the run held, or is it being improvised?",
+    decision: "Is the plan held, or is it being improvised?",
     produces: "A night that finishes on time",
-    duration: "Live",
+    duration: "During service",
     tool: "occasion-os",
     gates: [
       {
         id: "service.hold",
         label: "First course leaves the pass on the declared minute",
-        detail: "The route is only real if the first handoff lands on time.",
+        detail: "The route is only real if the first course lands on time.",
         hard: false,
       },
     ],
@@ -272,20 +272,20 @@ export function buildRunPackage(state: RunState) {
 export function runPackageMarkdown(state: RunState) {
   const pkg = buildRunPackage(state);
   const lines: string[] = [
-    "# Salty Desk — run package",
+    "# Salty Desk — this plan",
     "",
     `- Exported: ${pkg.exportedAt}`,
     `- Status: ${statusCopy(state.status).label}`,
     `- Opened: ${state.startedAt ?? "—"}`,
-    `- Open stage: ${pkg.run.openStage ?? "—"} (${pkg.run.progress} cleared)`,
+    `- Open step: ${STAGES.find((st) => st.code === pkg.run.openStage)?.name ?? "—"} (${pkg.run.progress} cleared)`,
     "",
   ];
   for (const s of pkg.stages) {
-    lines.push(`## ${s.code} · ${s.name} — ${s.cleared ? "cleared" : "not cleared"}`);
+    lines.push(`## ${s.name} — ${s.cleared ? "cleared" : "not cleared"}`);
     lines.push(`Owner: ${s.owner} · Decision: ${s.decision}`);
     lines.push("");
     for (const g of s.gates) {
-      lines.push(`- [${g.signed ? "x" : " "}] (${g.kind}) ${g.label}`);
+      lines.push(`- [${g.signed ? "x" : " "}] (${g.kind === "hard" ? "required" : "optional"}) ${g.label}`);
     }
     lines.push("");
     lines.push(`Notes: ${s.notes ?? "—"}`);
@@ -293,14 +293,14 @@ export function runPackageMarkdown(state: RunState) {
       lines.push("", "Evidence:");
       for (const e of s.evidence) {
         lines.push(
-          `- ${e.name} · ${formatBytes(e.size)} · ${e.type || "unknown type"} · ${e.gate ? `gate: ${e.gate}` : "stage-level"} · ${e.retained}`,
+          `- ${e.name} · ${formatBytes(e.size)} · ${e.type || "unknown type"} · ${e.gate ? `requirement: ${e.gate}` : "step-level"} · ${e.retained}`,
         );
       }
     }
     lines.push("");
   }
   lines.push("## Standing limits", ...pkg.limits.map((l) => `- ${l}`), "");
-  lines.push("## Run log", ...state.log.map((e) => `- ${e.at} · ${e.kind} · ${e.text}`));
+  lines.push("## Plan log", ...state.log.map((e) => `- ${e.at} · ${e.kind} · ${e.text}`));
   return lines.join("\n");
 }
 
@@ -325,17 +325,17 @@ export function runProgress(state: RunState) {
 export function statusCopy(status: RunStatus): { label: string; note: string } {
   switch (status) {
     case "running":
-      return { label: "Running", note: "Stage gates are open for sign-off." };
+      return { label: "In progress", note: "Checking each step before the plan moves on." };
     case "held":
-      return { label: "Held", note: "Nothing advances while the run is held. Deliberate pause." };
+      return { label: "Paused", note: "Nothing advances while paused. Deliberate pause." };
     case "aborted":
       return {
         label: "Stood down",
-        note: "The run was refused, not failed. Dining out is a correct outcome.",
+        note: "The plan was stopped, not failed. Dining out is a correct outcome.",
       };
     case "complete":
-      return { label: "Closed", note: "Every stage signed off. Service window carried." };
+      return { label: "Ready", note: "Every step signed off. Service window carried." };
     default:
-      return { label: "Idle", note: "No run open. Start one to take the stages in order." };
+      return { label: "Ready to start", note: "Add information to begin. Take the steps in order." };
   }
 }

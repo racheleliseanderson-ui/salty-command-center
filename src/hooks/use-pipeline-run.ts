@@ -101,7 +101,7 @@ export function usePipelineRun() {
       status: "running",
       startedAt: stamp(),
     };
-    commit(append(base, "control", "Run opened at Intake. Constraints declared, nothing inferred."));
+    commit(append(base, "control", "Plan started at guests & constraints. Constraints declared, nothing inferred."));
   }, [append, commit]);
 
   const toggleGate = useCallback(
@@ -125,7 +125,7 @@ export function usePipelineRun() {
         append(
           current,
           "stop",
-          `Refused at ${stage.code} ${stage.name} — ${blocking.length} hard gate${blocking.length > 1 ? "s" : ""} unsigned.`,
+          `More information needed at ${stage.name} — ${blocking.length} required item${blocking.length > 1 ? "s" : ""} not confirmed yet.`,
         ),
       );
       return;
@@ -139,8 +139,8 @@ export function usePipelineRun() {
         next,
         "stage",
         last
-          ? `${stage.code} ${stage.name} signed off. Run closed.`
-          : `${stage.code} ${stage.name} signed off → ${STAGES[current.stage + 1]!.code} ${STAGES[current.stage + 1]!.name}.`,
+          ? `${stage.name} signed off. Plan ready.`
+          : `${stage.name} signed off → ${STAGES[current.stage + 1]!.name}.`,
       ),
     );
   }, [append, commit]);
@@ -154,7 +154,7 @@ export function usePipelineRun() {
       append(
         { ...current, stage: target, status: "running" },
         "stage",
-        `Reopened ${stage.code} ${stage.name}. Later sign-offs stand until withdrawn.`,
+        `Reopened ${stage.name}. Later sign-offs stand until withdrawn.`,
       ),
     );
   }, [append, commit]);
@@ -166,7 +166,7 @@ export function usePipelineRun() {
       append(
         { ...current, status: held ? "running" : "held" },
         "control",
-        held ? "Hold released. Run resumed." : "Run held. Nothing advances until released.",
+        held ? "Pause released. Plan resumed." : "Plan paused. Nothing advances until released.",
       ),
     );
   }, [append, commit]);
@@ -177,7 +177,7 @@ export function usePipelineRun() {
       append(
         { ...current, status: "aborted" },
         "stop",
-        "Run stood down. Hosting refused — dine out instead of improvising.",
+        "Plan stood down. Hosting stopped — dine out instead of improvising.",
       ),
     );
   }, [append, commit]);
@@ -227,8 +227,8 @@ export function usePipelineRun() {
           append(
             next,
             "evidence",
-            `Attached ${file.name} (${formatBytes(file.size)}) at ${code}${gateId ? " · gate-tied" : ""}${
-              inline ? "" : " · recorded by reference only"
+            `Attached ${file.name} (${formatBytes(file.size)}) at ${code}${gateId ? " · tied to a requirement" : ""}${
+              inline ? "" : " · listed by name only"
             }.`,
           ),
         );
@@ -266,7 +266,7 @@ export function usePipelineRun() {
       } else {
         download(`salty-desk-run-${slug}.md`, "text/markdown", runPackageMarkdown(current));
       }
-      commit(append(current, "control", `Run package exported as ${format.toUpperCase()}. Local file, no upload.`));
+      commit(append(current, "control", `Plan downloaded as ${format.toUpperCase()}. Local file, no upload.`));
     },
     [append, commit],
   );

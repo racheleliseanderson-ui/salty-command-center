@@ -35,7 +35,7 @@ export function HandoffMap({
   if (visible.length === 0) {
     return (
       <p className="label-mono border border-dashed border-border p-6 leading-relaxed">
-        No packet field matches “{query}”. Clear the filter to see all three contracts.
+        No field matches “{query}”. Clear the filter to see what travels.
       </p>
     );
   }
@@ -59,7 +59,7 @@ export function HandoffMap({
           {!compact && (
             <>
               <p className="mt-5 max-w-[70ch] text-[0.88rem] leading-relaxed text-foreground/85">
-                <span className="label-mono block text-brass">Why the packet exists</span>
+                <span className="label-mono block text-brass">Why this share exists</span>
                 {h.purpose}
               </p>
 
@@ -138,11 +138,10 @@ export function HandoffMap({
   );
 }
 
-function Node({ name, id }: { name: string; id: string }) {
+function Node({ name }: { name: string; id?: string }) {
   return (
     <span className="min-w-0">
       <span className="block font-display text-lg leading-tight text-bone sm:text-xl">{name}</span>
-      <span className="label-mono">{id}</span>
     </span>
   );
 }

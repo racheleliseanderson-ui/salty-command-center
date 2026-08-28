@@ -46,7 +46,7 @@ export function packetExample(
   if (handoffId === "SC-MB-001") {
     return {
       moves: [
-        `Menu architecture for ${covers} — dish roles and pairing mode only`,
+        `Menu for ${covers} — dish roles and pairing mode only`,
         `Stress summary, with the attention axis set to "${attention}"`,
         a.runway === "tonight"
           ? "No prep window declared, so the anchor travels as fixed"
@@ -123,7 +123,7 @@ export function bindingBoundaries(a: Answers): { boundary: Boundary; because: st
     out.push(
       hit(
         "fail-closed",
-        "Your combination breaches a hard stop. The plan is refused rather than quietly degraded.",
+        "Your combination does not meet a real requirement. The plan stops rather than quietly degrading.",
       ),
     );
   }
@@ -141,7 +141,7 @@ export function bindingBoundaries(a: Answers): { boundary: Boundary; because: st
     out.push(
       hit(
         "movement",
-        "These answers stay on this device. Nothing reaches another tool until you send a packet.",
+        "These answers stay on this device. Nothing reaches another tool until you send it.",
       ),
     );
   }

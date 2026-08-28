@@ -10,17 +10,17 @@ import prepMise from "@/assets/prep-mise.jpg";
 export const Route = createFileRoute("/pipeline")({
   head: () => ({
     meta: [
-      { title: "Pipeline run console — Salty Desk" },
+      { title: "Plan the night — Salty Desk" },
       {
         name: "description",
         content:
-          "Open a run and take six stages in order: intake, menu architecture, stress test, handoff packet, route build, service window. Hard gates refuse rather than warn.",
+          "Start planning and take six steps in order: guests & constraints, menu, stress-test the night, share with Occasions, then the service window. We'll stop rather than guess.",
       },
-      { property: "og:title", content: "Pipeline run console — Salty Desk" },
+      { property: "og:title", content: "Plan the night — Salty Desk" },
       {
         property: "og:description",
         content:
-          "Run management for the Salty & Clever host suite: transport controls, stage gates, refusals, and a local run log.",
+          "Guests and constraints, menu, stress-test the night, share with Occasions, then the service window.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -49,20 +49,20 @@ function PipelinePage() {
         <div className="hairline-grid absolute inset-0 opacity-40" />
 
         <div className="relative mx-auto max-w-[1240px] px-5 pb-16 pt-20 sm:px-8 sm:pb-24 sm:pt-28">
-          <p className="label-mono rise text-brass">Run management · Stage gates · Refusals</p>
+          <p className="label-mono rise text-brass">Guests · menu · stress-test · share · service</p>
           <h1 className="rise display-xl mt-6 max-w-[20ch] text-bone">
-            The run
+            The plan
             <span className="block text-brass">holds or it doesn't.</span>
           </h1>
           <p className="rise mt-8 max-w-[56ch] text-lg leading-relaxed text-foreground/85">
-            One pipeline from declared constraints to the service window. Every stage names its
-            decision, its owner, and the gates that must be signed before anything advances.
+            One path from declared constraints to the service window. Every step names its
+            decision, its owner, and what must be true before anything advances.
           </p>
 
           <dl className="rise mt-12 grid max-w-3xl grid-cols-3 gap-px overflow-hidden border border-border bg-border">
             {[
-              { k: "Stages", v: String(STAGES.length) },
-              { k: "Hard gates", v: String(STAGES.flatMap((s) => s.gates).filter((g) => g.hard).length) },
+              { k: "Steps", v: String(STAGES.length) },
+              { k: "We'll stop rather than guess", v: String(STAGES.flatMap((s) => s.gates).filter((g) => g.hard).length) },
               { k: "Uploads", v: "0" },
             ].map((s) => (
               <div key={s.k} className="bg-ink-deep px-4 py-6 sm:px-5">
@@ -89,11 +89,11 @@ function PipelinePage() {
             </h2>
             <ul className="mt-8 divide-y divide-border border-t border-border">
               {[
-                ["Sign off & advance", "Moves the run forward only when every hard gate on the open stage is signed. Otherwise it records a refusal."],
-                ["Reopen previous", "Steps back a stage. Existing sign-offs stand until you withdraw them by hand."],
-                ["Hold", "A deliberate pause. Nothing advances while held, and the log says when it started."],
-                ["Stand down", "Ends the run as refused. Dining out is the correct outcome, not a failure state."],
-                ["Clear", "Deletes the run and its log from this device. No copy exists anywhere else."],
+                ["Confirm & continue", "Moves the plan forward only when every required item on the open step is signed. Otherwise it records that more information is needed."],
+                ["Reopen previous", "Steps back. Existing sign-offs stand until you withdraw them by hand."],
+                ["Hold", "A deliberate pause. Nothing advances while paused, and the log says when it started."],
+                ["Stand down", "Ends the plan as stopped. Dining out is the correct outcome, not a failure state."],
+                ["Clear", "Deletes the plan and its log from this device. No copy exists anywhere else."],
               ].map(([k, v]) => (
                 <li key={k} className="py-4">
                   <p className="font-display text-xl text-bone">{k}</p>
@@ -104,21 +104,21 @@ function PipelinePage() {
           </div>
 
           <div className="panel-brass rounded-lg p-6 sm:p-9">
-            <p className="label-mono text-brass">Where the run sits</p>
+            <p className="label-mono text-brass">Where the plan sits</p>
             <h3 className="mt-3 font-display text-3xl leading-tight text-bone">
-              The desk runs the pipeline. The tools do the work.
+              The desk sequences the night. The tools do the work.
             </h3>
             <p className="mt-5 text-[0.9rem] leading-relaxed text-foreground/85">
-              Stages P2 and P3 belong to Menu Builder, P5 and P6 to Occasion Operating System. The
-              desk owns intake and the handoff packet — the two points where an unstated assumption
-              would otherwise travel downstream.
+              Menu and stress-test belong to menu building inside Occasion OS; the route and service
+              window belong to Occasion OS. The desk owns guests & constraints and share with
+              Occasions — the two points where an unstated assumption would otherwise travel.
             </p>
             <div className="mt-8 grid gap-3 sm:flex sm:flex-wrap">
               <Link
                 to="/handoffs"
                 className="press tap inline-flex items-center justify-center gap-2 border border-brass/50 px-4 text-[0.8rem] tracking-wide text-brass transition-colors hover:bg-brass hover:text-primary-foreground"
               >
-                What moves at P4
+                What moves when you share
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link

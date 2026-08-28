@@ -37,25 +37,22 @@ export function StatusLedger() {
                   <span className="absolute inset-0 animate-ping rounded-full bg-live/60" />
                   <span className="relative h-1.5 w-1.5 rounded-full bg-live" />
                 </span>
-                <span className="label-mono text-live">{row.state}</span>
+                <span className="label-mono text-live">{row.state === "Live" ? "Available now" : row.state === "Beta" ? "In preview" : "Coming later"}</span>
               </span>
-              <span className="label-mono">{row.id}</span>
             </div>
 
             <p className="mt-4 font-display text-2xl leading-tight text-bone">{row.name}</p>
 
             <dl className="mt-5 space-y-2 border-l border-brass/30 pl-4 text-[0.8rem]">
-              <Row k="Build" v={row.build} />
-              <Row k="Contract" v={row.contract} />
               <Row k="Updated" v={row.updated} />
             </dl>
 
             <p className="mt-5 text-[0.8rem] leading-relaxed text-foreground/80">
-              <span className="label-mono block">Accepts</span>
+              <span className="label-mono block">What it takes</span>
               {row.accepts}
             </p>
             <p className="mt-3 text-[0.8rem] leading-relaxed text-muted-foreground">
-              <span className="label-mono block">Rejects</span>
+              <span className="label-mono block">What it will not do</span>
               {row.rejects}
             </p>
 

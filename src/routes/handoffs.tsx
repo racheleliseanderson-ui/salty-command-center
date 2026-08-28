@@ -8,17 +8,17 @@ import { SearchField } from "@/components/desk/SearchField";
 export const Route = createFileRoute("/handoffs")({
   head: () => ({
     meta: [
-      { title: "Handoff map — Salty Desk" },
+      { title: "What travels — Salty Desk" },
       {
         name: "description",
         content:
           "Exactly what moves between Kitchen & Bar, Architecture (inside Occasion OS), Occasion Operating System, and Restaurant Intelligence — and what stays behind. Explicit handoffs only.",
       },
-      { property: "og:title", content: "Handoff map — Salty Desk" },
+      { property: "og:title", content: "What travels — Salty Desk" },
       {
         property: "og:description",
         content:
-          "Public-safe packets move only when you send them. Nothing is uploaded; nothing is inferred across tools.",
+          "Public-safe shares move only when you send them. Nothing is uploaded; nothing is inferred across tools.",
       },
     ],
   }),
@@ -34,13 +34,13 @@ function Handoffs() {
 
       <section className="border-b border-border bg-ink-deep">
         <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
-          <p className="label-mono text-brass">Explicit handoffs only</p>
+          <p className="label-mono text-brass">You send it</p>
           <h1 className="display-xl mt-6 max-w-[18ch] text-bone">
             Nothing moves
             <span className="block text-brass">until you move it.</span>
           </h1>
           <p className="mt-8 max-w-[58ch] text-base leading-relaxed text-foreground/85 sm:text-lg">
-            Each tool owns its own state. A handoff is a packet you choose to send. Every row below
+            Each tool owns its own state. A share is something you choose to send. Every row below
             states the field, the reason it travels or is withheld, and what the receiving tool can
             and cannot conclude from it.
           </p>
@@ -52,11 +52,11 @@ function Handoffs() {
           <SearchField
             value={q}
             onChange={setQ}
-            label="Filter packet fields"
+            label="Filter what travels"
             placeholder="Filter by field, reason or contract…"
           />
           <p className="label-mono mt-3">
-            Filters the three contracts below · ⌘K searches the whole desk.
+            Filters the three shares below · ⌘K searches the whole desk.
           </p>
         </div>
 
@@ -68,9 +68,9 @@ function Handoffs() {
           <p className="label-mono text-brass">Rules of transfer</p>
           <ul className="mt-5 grid gap-4 text-[0.88rem] leading-relaxed text-foreground/85 md:grid-cols-2">
             <li>Handoffs are reader-initiated. There is no background sync.</li>
-            <li>Packets are public-safe: no private notes, no guest identities.</li>
+            <li>What you share is public-safe: no private notes, no guest identities.</li>
             <li>Dietary categories travel as planning filters, never as allergy guarantees.</li>
-            <li>A refused hard stop does not travel as an approval.</li>
+            <li>A stopped requirement does not travel as an approval.</li>
             <li>A field with no job downstream does not travel, even when it is harmless.</li>
             <li>Reasoning stays with the tool that did it; only conclusions move.</li>
           </ul>

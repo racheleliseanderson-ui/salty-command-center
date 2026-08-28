@@ -39,7 +39,7 @@ function HostPathPage() {
             return (
               <li key={step.step} className="panel min-w-0 overflow-hidden rounded-lg p-6 sm:p-8">
                 <p className="label-mono text-brass">
-                  {String(step.step).padStart(2, "0")} · {tool?.id ?? step.appId}
+                  {String(step.step).padStart(2, "0")} · {tool?.name ?? step.appId}
                 </p>
                 <h2 className="mt-3 font-display text-3xl leading-snug text-bone">{step.title}</h2>
                 <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
@@ -66,8 +66,8 @@ function HostPathPage() {
           <h2 className="mt-2 font-display text-2xl text-bone">What&apos;s already on the shelf?</h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             Kitchen & Bar Intelligence is the daily execution layer — not required for Host Path.
-            Use it when you are cooking from what you already have, then optionally send an
-            Availability Packet into Occasion OS.
+            Use it when you are cooking from what you already have, then optionally share
+            your shelf with Occasions.
           </p>
           <a
             href="https://kitchen.saltnotes.blog/"
@@ -86,7 +86,7 @@ function HostPathPage() {
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             Five-role architecture, stress meters, anchor lock, and hard stops run at{" "}
             <span className="text-bone">occasion.saltnotes.blog/architecture</span> under the same
-            host chrome. SC-MB-001 is a layer, not a peer on this desk.
+            host chrome. Menu building is a layer, not a peer on this desk.
           </p>
           <a
             href="https://occasion.saltnotes.blog/architecture"

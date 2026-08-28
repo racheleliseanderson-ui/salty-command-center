@@ -215,13 +215,13 @@ export function evaluate(a: Answers): Verdict {
 
   const handoffs: Record<Tool["slug"], string> = {
     "kitchen-bar":
-      "Next handoff: Availability Packet 1.0 → Occasion OS. You send it. Nothing silent.",
+      "Next: share your shelf with Occasions. You send it. Nothing silent.",
     "menu-builder":
-      "Next handoff: menu architecture + stress summary + anchor → Occasion OS, contract 1.1.0.",
+      "Next: menu, stress summary, and locked dish → Occasion OS.",
     "occasion-os":
-      "Next handoff: optional occasion context → Restaurant Intelligence, only if you choose it.",
+      "Next: optional occasion context → Restaurant Intelligence, only if you choose it.",
     "restaurant-intelligence":
-      "Next handoff: first-party case file + evidence trail → your own records.",
+      "Next: first-party case file + evidence trail → your own records.",
   };
 
   return {

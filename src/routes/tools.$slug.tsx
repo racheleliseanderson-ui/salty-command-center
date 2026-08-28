@@ -104,7 +104,6 @@ function ToolPage() {
         <div className="relative mx-auto max-w-[1240px] px-5 pb-16 pt-20 sm:px-8 sm:pb-20 sm:pt-28">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <StatusPip status={tool.status} note={tool.statusNote} />
-            <span className="label-mono">{tool.id}</span>
           </div>
           <h1 className="rise mt-6 font-display text-5xl leading-[1.02] text-bone sm:text-6xl">
             {tool.name}
@@ -133,7 +132,7 @@ function ToolPage() {
               to="/handoffs"
               className="inline-flex items-center gap-2 border border-border px-5 py-3 text-sm tracking-wide text-muted-foreground transition-colors hover:border-brass/50 hover:text-brass"
             >
-              See its handoffs
+              See what travels
             </Link>
           </div>
         </div>
@@ -153,7 +152,7 @@ function ToolPage() {
           <Reveal>
             <div className="border border-destructive/40 bg-destructive/10 p-6 sm:p-7">
               <p className="label-mono flex items-center gap-2 text-destructive-foreground/85">
-                <TriangleAlert className="h-3.5 w-3.5" /> Hard stops
+                <TriangleAlert className="h-3.5 w-3.5" /> We'll stop rather than guess
               </p>
               <ul className="mt-4 space-y-3 text-[0.86rem] leading-relaxed text-foreground/85">
                 {detail.hardStops.map((h) => (
