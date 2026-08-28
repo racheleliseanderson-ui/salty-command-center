@@ -62,7 +62,7 @@ export function StatusLedger() {
                 params={{ slug: tool.slug }}
                 className="mt-6 inline-flex items-center gap-2 text-[0.8rem] text-brass transition-colors hover:text-bone"
               >
-                Full record
+                Open this tool
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             ) : null}

@@ -100,7 +100,7 @@ function ReferencePage() {
           <p className="label-mono text-brass">What each tool takes right now</p>
           <div className="rule-brass mt-3 w-24" />
           <h2 className="mt-5 font-display text-4xl leading-tight text-bone">
-            What each tool accepts right now
+            What each tool takes right now
           </h2>
 
           <div className="mt-10 overflow-x-auto">
