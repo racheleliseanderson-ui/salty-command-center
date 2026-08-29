@@ -1,9 +1,9 @@
 /**
- * Pipeline run model. A run is the operational spine of the suite: intake →
- * menu architecture → stress test → handoff packet → route build → service.
+ * Plan model. A plan is the operational spine of the suite: declare the night →
+ * menu architecture → stress test → what you send on → prep route → service.
  *
- * Deterministic, local, and gate-driven. A stage cannot be signed off until
- * its declared gates are checked, and a hard gate refuses rather than warns.
+ * Local and deterministic. A step cannot be closed until its required checks are
+ * confirmed, and a required check blocks the step rather than nagging about it.
  */
 
 export type RunStatus = "idle" | "running" | "held" | "aborted" | "complete";
@@ -30,11 +30,16 @@ export type Stage = {
 export const STAGES: Stage[] = [
   {
     id: "intake",
+<<<<<<< Updated upstream
     code: "P1",
     name: "Guests & constraints",
+=======
+    code: "Step 1",
+    name: "Declare the night",
+>>>>>>> Stashed changes
     owner: "Desk",
     decision: "Are the constraints declared, or are we guessing?",
-    produces: "Declared case: guests, service style, attention, equipment",
+    produces: "Guests, service style, attention and equipment, all stated",
     duration: "10 min",
     tool: "desk",
     gates: [
@@ -47,7 +52,11 @@ export const STAGES: Stage[] = [
       {
         id: "intake.attention",
         label: "Host attention is honestly declared",
+<<<<<<< Updated upstream
         detail: "Attention is the scarcest input. Overstating it corrupts every later step.",
+=======
+        detail: "Attention is the scarcest thing you have. Overstating it distorts every later step.",
+>>>>>>> Stashed changes
         hard: true,
       },
       {
@@ -60,8 +69,13 @@ export const STAGES: Stage[] = [
   },
   {
     id: "architecture",
+<<<<<<< Updated upstream
     code: "P2",
     name: "Menu",
+=======
+    code: "Step 2",
+    name: "Menu architecture",
+>>>>>>> Stashed changes
     owner: "Menu Builder",
     decision: "Does the menu have a shape, or just dishes?",
     produces: "Five-role architecture + locked anchor",
@@ -71,7 +85,7 @@ export const STAGES: Stage[] = [
       {
         id: "arch.roles",
         label: "All five roles filled or deliberately empty",
-        detail: "An accidental gap reads as balance failure later. Empty on purpose is fine.",
+        detail: "An accidental gap reads as an unbalanced menu later. Empty on purpose is fine.",
         hard: true,
       },
       {
@@ -84,8 +98,13 @@ export const STAGES: Stage[] = [
   },
   {
     id: "stress",
+<<<<<<< Updated upstream
     code: "P3",
     name: "Stress-test the night",
+=======
+    code: "Step 3",
+    name: "Stress test",
+>>>>>>> Stashed changes
     owner: "Menu Builder",
     decision: "Can this kitchen finish this menu on time?",
     produces: "Balance · Make Ahead · Service Fit · Equipment Fit · Host Freedom",
@@ -94,8 +113,13 @@ export const STAGES: Stage[] = [
     gates: [
       {
         id: "stress.clear",
+<<<<<<< Updated upstream
         label: "No unresolved requirement",
         detail: "If a real requirement is not met, we'll stop rather than guess. Simplify within bounds or stand the plan down.",
+=======
+        label: "Nothing left that the night cannot be built around",
+        detail: "If a limit is genuinely breached, simplify within bounds — or decide not to host.",
+>>>>>>> Stashed changes
         hard: true,
       },
       {
@@ -114,17 +138,29 @@ export const STAGES: Stage[] = [
   },
   {
     id: "handoff",
+<<<<<<< Updated upstream
     code: "P4",
     name: "Share with Occasions",
     owner: "Desk",
     decision: "What moves forward, and what stays behind?",
     produces: "Menu, stress summary, and locked dish",
+=======
+    code: "Step 4",
+    name: "What you send on",
+    owner: "Desk",
+    decision: "What moves forward, and what stays behind?",
+    produces: "Menu shape, stress summary and locked anchor — sent to Occasion OS",
+>>>>>>> Stashed changes
     duration: "2 min",
     tool: "desk",
     gates: [
       {
         id: "handoff.scope",
+<<<<<<< Updated upstream
         label: "Share carries the menu, not private notes",
+=======
+        label: "Only the menu shape travels, never your private notes",
+>>>>>>> Stashed changes
         detail: "Drafts, rejected dishes and personal notes stay in the originating tool.",
         hard: true,
       },
@@ -138,8 +174,8 @@ export const STAGES: Stage[] = [
   },
   {
     id: "route",
-    code: "P5",
-    name: "Route build",
+    code: "Step 5",
+    name: "Prep route",
     owner: "Occasion OS",
     decision: "What happens, in what order, and who is holding it?",
     produces: "Shop → prep → serve route against declared attention",
@@ -149,7 +185,7 @@ export const STAGES: Stage[] = [
       {
         id: "route.sequence",
         label: "Shop, prep and serve stages each have an owner",
-        detail: "An unowned stage is the one that fails at 19:40.",
+        detail: "The step nobody owns is the one that falls over at 19:40.",
         hard: true,
       },
       {
@@ -162,10 +198,14 @@ export const STAGES: Stage[] = [
   },
   {
     id: "service",
-    code: "P6",
+    code: "Step 6",
     name: "Service window",
     owner: "You",
+<<<<<<< Updated upstream
     decision: "Is the plan held, or is it being improvised?",
+=======
+    decision: "Is the night being held, or improvised?",
+>>>>>>> Stashed changes
     produces: "A night that finishes on time",
     duration: "During service",
     tool: "occasion-os",
@@ -173,7 +213,11 @@ export const STAGES: Stage[] = [
       {
         id: "service.hold",
         label: "First course leaves the pass on the declared minute",
+<<<<<<< Updated upstream
         detail: "The route is only real if the first course lands on time.",
+=======
+        detail: "The route is only real if the first plate lands on time.",
+>>>>>>> Stashed changes
         hard: false,
       },
     ],
@@ -200,7 +244,7 @@ export type RunState = {
   gates: Record<string, boolean>;
   log: { at: string; kind: "control" | "gate" | "stage" | "stop" | "note" | "evidence"; text: string }[];
   startedAt: string | null;
-  /** First-party notes, keyed by stage id. */
+  /** Your own notes, keyed by step id. */
   notes: Record<string, string>;
   /** Attachment records, keyed by stage id. */
   evidence: Record<string, Evidence[]>;
@@ -225,7 +269,7 @@ export function formatBytes(n: number) {
   return `${(n / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-/** Deterministic, self-contained package of the run as it stands on this device. */
+/** Self-contained copy of the plan as it stands on this device. */
 export function buildRunPackage(state: RunState) {
   return {
     format: "salty-desk.run-package",
@@ -256,14 +300,14 @@ export function buildRunPackage(state: RunState) {
         type: e.type,
         addedAt: e.addedAt,
         gate: s.gates.find((g) => g.id === e.gateId)?.label ?? null,
-        retained: e.dataUrl ? "inline" : "by reference only",
+        retained: e.dataUrl ? "included in this file" : "listed by name only",
         dataUrl: e.dataUrl,
       })),
     })),
     log: state.log,
     limits: [
       "No allergen or dietary safety guarantee at any stage.",
-      "Evidence is first-party and local. Nothing was uploaded to produce this package.",
+      "Everything here is your own record, kept on your device. Nothing was uploaded to produce this file.",
       "Files above 1 MB are listed by name, size and type only.",
     ],
   };
@@ -272,11 +316,16 @@ export function buildRunPackage(state: RunState) {
 export function runPackageMarkdown(state: RunState) {
   const pkg = buildRunPackage(state);
   const lines: string[] = [
+<<<<<<< Updated upstream
     "# Salty Desk — this plan",
+=======
+    "# Salty Desk — your night plan",
+>>>>>>> Stashed changes
     "",
     `- Exported: ${pkg.exportedAt}`,
     `- Status: ${statusCopy(state.status).label}`,
     `- Opened: ${state.startedAt ?? "—"}`,
+<<<<<<< Updated upstream
     `- Open step: ${STAGES.find((st) => st.code === pkg.run.openStage)?.name ?? "—"} (${pkg.run.progress} cleared)`,
     "",
   ];
@@ -286,6 +335,17 @@ export function runPackageMarkdown(state: RunState) {
     lines.push("");
     for (const g of s.gates) {
       lines.push(`- [${g.signed ? "x" : " "}] (${g.kind === "hard" ? "required" : "optional"}) ${g.label}`);
+=======
+    `- Open step: ${pkg.run.openStage ?? "—"} (${pkg.run.progress} done)`,
+    "",
+  ];
+  for (const s of pkg.stages) {
+    lines.push(`## ${s.code} · ${s.name} — ${s.cleared ? "done" : "still open"}`);
+    lines.push(`Owner: ${s.owner} · Decision: ${s.decision}`);
+    lines.push("");
+    for (const g of s.gates) {
+      lines.push(`- [${g.signed ? "x" : " "}] (${g.kind === "hard" ? "required" : "worth noting"}) ${g.label}`);
+>>>>>>> Stashed changes
     }
     lines.push("");
     lines.push(`Notes: ${s.notes ?? "—"}`);
@@ -293,14 +353,22 @@ export function runPackageMarkdown(state: RunState) {
       lines.push("", "Evidence:");
       for (const e of s.evidence) {
         lines.push(
+<<<<<<< Updated upstream
           `- ${e.name} · ${formatBytes(e.size)} · ${e.type || "unknown type"} · ${e.gate ? `requirement: ${e.gate}` : "step-level"} · ${e.retained}`,
+=======
+          `- ${e.name} · ${formatBytes(e.size)} · ${e.type || "unknown type"} · ${e.gate ? `for: ${e.gate}` : "for the whole step"} · ${e.retained}`,
+>>>>>>> Stashed changes
         );
       }
     }
     lines.push("");
   }
   lines.push("## Standing limits", ...pkg.limits.map((l) => `- ${l}`), "");
+<<<<<<< Updated upstream
   lines.push("## Plan log", ...state.log.map((e) => `- ${e.at} · ${e.kind} · ${e.text}`));
+=======
+  lines.push("## What you did", ...state.log.map((e) => `- ${e.at} · ${e.text}`));
+>>>>>>> Stashed changes
   return lines.join("\n");
 }
 
@@ -325,6 +393,7 @@ export function runProgress(state: RunState) {
 export function statusCopy(status: RunStatus): { label: string; note: string } {
   switch (status) {
     case "running":
+<<<<<<< Updated upstream
       return { label: "In progress", note: "Checking each step before the plan moves on." };
     case "held":
       return { label: "Paused", note: "Nothing advances while paused. Deliberate pause." };
@@ -337,5 +406,19 @@ export function statusCopy(status: RunStatus): { label: string; note: string } {
       return { label: "Ready", note: "Every step signed off. Service window carried." };
     default:
       return { label: "Ready to start", note: "Add information to begin. Take the steps in order." };
+=======
+      return { label: "In progress", note: "Work through the checks on the open step." };
+    case "held":
+      return { label: "Paused", note: "Nothing advances while you are paused. Resume when you are ready." };
+    case "aborted":
+      return {
+        label: "Not hosting this one",
+        note: "You decided against hosting. That is a real answer — Restaurant Intelligence ranks the room instead.",
+      };
+    case "complete":
+      return { label: "Finished", note: "Every step confirmed. The service window is yours to run." };
+    default:
+      return { label: "Not started", note: "Nothing planned yet. Start a plan to take the six steps in order." };
+>>>>>>> Stashed changes
   }
 }

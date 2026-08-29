@@ -9,7 +9,7 @@ export const Route = createFileRoute("/privacy")({
       {
         name: "description",
         content:
-          "Local-first, first-party, no forced account. What Salty Desk and the suite will not do with your data or your kitchen.",
+          "Everything on your device, evidence from the source, no forced account. What Salty Desk and the suite will not do with your data or your kitchen.",
       },
     ],
   }),
@@ -26,19 +26,29 @@ function PrivacyPage() {
         </Link>
         <p className="label-mono mt-8 text-brass">Shared privacy boundary</p>
         <h1 className="mt-3 max-w-[20ch] font-display text-4xl leading-[1.05] text-bone sm:text-5xl">
-          Local-first. First-party. No forced account.
+          On your device. From the source. No forced account.
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
+<<<<<<< Updated upstream
           Core planning stays on this device. Shares move only when you choose to send them. Nothing is
           uploaded to use the desk, and nothing moves between tools until you move it.
+=======
+          Core planning runs on your device. Anything that reaches another tool is something you
+          chose to send. Nothing is uploaded to use the desk, and nothing moves between tools until
+          you move it.
+>>>>>>> Stashed changes
         </p>
 
         <ul className="mt-12 space-y-4">
           {BOUNDARIES.map((b) => (
             <li key={b.id} className="panel rounded-lg p-5 sm:p-6">
+<<<<<<< Updated upstream
               <p className="label-mono text-brass">
                 {b.group}
               </p>
+=======
+              <p className="label-mono text-brass">{b.group}</p>
+>>>>>>> Stashed changes
               <h2 className="mt-2 font-display text-xl text-bone">{b.limit}</h2>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{b.why}</p>
               <p className="mt-3 border-l border-brass/40 pl-3 text-sm leading-relaxed text-foreground/85">
@@ -65,7 +75,7 @@ function PrivacyPage() {
             Full standing rules →
           </Link>
           <Link to="/handoffs" className="text-muted-foreground hover:text-brass">
-            Handoff map
+            What travels between tools
           </Link>
         </div>
       </main>

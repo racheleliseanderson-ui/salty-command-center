@@ -18,7 +18,7 @@ export function Triage() {
     if (top && prevTop.current && prevTop.current !== top) {
       const tool = TOOLS.find((t) => t.slug === top);
       setChanged(
-        `Entry point moved to ${tool?.name} — the last constraint you declared changed the binding one.`,
+        `Now start at ${tool?.name} instead — your last answer changed which constraint matters most.`,
       );
     } else if (!top) {
       setChanged(null);
@@ -30,18 +30,18 @@ export function Triage() {
     <div className="panel grain min-w-0 overflow-hidden rounded-lg p-5 sm:p-9">
       <div className="grid min-w-0 gap-4 sm:flex sm:flex-wrap sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="label-mono text-brass">Triage console</p>
+          <p className="label-mono text-brass">Find your starting point</p>
           <h3 className="mt-3 font-display text-2xl leading-tight text-bone sm:text-4xl">
             Which tool do you actually need?
           </h3>
           <p className="mt-3 max-w-[54ch] text-sm leading-relaxed text-muted-foreground">
-            Four declared constraints. Deterministic and local — nothing is uploaded, nothing is
-            inferred, no account.
+            Four questions about the night you are planning. Your answers stay on this device —
+            nothing is uploaded, nothing is guessed at, no account.
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-3">
           <span className="label-mono">
-            {answered} of {QUESTIONS.length} declared
+            {answered} of {QUESTIONS.length} answered
           </span>
           <button
             type="button"
@@ -65,7 +65,7 @@ export function Triage() {
         {QUESTIONS.map((q, qi) => (
           <fieldset key={q.key} className="min-w-0 bg-ink-deep p-4 sm:p-6">
             <legend className="label-mono text-brass">
-              {String(qi + 1).padStart(2, "0")} · {q.key}
+              Question {qi + 1}
             </legend>
             <p className="mt-2 font-display text-lg leading-snug text-bone sm:text-xl">{q.label}</p>
             <div className="mt-4 grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2">
@@ -105,7 +105,7 @@ export function Triage() {
               : "panel-brass min-w-0 overflow-hidden rounded-lg p-5 sm:p-6"
           }
         >
-          <p className="label-mono text-brass">Verdict</p>
+          <p className="label-mono text-brass">Where to start</p>
           <h4 className="mt-3 font-display text-2xl leading-tight text-bone sm:text-3xl">
             {verdict.headline}
           </h4>
@@ -117,7 +117,7 @@ export function Triage() {
             <p className="mt-5 flex gap-3 border-t border-destructive/40 pt-4 text-[0.85rem] leading-relaxed text-foreground/85">
               <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-destructive-foreground" />
               <span className="min-w-0 break-words">
-                <span className="label-mono block text-[0.58rem]">Hard stop</span>
+                <span className="label-mono block text-[0.58rem]">Why this will not work as described</span>
                 {verdict.hardStop}
               </span>
             </p>
@@ -138,7 +138,7 @@ export function Triage() {
                 params={{ slug: verdict.entry }}
                 className="inline-flex min-h-11 min-w-0 items-center justify-center gap-2 border border-brass/50 bg-brass/10 px-4 text-[0.8rem] tracking-wide text-brass transition-colors hover:bg-brass hover:text-primary-foreground"
               >
-                Read the entry point
+                Read about this tool
                 <ArrowRight className="h-4 w-4 shrink-0" />
               </Link>
               <a
@@ -173,7 +173,7 @@ export function Triage() {
                   </p>
                   <span className="label-mono flex shrink-0 items-center gap-1.5 text-brass">
                     {lead ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
-                    {lead ? "Entry" : "Not this"} · {r.fit}%
+                    {lead ? "Start here" : "Not this one"} · {r.fit}%
                   </span>
                 </div>
                 <div className="mt-3 h-1 w-full overflow-hidden bg-border">

@@ -10,7 +10,11 @@ export const Route = createFileRoute("/intelligence")({
       {
         name: "description",
         content:
+<<<<<<< Updated upstream
           "Same altitude on every tool. Real decisions, case-file counts, and we'll stop rather than guess for Kitchen & Bar, Occasion OS, and Restaurant Intelligence.",
+=======
+          "The same depth on every tool: what each one does, what it hands on, what it counts, and where it stops — Kitchen & Bar, Occasion OS and Restaurant Intelligence.",
+>>>>>>> Stashed changes
       },
     ],
   }),
@@ -30,9 +34,15 @@ function IntelligencePage() {
           Same altitude. Full population.
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
+<<<<<<< Updated upstream
           Every app on this desk is first-class: real decisions, real case-file counts, real
           stops when a requirement is not met. No thin marketing shells. Menu building is a layer inside Occasion OS — not a
           fourth peer.
+=======
+          Every tool on this desk is built to the same depth: it names what it takes in, what it
+          hands on, what it has actually counted, and where it stops. No thin marketing shells.
+          Architecture is a layer inside Occasion OS — not a fourth tool.
+>>>>>>> Stashed changes
         </p>
 
         <div className="mt-10 grid min-w-0 grid-cols-2 gap-px overflow-hidden border border-border bg-border sm:grid-cols-3 lg:grid-cols-6">
@@ -50,7 +60,11 @@ function IntelligencePage() {
             return (
               <article key={tool.id} className="panel min-w-0 overflow-hidden rounded-lg p-6 sm:p-8">
                 <div className="flex min-w-0 flex-wrap items-center gap-3">
+<<<<<<< Updated upstream
                   <span className="label-mono text-live">Available now</span>
+=======
+                  <span className="label-mono text-live">Live</span>
+>>>>>>> Stashed changes
                   {tool.handoffOut ? (
                     <span className="label-mono text-brass">{tool.handoffOut}</span>
                   ) : null}
@@ -78,7 +92,7 @@ function IntelligencePage() {
 
                 <div className="mt-8 grid min-w-0 gap-8 lg:grid-cols-2">
                   <div className="min-w-0">
-                    <p className="label-mono text-brass">Does</p>
+                    <p className="label-mono text-brass">What it does</p>
                     <ul className="mt-3 space-y-2">
                       {tool.capabilities.map((line) => (
                         <li
@@ -92,7 +106,7 @@ function IntelligencePage() {
                     </ul>
                   </div>
                   <div className="min-w-0">
-                    <p className="label-mono text-brass">Population</p>
+                    <p className="label-mono text-brass">By the numbers</p>
                     <dl className="mt-3 grid min-w-0 grid-cols-2 gap-2">
                       {tool.metrics.map((m) => (
                         <div
@@ -105,7 +119,11 @@ function IntelligencePage() {
                       ))}
                     </dl>
                     <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+<<<<<<< Updated upstream
                       <span className="text-foreground/80">Will not: </span>
+=======
+                      <span className="text-foreground/80">Will not do: </span>
+>>>>>>> Stashed changes
                       {tool.refusals.join(" · ")}
                     </p>
                   </div>
@@ -116,6 +134,7 @@ function IntelligencePage() {
         </div>
 
         <section className="panel mt-10 rounded-lg p-6 sm:p-8">
+<<<<<<< Updated upstream
           <p className="label-mono text-brass">Menu building · inside Occasion OS</p>
           <h2 className="mt-2 font-display text-2xl text-bone">Menu building is a section</h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
@@ -125,6 +144,19 @@ function IntelligencePage() {
           <p className="mt-4 text-xs text-muted-foreground">
             RI coverage: {RI_COVERAGE.caseFiles} case files · {RI_COVERAGE.enriched} with a first-party page read ·{" "}
             {RI_COVERAGE.regionNote}
+=======
+          <p className="label-mono text-brass">Architecture · inside Occasion OS</p>
+          <h2 className="mt-2 font-display text-2xl text-bone">Menu architecture lives here</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Five-role menu architecture, stress meters, and the checks that stop a menu the kitchen
+            cannot finish all run at{" "}
+            <span className="text-bone">occasion.saltnotes.blog/architecture</span>, inside Occasion
+            OS. It is not a separate tool on this desk.
+          </p>
+          <p className="mt-4 text-xs text-muted-foreground">
+            Restaurant Intelligence covers {RI_COVERAGE.caseFiles} first-hand case files ·{" "}
+            {RI_COVERAGE.enriched} enriched · {RI_COVERAGE.regionNote}
+>>>>>>> Stashed changes
           </p>
         </section>
 
@@ -133,7 +165,7 @@ function IntelligencePage() {
             Privacy boundary →
           </Link>
           <Link to="/handoffs" className="text-muted-foreground hover:text-brass">
-            Handoff map
+            What travels between tools
           </Link>
         </div>
       </main>

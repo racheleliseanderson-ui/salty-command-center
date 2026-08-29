@@ -58,8 +58,8 @@ function readAsDataUrl(file: File) {
 
 
 /**
- * Run state is local and persistent: the run follows the reader between pages
- * and survives a reload. Nothing is uploaded, and clearing it is one control.
+ * Plan state is local and persistent: it follows the reader between pages and
+ * survives a reload. Nothing is uploaded, and deleting it is one control.
  */
 export function usePipelineRun() {
   const [run, setRun] = useState<RunState>(EMPTY_RUN);
@@ -82,7 +82,7 @@ export function usePipelineRun() {
     try {
       localStorage.setItem(RUN_STORAGE_KEY, JSON.stringify(next));
     } catch {
-      /* storage unavailable — the run holds for this session only */
+      /* storage unavailable — the plan holds for this session only */
     }
     window.dispatchEvent(new Event(EVENT));
   }, []);
@@ -101,7 +101,11 @@ export function usePipelineRun() {
       status: "running",
       startedAt: stamp(),
     };
+<<<<<<< Updated upstream
     commit(append(base, "control", "Plan started at guests & constraints. Constraints declared, nothing inferred."));
+=======
+    commit(append(base, "control", "Plan started at Step 1. Everything comes from what you declare — nothing is assumed."));
+>>>>>>> Stashed changes
   }, [append, commit]);
 
   const toggleGate = useCallback(
@@ -109,7 +113,7 @@ export function usePipelineRun() {
       const current = read();
       const next = { ...current, gates: { ...current.gates, [id]: !current.gates[id] } };
       commit(
-        append(next, "gate", `${next.gates[id] ? "Signed" : "Withdrawn"} · ${label}`),
+        append(next, "gate", `${next.gates[id] ? "Confirmed" : "Un-ticked"} · ${label}`),
       );
     },
     [append, commit],
@@ -125,7 +129,11 @@ export function usePipelineRun() {
         append(
           current,
           "stop",
+<<<<<<< Updated upstream
           `More information needed at ${stage.name} — ${blocking.length} required item${blocking.length > 1 ? "s" : ""} not confirmed yet.`,
+=======
+          `Stayed on ${stage.code} · ${stage.name} — ${blocking.length} required check${blocking.length > 1 ? "s" : ""} still to confirm.`,
+>>>>>>> Stashed changes
         ),
       );
       return;
@@ -139,8 +147,13 @@ export function usePipelineRun() {
         next,
         "stage",
         last
+<<<<<<< Updated upstream
           ? `${stage.name} signed off. Plan ready.`
           : `${stage.name} signed off → ${STAGES[current.stage + 1]!.name}.`,
+=======
+          ? `${stage.code} · ${stage.name} done. The plan is finished.`
+          : `${stage.code} · ${stage.name} done → ${STAGES[current.stage + 1]!.code} · ${STAGES[current.stage + 1]!.name}.`,
+>>>>>>> Stashed changes
       ),
     );
   }, [append, commit]);
@@ -154,7 +167,11 @@ export function usePipelineRun() {
       append(
         { ...current, stage: target, status: "running" },
         "stage",
+<<<<<<< Updated upstream
         `Reopened ${stage.name}. Later sign-offs stand until withdrawn.`,
+=======
+        `Back on ${stage.code} · ${stage.name}. Later checks stay ticked until you un-tick them.`,
+>>>>>>> Stashed changes
       ),
     );
   }, [append, commit]);
@@ -166,7 +183,11 @@ export function usePipelineRun() {
       append(
         { ...current, status: held ? "running" : "held" },
         "control",
+<<<<<<< Updated upstream
         held ? "Pause released. Plan resumed." : "Plan paused. Nothing advances until released.",
+=======
+        held ? "Resumed." : "Paused. Nothing advances until you resume.",
+>>>>>>> Stashed changes
       ),
     );
   }, [append, commit]);
@@ -177,7 +198,11 @@ export function usePipelineRun() {
       append(
         { ...current, status: "aborted" },
         "stop",
+<<<<<<< Updated upstream
         "Plan stood down. Hosting stopped — dine out instead of improvising.",
+=======
+        "Decided not to host this one. Dining out beats improvising the night.",
+>>>>>>> Stashed changes
       ),
     );
   }, [append, commit]);
@@ -198,7 +223,7 @@ export function usePipelineRun() {
       const current = read();
       const text = (current.notes[stageId] ?? "").trim();
       commit(
-        append(current, "note", text ? `Note recorded at ${code} (${text.length} chars).` : `Note cleared at ${code}.`),
+        append(current, "note", text ? `Note saved on ${code} (${text.length} characters).` : `Note cleared on ${code}.`),
       );
     },
     [append, commit],
@@ -227,7 +252,11 @@ export function usePipelineRun() {
           append(
             next,
             "evidence",
+<<<<<<< Updated upstream
             `Attached ${file.name} (${formatBytes(file.size)}) at ${code}${gateId ? " · tied to a requirement" : ""}${
+=======
+            `Added ${file.name} (${formatBytes(file.size)}) to ${code}${gateId ? " · tied to a check" : ""}${
+>>>>>>> Stashed changes
               inline ? "" : " · listed by name only"
             }.`,
           ),
@@ -248,7 +277,7 @@ export function usePipelineRun() {
           [stageId]: (current.evidence[stageId] ?? []).filter((e) => e.id !== id),
         },
       };
-      commit(append(next, "evidence", `Withdrew ${item?.name ?? "attachment"} at ${code}.`));
+      commit(append(next, "evidence", `Removed ${item?.name ?? "attachment"} from ${code}.`));
     },
     [append, commit],
   );
@@ -266,7 +295,11 @@ export function usePipelineRun() {
       } else {
         download(`salty-desk-run-${slug}.md`, "text/markdown", runPackageMarkdown(current));
       }
+<<<<<<< Updated upstream
       commit(append(current, "control", `Plan downloaded as ${format.toUpperCase()}. Local file, no upload.`));
+=======
+      commit(append(current, "control", `Plan downloaded as ${format.toUpperCase()}. A file on your device — nothing uploaded.`));
+>>>>>>> Stashed changes
     },
     [append, commit],
   );

@@ -31,7 +31,7 @@ export function describeCase(a: Answers): string[] {
   return out;
 }
 
-/** Worked packet example, written from the reader's declared constraints. */
+/** Worked example of what would travel, written from the reader's declared constraints. */
 export function packetExample(
   a: Answers,
   handoffId: string,
@@ -123,7 +123,11 @@ export function bindingBoundaries(a: Answers): { boundary: Boundary; because: st
     out.push(
       hit(
         "fail-closed",
+<<<<<<< Updated upstream
         "Your combination does not meet a real requirement. The plan stops rather than quietly degrading.",
+=======
+        "What you have declared cannot be built as a hosting plan. The tool says so plainly instead of quietly shrinking the night to fit.",
+>>>>>>> Stashed changes
       ),
     );
   }

@@ -10,13 +10,21 @@ export const Route = createFileRoute("/boundary")({
       {
         name: "description",
         content:
+<<<<<<< Updated upstream
           "The standing limits of the Salty & Clever suite: local-first storage, first-party evidence, no allergen safety guarantees, we'll stop rather than guess.",
+=======
+          "The standing limits of the Salty & Clever suite: everything kept on your device, first-hand evidence only, no allergen safety guarantees, and a plan that stops rather than shrink to fit.",
+>>>>>>> Stashed changes
       },
       { property: "og:title", content: "Shared boundary — Salty Desk" },
       {
         property: "og:description",
         content:
+<<<<<<< Updated upstream
           "Educational planning only. Dietary tags are filters, not safety controls. If a real requirement is not met, the plan stops.",
+=======
+          "Educational planning only. Dietary tags are filters, not safety controls. When a real limit is breached, the plan stops and names it.",
+>>>>>>> Stashed changes
       },
     ],
   }),
@@ -46,7 +54,7 @@ function Boundary() {
       </section>
 
       <section className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
-        <p className="label-mono text-brass">Hard limits, grouped</p>
+        <p className="label-mono text-brass">The limits, grouped</p>
         <div className="mt-8 space-y-12">
           {GROUPS.map((g) => {
             const rows = BOUNDARIES.filter((b) => b.group === g);

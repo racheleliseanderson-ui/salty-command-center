@@ -28,9 +28,15 @@ function HostPathPage() {
           Two steps, in this order.
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
+<<<<<<< Updated upstream
           The Host Path sequences the decisions that actually matter for a night at home. Menu
           building (five-role menu stress) lives inside Occasion OS — not as a separate tool. Nothing
           moves between tools until you send it.
+=======
+          The Host Path puts the decisions that actually make or break a night at home in the order
+          you have to take them. Architecture (five-role menu stress) lives inside Occasion OS — not
+          as a separate tool. Nothing moves between tools until you send it.
+>>>>>>> Stashed changes
         </p>
 
         <ol className="mt-12 space-y-6">
@@ -39,7 +45,11 @@ function HostPathPage() {
             return (
               <li key={step.step} className="panel min-w-0 overflow-hidden rounded-lg p-6 sm:p-8">
                 <p className="label-mono text-brass">
+<<<<<<< Updated upstream
                   {String(step.step).padStart(2, "0")} · {tool?.name ?? step.appId}
+=======
+                  {String(step.step).padStart(2, "0")} · {tool?.name ?? "The desk"}
+>>>>>>> Stashed changes
                 </p>
                 <h2 className="mt-3 font-display text-3xl leading-snug text-bone">{step.title}</h2>
                 <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
@@ -66,8 +76,13 @@ function HostPathPage() {
           <h2 className="mt-2 font-display text-2xl text-bone">What&apos;s already on the shelf?</h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             Kitchen & Bar Intelligence is the daily execution layer — not required for Host Path.
+<<<<<<< Updated upstream
             Use it when you are cooking from what you already have, then optionally share
             your shelf with Occasions.
+=======
+            Use it when you are cooking from what you already have, then optionally send your
+            confirmed availability list into Occasion OS.
+>>>>>>> Stashed changes
           </p>
           <a
             href="https://kitchen.saltnotes.blog/"
@@ -84,9 +99,16 @@ function HostPathPage() {
           <p className="label-mono text-brass">Menu building inside Occasion OS</p>
           <h2 className="mt-2 font-display text-2xl text-bone">Menu stress is not a fourth tool</h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+<<<<<<< Updated upstream
             Five-role menu building, stress meters, locking a dish, and stopping when a real
             requirement is not met all live inside Occasion OS under the same host look. Menu
             building is a section, not a peer on this desk.
+=======
+            Five-role architecture, stress meters, anchor lock, and the checks that stop a menu the
+            kitchen cannot finish all run at{" "}
+            <span className="text-bone">occasion.saltnotes.blog/architecture</span> under the same
+            house style. It is a layer inside Occasion OS, not a tool of its own on this desk.
+>>>>>>> Stashed changes
           </p>
           <a
             href="https://occasion.saltnotes.blog/architecture"
@@ -104,7 +126,11 @@ function HostPathPage() {
             ← Back to desk
           </Link>
           <Link to="/handoffs" className="inline-flex items-center gap-2 text-sm text-brass">
+<<<<<<< Updated upstream
             What travels
+=======
+            What travels between tools
+>>>>>>> Stashed changes
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>

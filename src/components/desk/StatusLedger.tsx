@@ -44,6 +44,7 @@ export function StatusLedger() {
             <p className="mt-4 font-display text-2xl leading-tight text-bone">{row.name}</p>
 
             <dl className="mt-5 space-y-2 border-l border-brass/30 pl-4 text-[0.8rem]">
+<<<<<<< Updated upstream
               <Row k="Updated" v={row.updated} />
             </dl>
 
@@ -53,6 +54,19 @@ export function StatusLedger() {
             </p>
             <p className="mt-3 text-[0.8rem] leading-relaxed text-muted-foreground">
               <span className="label-mono block">What it will not do</span>
+=======
+              <Row k="What it does" v={row.build} />
+              <Row k="What it hands on" v={row.contract} />
+              <Row k="Last updated" v={row.updated} />
+            </dl>
+
+            <p className="mt-5 text-[0.8rem] leading-relaxed text-foreground/80">
+              <span className="label-mono block">Takes in</span>
+              {row.accepts}
+            </p>
+            <p className="mt-3 text-[0.8rem] leading-relaxed text-muted-foreground">
+              <span className="label-mono block">Will not do</span>
+>>>>>>> Stashed changes
               {row.rejects}
             </p>
 
@@ -62,7 +76,11 @@ export function StatusLedger() {
                 params={{ slug: tool.slug }}
                 className="mt-6 inline-flex items-center gap-2 text-[0.8rem] text-brass transition-colors hover:text-bone"
               >
+<<<<<<< Updated upstream
                 Open this tool
+=======
+                Read the full page
+>>>>>>> Stashed changes
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             ) : null}

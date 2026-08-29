@@ -35,7 +35,11 @@ export function HandoffMap({
   if (visible.length === 0) {
     return (
       <p className="label-mono border border-dashed border-border p-6 leading-relaxed">
+<<<<<<< Updated upstream
         No field matches “{query}”. Clear the filter to see what travels.
+=======
+        Nothing matches “{query}”. Clear the filter to see everything that can travel.
+>>>>>>> Stashed changes
       </p>
     );
   }
@@ -50,23 +54,27 @@ export function HandoffMap({
           </div>
 
           <div className="mt-5 grid gap-3 sm:flex sm:flex-wrap sm:items-center sm:gap-5">
-            <Node name={h.from} id={h.fromId} />
+            <Node name={h.from} />
             <ArrowRight className="trace-arrow hidden h-5 w-5 shrink-0 text-brass sm:block" />
             <ArrowDown className="h-5 w-5 shrink-0 text-brass sm:hidden" />
-            <Node name={h.to} id={h.toId} />
+            <Node name={h.to} />
           </div>
 
           {!compact && (
             <>
               <p className="mt-5 max-w-[70ch] text-[0.88rem] leading-relaxed text-foreground/85">
+<<<<<<< Updated upstream
                 <span className="label-mono block text-brass">Why this share exists</span>
+=======
+                <span className="label-mono block text-brass">Why this transfer exists</span>
+>>>>>>> Stashed changes
                 {h.purpose}
               </p>
 
               <div className="mt-7 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-2">
                 <div className="bg-ink-deep p-5">
                   <p className="label-mono flex items-center gap-2 text-brass">
-                    <Check className="h-3.5 w-3.5" /> Moves forward
+                    <Check className="h-3.5 w-3.5" /> Travels with it
                   </p>
                   <ul className="mt-4 space-y-4">
                     {h.moves.map((m) => (
@@ -138,7 +146,11 @@ export function HandoffMap({
   );
 }
 
+<<<<<<< Updated upstream
 function Node({ name }: { name: string; id?: string }) {
+=======
+function Node({ name }: { name: string }) {
+>>>>>>> Stashed changes
   return (
     <span className="min-w-0">
       <span className="block font-display text-lg leading-tight text-bone sm:text-xl">{name}</span>
