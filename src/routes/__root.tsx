@@ -77,19 +77,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-<<<<<<< Updated upstream
       { title: "Salty Desk — Decide what happens next" },
       {
         name: "description",
         content:
           "Decision intake and continuity for Salty & Clever: keep a working brief and move into Kitchen & Bar Intelligence, Occasion OS, or Restaurant Intelligence with a clear next step.",
-=======
-      { title: "Salty Desk — Host & dine decisions" },
-      {
-        name: "description",
-        content:
-          "Salty Desk points you at the right tool in the Salty & Clever host-and-dine suite: Kitchen & Bar Intelligence, Occasion Operating System (Architecture inside), and Restaurant Intelligence.",
->>>>>>> Stashed changes
       },
       { name: "author", content: "Salty & Clever" },
       { property: "og:type", content: "website" },

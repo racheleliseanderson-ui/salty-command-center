@@ -22,13 +22,8 @@ export const KIND_LABEL: Record<SearchKind, string> = {
   handoff: "What travels",
   limit: "Limit",
   term: "Term",
-<<<<<<< Updated upstream
   ledger: "Desk",
   log: "Desk log",
-=======
-  ledger: "Tool status",
-  log: "What changed",
->>>>>>> Stashed changes
   stage: "Plan step",
 };
 
@@ -51,7 +46,7 @@ function entry(
   };
 }
 
-/** Flattened index over everything the desk holds. */
+/** Flattened, deterministic index over everything the desk holds. */
 export const SEARCH_INDEX: SearchHit[] = [
   ...STAGES.map((st) =>
     entry(
@@ -105,14 +100,7 @@ export const SEARCH_INDEX: SearchHit[] = [
     ], { to: "/reference" }),
   ),
   ...DESK_LOG.map((l, i) =>
-    entry(
-      "log",
-      `log-${i}`,
-      `${TOOLS.find((t) => t.id === l.id)?.name ?? "The desk"} · ${l.date}`,
-      l.entry,
-      [l.id],
-      { to: "/reference" },
-    ),
+    entry("log", `log-${i}`, `${l.id} · ${l.date}`, l.entry, [], { to: "/reference" }),
   ),
 ];
 

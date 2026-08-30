@@ -4,22 +4,18 @@ import { ArrowRight } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
 import { Reveal } from "@/components/desk/Reveal";
 import { SearchField } from "@/components/desk/SearchField";
-import { DESK_LOG, GLOSSARY, LEDGER, TOOLS } from "@/lib/desk-data";
+import { DESK_LOG, GLOSSARY, LEDGER } from "@/lib/desk-data";
 
 export const Route = createFileRoute("/reference")({
   head: () => ({
     meta: [
-      { title: "Plain words — Salty Desk" },
+      { title: "Reference — suite vocabulary & desk log | Salty Desk" },
       {
         name: "description",
         content:
-<<<<<<< Updated upstream
           "Plain definitions for the Salty & Clever suite: locked dish, we'll stop rather than guess, stress axis, confirm burden, thin field — plus the current desk log.",
-=======
-          "Plain definitions for the Salty & Clever suite: anchor, blocking constraint, stress axis, confirm burden, thin field — plus what each tool does right now, and what changed recently.",
->>>>>>> Stashed changes
       },
-      { property: "og:title", content: "Plain words — Salty Desk" },
+      { property: "og:title", content: "Reference — suite vocabulary & desk log" },
       {
         property: "og:description",
         content:
@@ -55,7 +51,7 @@ function ReferencePage() {
 
       <section className="border-b border-border bg-ink-deep">
         <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 sm:py-24">
-          <p className="label-mono text-brass">Plain words</p>
+          <p className="label-mono text-brass">Reference</p>
           <h1 className="display-xl mt-6 max-w-[18ch] text-bone">
             The words, <span className="text-brass">defined once.</span>
           </h1>
@@ -68,13 +64,13 @@ function ReferencePage() {
             <SearchField
               value={q}
               onChange={setQ}
-              label="Filter terms and recent changes"
-              placeholder="Filter terms and recent changes…"
+              label="Filter reference terms and desk log"
+              placeholder="Filter terms and log entries…"
               count={terms.length + log.length}
               countLabel="entries shown"
             />
             <p className="label-mono mt-3">
-              Press ⌘K to search the whole desk — tools, transfers and limits.
+              Press ⌘K for suite-wide search across tools, handoffs and limits.
             </p>
           </div>
         </div>
@@ -101,28 +97,17 @@ function ReferencePage() {
 
       <section className="border-t border-border bg-ink-deep">
         <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8">
-<<<<<<< Updated upstream
           <p className="label-mono text-brass">What each tool takes right now</p>
           <div className="rule-brass mt-3 w-24" />
           <h2 className="mt-5 font-display text-4xl leading-tight text-bone">
             What each tool takes right now
-=======
-          <p className="label-mono text-brass">Where each tool stands</p>
-          <div className="rule-brass mt-3 w-24" />
-          <h2 className="mt-5 font-display text-4xl leading-tight text-bone">
-            What each tool takes in, and what it hands on
->>>>>>> Stashed changes
           </h2>
 
           <div className="mt-10 overflow-x-auto">
             <table className="w-full min-w-[720px] border-collapse text-left">
               <thead>
                 <tr>
-<<<<<<< Updated upstream
                   {["Tool", "State", "Updated"].map((h) => (
-=======
-                  {["Tool", "Status", "What it does", "What it hands on", "Last updated"].map((h) => (
->>>>>>> Stashed changes
                     <th key={h} className="label-mono border-b border-border pb-3 pr-6">
                       {h}
                     </th>
@@ -150,19 +135,11 @@ function ReferencePage() {
               <div key={row.id} className="bg-ink-deep p-6">
                 <p className="label-mono text-brass">{row.name}</p>
                 <p className="mt-4 text-[0.83rem] leading-relaxed text-foreground/85">
-<<<<<<< Updated upstream
                   <span className="label-mono block">What it takes</span>
                   {row.accepts}
                 </p>
                 <p className="mt-4 text-[0.83rem] leading-relaxed text-muted-foreground">
                   <span className="label-mono block">What it will not do</span>
-=======
-                  <span className="label-mono block">Takes in</span>
-                  {row.accepts}
-                </p>
-                <p className="mt-4 text-[0.83rem] leading-relaxed text-muted-foreground">
-                  <span className="label-mono block">Will not do</span>
->>>>>>> Stashed changes
                   {row.rejects}
                 </p>
               </div>
@@ -172,17 +149,13 @@ function ReferencePage() {
       </section>
 
       <section className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8">
-        <p className="label-mono text-brass">Recent changes</p>
+        <p className="label-mono text-brass">Desk log</p>
         <div className="rule-brass mt-3 w-24" />
-        <h2 className="mt-5 font-display text-4xl leading-tight text-bone">What changed lately</h2>
+        <h2 className="mt-5 font-display text-4xl leading-tight text-bone">Recent to the desk</h2>
         <ul className="mt-10 divide-y divide-border border-t border-border">
           {log.map((l) => (
             <li key={l.date + l.id} className="grid gap-2 py-5 sm:grid-cols-[9rem_1fr]">
               <span className="label-mono">{l.date}</span>
-<<<<<<< Updated upstream
-=======
-              <span className="label-mono text-brass">{TOOLS.find((t) => t.id === l.id)?.name ?? "The desk"}</span>
->>>>>>> Stashed changes
               <span className="text-[0.88rem] leading-relaxed text-foreground/85">{l.entry}</span>
             </li>
           ))}
@@ -192,7 +165,7 @@ function ReferencePage() {
           to="/boundary"
           className="mt-12 inline-flex items-center gap-2 text-sm text-brass transition-colors hover:text-bone"
         >
-          Read the standing limits
+          Read the shared boundary
           <ArrowRight className="h-4 w-4" />
         </Link>
       </section>

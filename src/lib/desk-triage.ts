@@ -137,13 +137,13 @@ export function evaluate(a: Answers): Verdict {
   if (a.mode !== "out") {
     if (a.covers === "large" && a.attention === "none") {
       hardStop =
-        "9+ at the table with no attention to give during service. Plated service cannot be run by nobody — this one does not work as declared.";
+        "9+ covers with no host attention during service. Plated capacity fails; this is a hard stop, not a warning.";
     } else if (a.runway === "tonight" && a.covers === "large") {
       hardStop =
-        "9+ at the table and no prep window. There is no way to stage the prep, so this night cannot be built as declared.";
+        "9+ covers with no prep window. The prep route cannot be staged; the plan fails closed.";
     } else if (a.runway === "tonight" && a.attention === "none" && a.mode === "cook") {
       hardStop =
-        "Service tonight with no attention to give it. Nothing later in the night recovers that.";
+        "Service tonight with no attention to give it. Nothing downstream can recover that.";
     }
   }
 
@@ -187,9 +187,9 @@ export function evaluate(a: Answers): Verdict {
     return {
       ranked,
       entry: null,
-      headline: "Nothing weighed up yet",
+      headline: "No verdict yet",
       detail:
-        "Answer the four questions. The desk will name one place to start and say plainly which tools are wrong for it.",
+        "Answer the four questions. The desk will name one entry point and say plainly which tools are wrong for it.",
       handoff: "Nothing moves between tools until you send it.",
     };
   }
@@ -199,9 +199,9 @@ export function evaluate(a: Answers): Verdict {
       ranked,
       entry: "restaurant-intelligence",
       headline: "Don't host this one",
-      detail: "The night you have described cannot be run as declared. Going out is the right call here — not a consolation prize.",
+      detail: "The constraints breach a hard stop. Dining out is the correct outcome here, not a failure.",
       handoff:
-        "Optional, and only if you choose it: occasion type, party size and date window → Restaurant Intelligence.",
+        "Optional, reader-initiated: occasion type, party size, and date window → Restaurant Intelligence.",
       hardStop,
     };
   }
@@ -215,7 +215,6 @@ export function evaluate(a: Answers): Verdict {
 
   const handoffs: Record<Tool["slug"], string> = {
     "kitchen-bar":
-<<<<<<< Updated upstream
       "Next: share your shelf with Occasions. You send it. Nothing silent.",
     "menu-builder":
       "Next: menu, stress summary, and locked dish → Occasion OS.",
@@ -223,15 +222,6 @@ export function evaluate(a: Answers): Verdict {
       "Next: optional occasion context → Restaurant Intelligence, only if you choose it.",
     "restaurant-intelligence":
       "Next: first-party case file + evidence trail → your own records.",
-=======
-      "Next, if you want it: send your confirmed availability list to Occasion OS. You send it — nothing moves on its own.",
-    "menu-builder":
-      "Next, if you want it: send the menu shape, stress summary and locked anchor to Occasion OS.",
-    "occasion-os":
-      "Next, if you want it: send the occasion details to Restaurant Intelligence — only if you choose to.",
-    "restaurant-intelligence":
-      "Next, if you want it: keep the case file and its evidence trail in your own records.",
->>>>>>> Stashed changes
   };
 
   return {

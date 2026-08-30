@@ -72,7 +72,7 @@ function ToolNotFound() {
     <div className="min-h-dvh bg-ink">
       <DeskHeader />
       <div className="mx-auto max-w-[1240px] px-5 py-32 sm:px-8">
-        <p className="label-mono text-brass">Not on this desk</p>
+        <p className="label-mono text-brass">Unknown record</p>
         <h1 className="display-xl mt-5 max-w-[16ch] text-bone">No such tool at this desk.</h1>
         <Link to="/" className="mt-10 inline-flex items-center gap-2 text-sm text-brass">
           Back to the desk <ArrowRight className="h-4 w-4" />
@@ -132,11 +132,7 @@ function ToolPage() {
               to="/handoffs"
               className="inline-flex items-center gap-2 border border-border px-5 py-3 text-sm tracking-wide text-muted-foreground transition-colors hover:border-brass/50 hover:text-brass"
             >
-<<<<<<< Updated upstream
               See what travels
-=======
-              What it sends and receives
->>>>>>> Stashed changes
             </Link>
           </div>
         </div>
@@ -145,10 +141,10 @@ function ToolPage() {
       <section className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8">
         <div className="grid gap-10 lg:grid-cols-2">
           <Reveal>
-            <Panel title="What you need to bring" items={detail.inputs} />
+            <Panel title="Inputs it demands" items={detail.inputs} />
           </Reveal>
           <Reveal delay={90}>
-            <Panel title="What you get back" items={detail.returns} tone="brass" />
+            <Panel title="What it returns" items={detail.returns} tone="brass" />
           </Reveal>
         </div>
 
@@ -156,11 +152,7 @@ function ToolPage() {
           <Reveal>
             <div className="border border-destructive/40 bg-destructive/10 p-6 sm:p-7">
               <p className="label-mono flex items-center gap-2 text-destructive-foreground/85">
-<<<<<<< Updated upstream
                 <TriangleAlert className="h-3.5 w-3.5" /> We'll stop rather than guess
-=======
-                <TriangleAlert className="h-3.5 w-3.5" /> What stops the plan
->>>>>>> Stashed changes
               </p>
               <ul className="mt-4 space-y-3 text-[0.86rem] leading-relaxed text-foreground/85">
                 {detail.hardStops.map((h) => (
@@ -170,17 +162,14 @@ function ToolPage() {
                   </li>
                 ))}
               </ul>
-              <p className="label-mono mt-5">
-                These are real conflicts, not warnings you can click past. The tool names the limit it
-                hit and stops there.
-              </p>
+              <p className="label-mono mt-5">A hard stop is a refusal, not a warning.</p>
             </div>
           </Reveal>
 
           <Reveal delay={90}>
             <div className="panel rounded-lg p-6 sm:p-7">
               <p className="label-mono flex items-center gap-2">
-                <Lock className="h-3.5 w-3.5" /> What it will never do
+                <Lock className="h-3.5 w-3.5" /> Refuses outright
               </p>
               <ul className="mt-4 space-y-2 text-[0.86rem] leading-relaxed text-muted-foreground">
                 {tool.refusals.map((r) => (
@@ -188,10 +177,10 @@ function ToolPage() {
                 ))}
               </ul>
 
-              <p className="label-mono mt-7 text-brass">What it sends and receives</p>
+              <p className="label-mono mt-7 text-brass">What travels</p>
               <ul className="mt-3 space-y-2 text-[0.84rem] leading-relaxed text-foreground/80">
-                {tool.handoffIn ? <li>Takes in ← {tool.handoffIn}</li> : null}
-                {tool.handoffOut ? <li>Hands on → {tool.handoffOut}</li> : null}
+                {tool.handoffIn ? <li>In ← {tool.handoffIn}</li> : null}
+                {tool.handoffOut ? <li>Out → {tool.handoffOut}</li> : null}
               </ul>
             </div>
           </Reveal>
@@ -228,7 +217,7 @@ function ToolPage() {
             to="/reference"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-brass"
           >
-            Plain words, defined
+            Suite vocabulary
           </Link>
         </div>
       </section>

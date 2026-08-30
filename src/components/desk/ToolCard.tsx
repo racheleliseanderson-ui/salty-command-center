@@ -56,13 +56,9 @@ export function ToolCard({ tool, index }: { tool: Tool; index: number }) {
       <div className="flex min-w-0 flex-1 flex-col gap-5 p-5 sm:p-8">
         <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
           <StatusPip status={tool.status} note={tool.statusNote} />
-<<<<<<< Updated upstream
           <span className="label-mono shrink-0">
             {String(index + 1).padStart(2, "0")}
           </span>
-=======
-          <span className="label-mono shrink-0">{String(index + 1).padStart(2, "0")}</span>
->>>>>>> Stashed changes
         </div>
 
         <div className="min-w-0">
@@ -73,7 +69,7 @@ export function ToolCard({ tool, index }: { tool: Tool; index: number }) {
         </div>
 
         <div className="min-w-0 space-y-4 border-l border-brass/30 pl-4">
-          <Field label="The decision it settles" value={tool.decision} strong />
+          <Field label="Decision it serves" value={tool.decision} strong />
           <Field label="Use it when" value={tool.useWhen} />
           <Field label="Not this tool" value={tool.notFor} />
         </div>
@@ -90,7 +86,7 @@ export function ToolCard({ tool, index }: { tool: Tool; index: number }) {
         </dl>
 
         <div className="min-w-0">
-          <p className="label-mono">What it does</p>
+          <p className="label-mono">Does</p>
           <ul className="mt-3 space-y-2">
             {tool.capabilities.map((c) => (
               <li key={c} className="flex gap-3 text-[0.83rem] leading-relaxed text-foreground/85">
@@ -102,11 +98,7 @@ export function ToolCard({ tool, index }: { tool: Tool; index: number }) {
         </div>
 
         <div className="min-w-0 overflow-hidden border border-destructive/35 bg-destructive/10 p-4">
-<<<<<<< Updated upstream
           <p className="label-mono text-destructive-foreground/80">Does not</p>
-=======
-          <p className="label-mono text-destructive-foreground/80">What it will not do</p>
->>>>>>> Stashed changes
           <ul className="mt-2 space-y-1.5 text-[0.8rem] leading-relaxed text-foreground/75">
             {tool.refusals.map((r) => (
               <li key={r} className="break-words">
@@ -138,7 +130,7 @@ export function ToolCard({ tool, index }: { tool: Tool; index: number }) {
             params={{ slug: tool.slug }}
             className="inline-flex min-h-11 items-center justify-center px-4 text-[0.8rem] text-muted-foreground hover:text-brass"
           >
-            Read the full page
+            Full record
           </Link>
         </div>
       </div>
@@ -166,7 +158,7 @@ function Field({ label, value, strong }: { label: string; value: string; strong?
 function HandoffLine({ dir, text }: { dir: "in" | "out"; text: string }) {
   return (
     <p className="flex min-w-0 items-start gap-2 text-[0.78rem] leading-relaxed text-muted-foreground">
-      <span className="label-mono shrink-0 text-brass/80">{dir === "in" ? "Takes in ←" : "Hands on →"}</span>
+      <span className="label-mono shrink-0 text-brass/80">{dir === "in" ? "In ←" : "Out →"}</span>
       <span className="min-w-0 break-words">{text}</span>
     </p>
   );

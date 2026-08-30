@@ -2,20 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { CommandPalette } from "@/components/desk/CommandPalette";
 import { DisplayControls } from "@/components/desk/DisplayControls";
 
-<<<<<<< Updated upstream
 /** The suite ribbon is the primary navigation. The Desk should not repeat it with a second tab set. */
-=======
-const NAV = [
-  { to: "/", label: "Desk", exact: true },
-  { to: "/host-path", label: "Host Path", exact: false },
-  { to: "/handoffs", label: "What travels", exact: false },
-  { to: "/intelligence", label: "Intelligence", exact: false },
-  { to: "/privacy", label: "Privacy", exact: false },
-  { to: "/boundary", label: "Standing rules", exact: false },
-] as const;
-
-/** Suite ribbon — three equal tools + this desk. Architecture is inside Occasion OS. */
->>>>>>> Stashed changes
 const SUITE = [
   { href: "https://salty.saltnotes.blog/", label: "Decision Desk", short: "Desk", id: "desk" },
   { href: "https://kitchen.saltnotes.blog/", label: "Kitchen & Bar", short: "Kitchen", id: "kitchen" },
@@ -85,15 +72,9 @@ export function DeskFooter() {
         <div className="min-w-0">
           <p className="font-display text-2xl text-bone">Salty Desk</p>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
-<<<<<<< Updated upstream
             Decision intake and continuity for the Salty & Clever host-and-dine suite. The Desk
             keeps the working question visible, recommends the next instrument, and leaves the
             specialized work to the specialized tool.
-=======
-            Where you decide how the night goes, across the Salty &amp; Clever host-and-dine suite.
-            Three independent tools, all built to the same depth. Architecture lives inside Occasion
-            OS. The desk points; the tools do the work.
->>>>>>> Stashed changes
           </p>
           <p className="label-mono mt-6">Salty & Clever · host-and-dine decision support</p>
         </div>
@@ -122,7 +103,6 @@ export function DeskFooter() {
         <div className="min-w-0">
           <p className="label-mono">Desk notes</p>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-<<<<<<< Updated upstream
             <li>
               <Link to="/handoffs" className="hover:text-brass">
                 What can move between tools
@@ -142,21 +122,6 @@ export function DeskFooter() {
           <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
             No allergen safety guarantees. No silent movement between tools. Hard stops stay hard.
           </p>
-=======
-            <li>Nothing moves between tools unless you send it</li>
-            <li>First-hand evidence only</li>
-            <li>No allergen safety guarantees</li>
-            <li>Real conflicts stop the plan</li>
-          </ul>
-          <div className="mt-6 flex flex-wrap gap-3 text-sm">
-            <Link to="/privacy" className="text-brass hover:underline">
-              Privacy
-            </Link>
-            <Link to="/intelligence" className="text-muted-foreground hover:text-brass">
-              How the tools compare
-            </Link>
-          </div>
->>>>>>> Stashed changes
         </div>
       </div>
     </footer>
