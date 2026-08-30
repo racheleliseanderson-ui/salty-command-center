@@ -1,7 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 
 import { compareHostAndDine, type Lean } from "@/lib/desk-compare";
-import { TOOLS } from "@/lib/desk-data";
+import { TOOLS, type Tool } from "@/lib/desk-data";
 import type { Answers } from "@/lib/desk-triage";
 
 const LEAN_COPY: Record<Lean, { label: string; className: string }> = {
@@ -19,7 +19,15 @@ const LEAN_COPY: Record<Lean, { label: string; className: string }> = {
  * recommended next investigation. A number here would be a guess wearing a
  * uniform.
  */
-export function HostVsDine({ answers, hardStop }: { answers: Answers; hardStop?: string }) {
+export function HostVsDine({
+  answers,
+  hardStop,
+  resolveHref,
+}: {
+  answers: Answers;
+  hardStop?: string | undefined;
+  resolveHref?: ((slug: Tool["slug"]) => string) | undefined;
+}) {
   const comparison = compareHostAndDine(answers, hardStop);
   const tool = TOOLS.find((t) => t.slug === comparison.next.tool);
 
@@ -106,7 +114,7 @@ export function HostVsDine({ answers, hardStop }: { answers: Answers; hardStop?:
         </p>
         {tool && (
           <a
-            href={tool.href}
+            href={resolveHref?.(tool.slug) ?? tool.href}
             className="press tap mt-5 inline-flex min-h-[44px] items-center gap-2 bg-brass px-5 text-sm font-medium tracking-wide text-primary-foreground transition-colors hover:bg-bone"
           >
             {comparison.next.action}

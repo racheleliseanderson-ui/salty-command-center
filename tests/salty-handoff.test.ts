@@ -32,6 +32,15 @@ import {
   dismissImport,
   shouldApply,
 } from "../src/lib/salty-handoff/import-session.ts";
+import {
+  answersFromBrief,
+  applyReturningHandoff,
+  handoffFromBrief,
+  isBriefComplete,
+  resumeUrlForTool,
+  type WorkingBrief,
+} from "../src/lib/salty-handoff/apply.ts";
+import { createDecision } from "../src/lib/desk-decision.ts";
 
 const NOW = Date.parse("2026-08-28T18:00:00.000Z");
 
@@ -366,4 +375,59 @@ test("the encoded token is url-safe", () => {
 test("the version constant matches the wire value", () => {
   assert.equal(HANDOFF_VERSION, 2);
   assert.equal(fullPacket().v, HANDOFF_VERSION);
+});
+
+/* ── desk apply ────────────────────────────────────────────────────────────── */
+
+const BRIEF: WorkingBrief = {
+  intent: "run-night",
+  party: "3-6",
+  horizon: "few-days",
+  friction: "service",
+  savedAt: "2026-08-30T12:00:00.000Z",
+};
+
+test("a complete brief becomes a host packet for Occasion OS", () => {
+  const { url, handoff } = handoffFromBrief(BRIEF);
+  assert.equal(handoff.from, "desk");
+  assert.equal(handoff.to, "occasion");
+  assert.equal(handoff.intent, "host");
+  assert.equal(handoff.party?.size, 6);
+  assert.equal(handoff.timing?.window, "days");
+  assert.equal(handoff.constraint, "service load");
+  assert.match(url, /^https:\/\/occasion\.saltnotes\.blog\/#sh=/);
+  assert.equal(url.includes("?"), false);
+});
+
+test("cook-from-here and choose-restaurant route to the matching tools", () => {
+  const kitchen = handoffFromBrief({ ...BRIEF, intent: "cook-from-here" });
+  assert.equal(kitchen.handoff.to, "kitchen");
+  assert.equal(kitchen.handoff.intent, "cook-from-pantry");
+  const dine = handoffFromBrief({ ...BRIEF, intent: "choose-restaurant" });
+  assert.equal(dine.handoff.to, "restaurant");
+  assert.equal(dine.handoff.intent, "dine-out");
+  assert.match(resumeUrlForTool(BRIEF, "menu-builder"), /\/architecture#sh=/);
+});
+
+test("an incomplete brief is rejected before anything is sent", () => {
+  assert.equal(isBriefComplete({ intent: "run-night" }), false);
+  assert.equal(isBriefComplete(BRIEF), true);
+  assert.equal(answersFromBrief(BRIEF).covers, "medium");
+  assert.equal(answersFromBrief(BRIEF).mode, "cook");
+});
+
+test("a restaurant return writes the room and does not invent a shortlist", () => {
+  const incoming = createHandoff("restaurant", "desk", "return-decision", {
+    decision: {
+      room: "Tavernetta",
+      status: "hold",
+      unresolved: ["Step-free entry unconfirmed"],
+    },
+  });
+  const next = applyReturningHandoff(createDecision(), incoming);
+  assert.equal(next.room?.room, "Tavernetta");
+  assert.equal(next.path, "dine");
+  assert.equal(next.unresolved.length, 1);
+  assert.match(next.conclusion ?? "", /Tavernetta/);
+  assert.equal("shortlist" in (next.room ?? {}), false);
 });
