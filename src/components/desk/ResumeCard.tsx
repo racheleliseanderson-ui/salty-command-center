@@ -20,9 +20,11 @@ import {
 export function ResumeCard({
   decision,
   onStartAnother,
+  resumeHref,
 }: {
   decision: DeskDecision;
   onStartAnother: () => void;
+  resumeHref?: string | undefined;
 }) {
   const stage = decisionStage(decision);
   const switched = describeSwitch(decision);
@@ -30,7 +32,7 @@ export function ResumeCard({
     ? TOOLS.find((t) => t.slug === decision.activeTool)
     : undefined;
 
-  const resumeHref = tool?.href;
+  const href = resumeHref ?? tool?.href;
   const resumeLabel = tool ? `Back to ${TOOL_LABELS[tool.slug]}` : null;
 
   return (
@@ -83,9 +85,9 @@ export function ResumeCard({
       </div>
 
       <div className="flex min-w-0 flex-wrap gap-3 border-t border-border/60 px-5 py-4 sm:px-8">
-        {resumeHref && resumeLabel ? (
+        {href && resumeLabel ? (
           <a
-            href={resumeHref}
+            href={href}
             className="press tap inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 bg-brass px-5 text-sm font-medium tracking-wide text-primary-foreground transition-colors hover:bg-bone sm:flex-none"
           >
             {resumeLabel}

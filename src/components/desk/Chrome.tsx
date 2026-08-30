@@ -51,8 +51,8 @@ export function SuiteRibbon({ current }: { current: (typeof SUITE)[number]["id"]
               aria-current={active ? "page" : undefined}
               className={
                 active
-                  ? "tap inline-flex shrink-0 items-center rounded-sm bg-brass/15 px-3 text-[0.74rem] tracking-wide text-brass"
-                  : "tap inline-flex shrink-0 items-center rounded-sm px-3 text-[0.74rem] tracking-wide text-muted-foreground hover:text-bone"
+                  ? "tap inline-flex min-h-11 shrink-0 items-center rounded-sm bg-brass/15 px-3 text-[0.74rem] tracking-wide text-brass"
+                  : "tap inline-flex min-h-11 shrink-0 items-center rounded-sm px-3 text-[0.74rem] tracking-wide text-muted-foreground hover:text-bone"
               }
             >
               <span className="sm:hidden">{item.short}</span>
