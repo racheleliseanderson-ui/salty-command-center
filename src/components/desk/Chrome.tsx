@@ -67,63 +67,39 @@ export function SuiteRibbon({ current }: { current: (typeof SUITE)[number]["id"]
 
 export function DeskFooter() {
   return (
-    <footer className="border-t border-border/70 bg-ink-deep">
-      <div className="mx-auto grid max-w-[1120px] min-w-0 gap-10 px-5 py-14 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr]">
+    <footer className="bg-ink-deep">
+      <div aria-hidden className="h-px w-full bg-brass/70" />
+      <div className="mx-auto grid max-w-[1120px] min-w-0 gap-10 px-5 py-14 sm:px-8 md:grid-cols-[1.4fr_1fr]">
         <div className="min-w-0">
-          <p className="font-display text-2xl text-bone">Salty Desk</p>
+          <p className="label-mono text-brass">Northern Lantern House Labs</p>
+          <p className="mt-3 font-display text-2xl text-bone">Salty Desk</p>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
             Decision intake and continuity for the Salty & Clever host-and-dine suite. The Desk
             keeps the working question visible, recommends the next instrument, and leaves the
             specialized work to the specialized tool.
           </p>
-          <p className="label-mono mt-6">Salty & Clever · host-and-dine decision support</p>
-        </div>
-
-        <div className="min-w-0">
-          <p className="label-mono">Suite</p>
-          <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-            {SUITE.filter((s) => s.id !== "desk").map((s) => (
-              <li key={s.id}>
-                <a href={s.href} className="gold-underline hover:text-brass">
-                  {s.label}
-                </a>
-              </li>
-            ))}
-            <li>
-              <a
-                href="https://occasion.saltnotes.blog/architecture"
-                className="gold-underline hover:text-brass"
-              >
-                Menu architecture
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div className="min-w-0">
-          <p className="label-mono">Desk notes</p>
-          <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-            <li>
-              <Link to="/handoffs" className="hover:text-brass">
-                What can move between tools
-              </Link>
-            </li>
-            <li>
-              <Link to="/boundary" className="hover:text-brass">
-                Standing rules
-              </Link>
-            </li>
-            <li>
-              <Link to="/privacy" className="hover:text-brass">
-                Privacy
-              </Link>
-            </li>
-          </ul>
           <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
             No allergen safety guarantees. No silent movement between tools. Hard stops stay hard.
           </p>
         </div>
+
+        <div className="min-w-0">
+          <p className="label-mono">In this site</p>
+          <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+            <li><Link to="/" className="hover:text-brass">Desk</Link></li>
+            <li><Link to="/host-path" className="hover:text-brass">Host Path</Link></li>
+            <li><Link to="/handoffs" className="hover:text-brass">What can move between tools</Link></li>
+            <li><Link to="/intelligence" className="hover:text-brass">Intelligence</Link></li>
+            <li><Link to="/pipeline" className="hover:text-brass">Plan the night</Link></li>
+            <li><Link to="/reference" className="hover:text-brass">Plain words</Link></li>
+            <li><Link to="/boundary" className="hover:text-brass">Standing rules</Link></li>
+            <li><Link to="/privacy" className="hover:text-brass">Privacy</Link></li>
+          </ul>
+        </div>
       </div>
+      <p className="mx-auto max-w-[1120px] border-t border-border/60 px-5 py-6 text-xs text-muted-foreground sm:px-8">
+        © 2026 Salty & Clever
+      </p>
     </footer>
   );
 }
