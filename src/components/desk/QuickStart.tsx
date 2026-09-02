@@ -1,3 +1,4 @@
+import type { MouseEvent } from "react";
 import { ArrowRight } from "lucide-react";
 import { APP_ORIGINS, type SaltyApp } from "@/lib/salty-handoff/contract";
 import {
@@ -60,7 +61,7 @@ const LABEL: Record<SaltyApp, string> = {
 };
 
 export function QuickStart() {
-  function go(route: Route, event: React.MouseEvent<HTMLAnchorElement>) {
+  function go(route: Route, event: MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
     const base = `${APP_ORIGINS[route.app]}${route.path}`;
     const profile = readHomeProfile();
