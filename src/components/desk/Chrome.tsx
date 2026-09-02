@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { CommandPalette } from "@/components/desk/CommandPalette";
 import { DisplayControls } from "@/components/desk/DisplayControls";
+import { NightRecordStrip } from "@/components/desk/NightRecordStrip";
 
 /** The suite ribbon is the primary navigation. The Desk should not repeat it with a second tab set. */
 const SUITE = [
-  { href: "https://salty.saltnotes.blog/", label: "Decision Desk", short: "Desk", id: "desk" },
+  { href: "https://salty.saltnotes.blog/", label: "Salty Desk", short: "Desk", id: "desk" },
   { href: "https://kitchen.saltnotes.blog/", label: "Kitchen & Bar", short: "Kitchen", id: "kitchen" },
-  { href: "https://occasion.saltnotes.blog/", label: "Occasion OS", short: "Occasion", id: "occasion" },
+  { href: "https://occasion.saltnotes.blog/", label: "Occasion", short: "Occasion", id: "occasion" },
   {
     href: "https://deepdish.saltnotes.blog/",
     label: "Restaurant Intelligence",
@@ -33,6 +34,7 @@ export function DeskHeader() {
       </div>
 
       <SuiteRibbon current="desk" />
+      <NightRecordStrip />
     </header>
   );
 }
@@ -76,7 +78,7 @@ export function DeskFooter() {
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
             Decision intake and continuity for the Salty & Clever host-and-dine suite. The Desk
             keeps the working question visible, recommends the next instrument, and leaves the
-            specialized work to the specialized tool.
+            specialist work to the specialist tool.
           </p>
           <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
             No allergen safety guarantees. No silent movement between tools. Hard stops stay hard.
@@ -87,6 +89,7 @@ export function DeskFooter() {
           <p className="label-mono">In this site</p>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             <li><Link to="/" className="hover:text-brass">Desk</Link></li>
+            <li><Link to="/memory" className="hover:text-brass">Remembered context</Link></li>
             <li><Link to="/host-path" className="hover:text-brass">Host Path</Link></li>
             <li><Link to="/handoffs" className="hover:text-brass">What can move between tools</Link></li>
             <li><Link to="/intelligence" className="hover:text-brass">Intelligence</Link></li>
