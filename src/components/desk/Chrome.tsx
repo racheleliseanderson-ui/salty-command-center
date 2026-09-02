@@ -1,7 +1,13 @@
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { CommandPalette } from "@/components/desk/CommandPalette";
 import { DisplayControls } from "@/components/desk/DisplayControls";
 import { NightRecordStrip } from "@/components/desk/NightRecordStrip";
+import {
+  nightRecordUrl,
+  readNightRecord,
+  type SaltyNightRecord,
+} from "@/lib/salty-night-record";
 
 /** The suite ribbon is the primary navigation. The Desk should not repeat it with a second tab set. */
 const SUITE = [
@@ -40,16 +46,23 @@ export function DeskHeader() {
 }
 
 export function SuiteRibbon({ current }: { current: (typeof SUITE)[number]["id"] }) {
+  const [night, setNight] = useState<SaltyNightRecord | null>(null);
+
+  useEffect(() => {
+    setNight(readNightRecord());
+  }, []);
+
   return (
     <nav aria-label="Salty & Clever tools" className="border-t border-border/50 bg-ink/80">
       <div className="mx-auto flex max-w-[1120px] min-w-0 items-center gap-1 overflow-x-auto px-3 py-1.5 sm:px-8">
         <span className="label-mono mr-2 hidden shrink-0 text-brass sm:inline">Suite</span>
         {SUITE.map((item) => {
           const active = item.id === current;
+          const href = night ? nightRecordUrl(item.href, night) : item.href;
           return (
             <a
               key={item.id}
-              href={item.href}
+              href={href}
               aria-current={active ? "page" : undefined}
               className={
                 active
