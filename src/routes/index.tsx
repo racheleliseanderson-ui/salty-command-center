@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { DeskFooter, DeskHeader } from "@/components/desk/Chrome";
 import { DecisionDesk } from "@/components/desk/DecisionDesk";
 import { ImportedContext } from "@/components/desk/ImportedContext";
+import { QuickStart } from "@/components/desk/QuickStart";
 import { ResumeCard } from "@/components/desk/ResumeCard";
 import { useDeskDecision } from "@/hooks/use-desk-decision";
 import { useSaltyImport } from "@/hooks/use-salty-import";
@@ -25,7 +26,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Start with the decision, keep a working brief, and move into Kitchen & Bar Intelligence, Occasion OS, or Restaurant Intelligence without navigating the same directory twice.",
+          "Choose the job, open the right Salty & Clever specialist immediately, or add party, timing and the main constraint when carrying context will save work.",
       },
     ],
   }),
@@ -59,7 +60,7 @@ function Desk() {
     writeBrief(null);
     startFresh();
     setStartingAnother(true);
-    document.getElementById("decision-desk")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById("quick-start")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   return (
@@ -94,29 +95,29 @@ function Desk() {
           <div className="hairline-grid absolute inset-0 opacity-40" />
 
           <div className="relative mx-auto max-w-[1120px] min-w-0 px-5 pb-16 pt-20 sm:px-8 sm:pb-24 sm:pt-28">
-            <p className="label-mono text-brass">Salty & Clever · Decision desk</p>
+            <p className="label-mono text-brass">Salty & Clever · Salty Desk</p>
             <h1 className="display-xl mt-6 max-w-[18ch] text-bone">
               Start with the decision.
               <span className="block text-brass">Keep the context.</span>
             </h1>
             <p className="mt-8 max-w-[54ch] text-lg leading-relaxed text-foreground/85">
-              Tell the desk what you are trying to accomplish, build a small working brief, and
-              leave with one useful next move. The specialist tools do the specialist work.
+              Choose what you are trying to accomplish and go straight to the specialist that owns
+              it. Add more context only when it will save you from answering the same questions twice.
             </p>
             <div className="mt-10 flex min-w-0 flex-wrap gap-3">
               <a
-                href="#decision-desk"
+                href="#quick-start"
                 className="press tap inline-flex min-h-11 items-center gap-2 bg-brass px-5 py-3 text-sm font-medium tracking-wide text-primary-foreground transition-colors hover:bg-bone"
               >
-                Start a working brief
+                Choose the job
                 <ArrowRight className="h-4 w-4" />
               </a>
-              <Link
-                to="/handoffs"
+              <a
+                href="#decision-desk"
                 className="press tap inline-flex min-h-11 items-center gap-2 border border-bone/30 px-5 py-3 text-sm font-medium tracking-wide text-bone transition-colors hover:border-brass hover:text-brass"
               >
-                See what can move between tools
-              </Link>
+                Carry more context first
+              </a>
             </div>
             <p className="mt-12 max-w-[46ch] border-l border-brass/50 pl-5 font-display text-2xl leading-snug text-bone/90">
               One question should have one obvious place to start.
@@ -125,20 +126,26 @@ function Desk() {
         </section>
       )}
 
+      {!showResume ? (
+        <div id="quick-start">
+          <QuickStart />
+        </div>
+      ) : null}
+
       <DecisionDesk />
 
       {!showResume ? (
         <section className="border-y border-border bg-ink-deep">
           <div className="mx-auto max-w-[1120px] min-w-0 px-5 py-16 sm:px-8 sm:py-20">
-            <p className="label-mono text-brass">The instruments</p>
+            <p className="label-mono text-brass">The specialists</p>
             <div className="mt-3 flex min-w-0 flex-wrap items-end justify-between gap-5">
               <div className="min-w-0">
                 <h2 className="max-w-[22ch] font-display text-4xl leading-[1.05] text-bone sm:text-5xl">
                   Three tools. Three different jobs.
                 </h2>
                 <p className="mt-5 max-w-[60ch] text-base leading-relaxed text-muted-foreground">
-                  The suite navigation gets you there. These notes exist only to explain the
-                  decision each instrument owns — not to create another directory.
+                  The quick start gets you there. These notes only explain the decision each
+                  specialist owns — they do not turn Desk into another destination.
                 </p>
               </div>
             </div>
@@ -152,7 +159,7 @@ function Desk() {
                     {tool.useWhen}
                   </p>
                   <p className="mt-6 text-sm text-muted-foreground">
-                    Start from the brief above so this tool already knows the night.
+                    Use the working brief only when this tool benefits from the extra context.
                   </p>
                 </article>
               ))}
@@ -163,7 +170,7 @@ function Desk() {
 
       <section className="mx-auto grid max-w-[1120px] min-w-0 gap-5 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-2">
         <article className="panel min-w-0 rounded-lg p-6 sm:p-8">
-          <p className="label-mono text-brass">What the Desk owns</p>
+          <p className="label-mono text-brass">What Salty Desk owns</p>
           <h2 className="mt-3 font-display text-3xl leading-snug text-bone">
             The decision before the specialist work.
           </h2>
@@ -173,10 +180,10 @@ function Desk() {
               hosting with dining out.
             </li>
             <li className="border-l border-brass/50 pl-4">
-              Keep party size, timing, and the main constraint in one working brief on this device.
+              Keep party size, timing and the main constraint in one Night Record when they matter.
             </li>
             <li className="border-l border-brass/50 pl-4">
-              Remember which tool is active, what came back, and whether the path changed.
+              Remember the active specialist, what came back and the next useful move.
             </li>
           </ul>
         </article>
@@ -187,17 +194,18 @@ function Desk() {
             Carry the decision, not the whole application.
           </h2>
           <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-            A useful handoff is small: confirmed availability, occasion context, or the room you
-            chose. Kitchen notes should not follow you to a restaurant, and restaurant research
-            should not clutter a prep plan. Nothing moves unless you ask it to.
+            The Night Record carries one decision, its current state, the next step and a resume
+            point. Detailed shelf matching, menu feasibility and restaurant ranking stay inside the
+            specialist that owns them. Nothing moves unless you ask it to.
           </p>
-          <Link
-            to="/handoffs"
-            className="mt-7 inline-flex min-h-11 items-center gap-2 text-sm text-brass hover:text-bone"
-          >
-            Review the handoff map
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+          <div className="mt-7 flex flex-wrap gap-5">
+            <Link to="/memory" className="inline-flex min-h-11 items-center gap-2 text-sm text-brass hover:text-bone">
+              Open remembered context <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link to="/handoffs" className="inline-flex min-h-11 items-center gap-2 text-sm text-brass hover:text-bone">
+              Review the handoff map <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </article>
       </section>
 
