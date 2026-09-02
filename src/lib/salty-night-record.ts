@@ -17,17 +17,13 @@ export type NightState =
   | "confirming"
   | "done";
 
-export type NightResume = {
-  app: SaltyApp;
-  url: string;
-  label: string;
-};
+export type NightResume = { app: SaltyApp; url: string; label: string };
 
 export type SaltyHomeProfile = {
-  region?: string;
-  defaultPartySize?: number;
-  serviceStyle?: string;
-  kitchenNote?: string;
+  region?: string | undefined;
+  defaultPartySize?: number | undefined;
+  serviceStyle?: string | undefined;
+  kitchenNote?: string | undefined;
   updatedAt: string;
 };
 
@@ -41,17 +37,21 @@ export type SaltyNightRecord = {
   currentApp: SaltyApp;
   nextStep: string;
   resume: NightResume;
-  partySize?: number;
-  timing?: { date?: string; time?: string; window?: "tonight" | "days" | "weeks" };
-  constraint?: string;
-  shelfSummary?: string;
-  menuSummary?: string;
+  partySize?: number | undefined;
+  timing?: { date?: string | undefined; time?: string | undefined; window?: "tonight" | "days" | "weeks" | undefined } | undefined;
+  constraint?: string | undefined;
+  shelfSummary?: string | undefined;
+  menuSummary?: string | undefined;
   restaurant?: {
-    room?: string;
-    status?: "shortlisted" | "in-progress" | "hold" | "verified";
-    unresolved?: string[];
-  };
-  home?: Pick<SaltyHomeProfile, "region" | "defaultPartySize" | "serviceStyle">;
+    room?: string | undefined;
+    status?: "shortlisted" | "in-progress" | "hold" | "verified" | undefined;
+    unresolved?: string[] | undefined;
+  } | undefined;
+  home?: {
+    region?: string | undefined;
+    defaultPartySize?: number | undefined;
+    serviceStyle?: string | undefined;
+  } | undefined;
 };
 
 const LABELS: Record<SaltyApp, string> = {
@@ -100,13 +100,13 @@ function nextFor(app: SaltyApp, handoff?: SaltyHandoff) {
 export function startNightRecord(input: {
   decision: string;
   currentApp: SaltyApp;
-  state?: NightState;
-  nextStep?: string;
-  resumeUrl?: string;
-  partySize?: number;
-  constraint?: string;
-  timing?: SaltyNightRecord["timing"];
-  home?: SaltyNightRecord["home"];
+  state?: NightState | undefined;
+  nextStep?: string | undefined;
+  resumeUrl?: string | undefined;
+  partySize?: number | undefined;
+  constraint?: string | undefined;
+  timing?: SaltyNightRecord["timing"] | undefined;
+  home?: SaltyNightRecord["home"] | undefined;
 }): SaltyNightRecord {
   const at = nowIso();
   return {
@@ -136,10 +136,9 @@ export function mergeNightFromHandoff(
   currentApp: SaltyApp,
 ): SaltyNightRecord {
   const base = existing ?? startNightRecord({ decision: decisionFor(handoff), currentApp });
-  const updatedAt = nowIso();
   return {
     ...base,
-    updatedAt,
+    updatedAt: nowIso(),
     decision: existing?.decision || decisionFor(handoff),
     state: stateFor(currentApp, handoff),
     currentApp,
@@ -269,7 +268,7 @@ export function readNightFromLocation(expectedApp: SaltyApp): SaltyNightRecord |
       if (decoded.ok) record = mergeNightFromHandoff(record ?? readNightRecord(), decoded.handoff, expectedApp);
     }
     if (record) {
-      const next = {
+      const next: SaltyNightRecord = {
         ...record,
         currentApp: expectedApp,
         updatedAt: nowIso(),
