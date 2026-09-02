@@ -81,7 +81,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Decision intake and continuity for Salty & Clever: keep a working brief and move into Kitchen & Bar Intelligence, Occasion OS, or Restaurant Intelligence with a clear next step.",
+          "Decision intake and continuity for Salty & Clever: move into Kitchen & Bar, Occasion, or Restaurant Intelligence with one visible Night Record and a clear next step.",
       },
       { name: "author", content: "Salty & Clever" },
       { property: "og:type", content: "website" },
