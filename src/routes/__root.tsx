@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+import { canonicalFor } from "../lib/site";
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -73,49 +74,56 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Salty Desk — Decide what happens next" },
-      {
-        name: "description",
-        content:
-          "Decision intake and continuity for Salty & Clever: move into Kitchen & Bar, Occasion, or Restaurant Intelligence with one visible Night Record and a clear next step.",
-      },
-      { name: "author", content: "Salty & Clever" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "theme-color", content: "#101a2e" },
-      {
-        property: "og:image",
-        content:
-          "https://i0.wp.com/saltnotes.blog/wp-content/uploads/2026/08/Chef-station-overhead-ingredients.jpg?resize=1200%2C630&ssl=1",
-      },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      {
-        property: "og:image:alt",
-        content: "Overhead view of ingredients and tools on a chef station",
-      },
-      { property: "og:url", content: "https://salty.saltnotes.blog/" },
-      {
-        name: "twitter:image",
-        content:
-          "https://i0.wp.com/saltnotes.blog/wp-content/uploads/2026/08/Chef-station-overhead-ingredients.jpg?resize=1200%2C630&ssl=1",
-      },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
-      },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
-    ],
-  }),
+  head: ({ matches }) => {
+    // `matches` is the whole chain, so its last entry is the route actually
+    // being rendered. The root match's own pathname is always "/", which is
+    // how every page here came to declare itself a duplicate of the home page.
+    const canonical = canonicalFor(matches[matches.length - 1]?.pathname ?? "/");
+    return {
+      meta: [
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { title: "Salty Desk — Decide what happens next" },
+        {
+          name: "description",
+          content:
+            "Decision intake and continuity for Salty & Clever: move into Kitchen & Bar, Occasion, or Restaurant Intelligence with one visible Night Record and a clear next step.",
+        },
+        { name: "author", content: "Salty & Clever" },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "theme-color", content: "#101a2e" },
+        {
+          property: "og:image",
+          content:
+            "https://i0.wp.com/saltnotes.blog/wp-content/uploads/2026/08/Chef-station-overhead-ingredients.jpg?resize=1200%2C630&ssl=1",
+        },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        {
+          property: "og:image:alt",
+          content: "Overhead view of ingredients and tools on a chef station",
+        },
+        { property: "og:url", content: canonical },
+        {
+          name: "twitter:image",
+          content:
+            "https://i0.wp.com/saltnotes.blog/wp-content/uploads/2026/08/Chef-station-overhead-ingredients.jpg?resize=1200%2C630&ssl=1",
+        },
+      ],
+      links: [
+        { rel: "canonical", href: canonical },
+        { rel: "stylesheet", href: appCss },
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+        },
+        { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      ],
+    };
+  },
 
   shellComponent: RootShell,
   component: RootComponent,
